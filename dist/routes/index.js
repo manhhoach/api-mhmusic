@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const router = express_1.default.Router();
+const song_1 = __importDefault(require("./song"));
+const category_1 = __importDefault(require("./category"));
+const singer_1 = __importDefault(require("./singer"));
+const user_1 = __importDefault(require("./user"));
+const album_1 = __importDefault(require("./album"));
+const like_1 = __importDefault(require("./like"));
+router.use('/song', song_1.default);
+router.use('/category', category_1.default);
+router.use('/singer', singer_1.default);
+router.use('/user', user_1.default);
+router.use('/album', album_1.default);
+router.use('/like', like_1.default);
+exports.default = router;

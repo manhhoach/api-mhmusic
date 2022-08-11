@@ -33,6 +33,7 @@ sequelizeConnection.models.album = createAlbum(sequelizeConnection)
 sequelizeConnection.models.album_song = createAlbumSong(sequelizeConnection)
 sequelizeConnection.models.like = createLike(sequelizeConnection)
 
+
 //sequelizeConnection.models.category.sync({alter: true})
 //sequelizeConnection.models.singer.sync({alter: true})
 //sequelizeConnection.models.song.sync({alter: true})
