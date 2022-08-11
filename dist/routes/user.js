@@ -35,6 +35,7 @@ router.post('/login', userController.login); // done
 router.post('/forgot-password', userController.forgotPassword); //
 router.put('/reset-password/:token', userController.resetPassword); //
 router.use(jwt.decodeToken);
+router.put('/recent-songs', userController.updateRecentSongs);
 router.put('/change-password', userController.changePassword); // done
 router.get('/me', userController.getMe); // done
 router.put('/me', userController.updateMe); // done

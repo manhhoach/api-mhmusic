@@ -34,54 +34,48 @@ export const getOne = tryCatch(async (req: Request, res: Response, next: NextFun
 })
 
 export const create = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-    let data: any={};
-    if(req.body.songId&&!req.body.url)
-    {
+    let data: any = {};
+    if (req.body.songId && !req.body.url) {
         let url = await getUrl(req.body.songId)
         if (url.success === true) {
             data = {
                 ...req.body, url: `http://api.mp3.zing.vn/api/streaming/audio/${req.body.songId}/320`
-            }      
+            }
         }
         else {
-           return res.json(responseError("Song id or Song does not exist"))
+            return res.json(responseError("Song id or Song does not exist"))
         }
     }
-    else 
-    {
-        data={...req.body}     
+    else {
+        data = { ...req.body }
     }
     let song = await songService.create(data)
-    res.json(responseSuccess(song));  
+    res.json(responseSuccess(song));
 })
 
 
 export const update = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-    let data: any={};
-    if(req.body.songId&&!req.body.url)
-    {
+    let data: any = {};
+    if (req.body.songId && !req.body.url) {
         let url = await getUrl(req.body.songId)
         if (url.success === true) {
             data = {
                 ...req.body, url: `http://api.mp3.zing.vn/api/streaming/audio/${req.body.songId}/320`
-            }      
+            }
         }
         else {
-           return res.json(responseError("Song id or Song does not exist"))
+            return res.json(responseError("Song id or Song does not exist"))
         }
     }
-    else 
-    {
-        data={...req.body}     
+    else {
+        data = { ...req.body }
     }
-    let result = await songService.update(data, {id: parseInt(req.params.id)})
-    if(result[0]===1)
-    {
-        let song=await songService.getOne( {id: parseInt(req.params.id)})
-        res.json(responseSuccess(song));  
+    let result = await songService.update(data, { id: parseInt(req.params.id) })
+    if (result[0] === 1) {
+        let song = await songService.getOne({ id: parseInt(req.params.id) })
+        res.json(responseSuccess(song));
     }
-    else
-    {
+    else {
         res.json(responseError("UPDATE FAILED"))
     }
 
@@ -89,15 +83,24 @@ export const update = tryCatch(async (req: Request, res: Response, next: NextFun
 
 
 export const destroy = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-    let result = await Promise.all( 
-        req.body.ids.map( async(id: number) => await songService.destroy({id: id}) )
+    let result = await Promise.all(
+        req.body.ids.map(async (id: number) => await songService.destroy({ id: id }))
     )
-    if(result.includes(1))
-    {
+    if (result.includes(1)) {
         res.json(responseSuccess("DELETE SUCCESS"));
     }
-    else
-    {
+    else {
         res.json(responseError("DELETE FAILED"))
     }
+})
+
+export const getRecentSongs = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+    let recentSongsId = res.locals.user.recentSongs.split(';');
+    let recentSongs = await Promise.all(
+        recentSongsId.map(async (id: string) => {
+            let song: any = await songService.getOne({ id: parseInt(id) }, false, false);
+            return song?.dataValues;
+        })
+    )
+    res.json(responseSuccess(recentSongs))
 })

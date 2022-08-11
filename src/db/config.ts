@@ -42,7 +42,7 @@ sequelizeConnection.models.like = createLike(sequelizeConnection)
 //sequelizeConnection.models.album_song.sync({force: true})
 //sequelizeConnection.models.like.sync({ force: true })
 
-//sequelizeConnection.sync({alter: true})
+//sequelizeConnection.sync({force: true})
 
 
 // const deleteConstraint = () => {

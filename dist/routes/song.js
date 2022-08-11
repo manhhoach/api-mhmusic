@@ -31,6 +31,7 @@ const router = express_1.default.Router();
 const songController = __importStar(require("../controllers/song"));
 const jwt = __importStar(require("../middlewares/jwt_token"));
 router.get('/', songController.getAll); // done
+router.get('/recent-songs', jwt.decodeToken, songController.getRecentSongs); // done
 router.get('/:id', songController.getOne); // done
 router.use(jwt.decodeToken);
 router.use(jwt.protect);

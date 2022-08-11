@@ -5,9 +5,13 @@ import * as jwt from '../middlewares/jwt_token';
 
 
 router.get('/', songController.getAll); // done
+router.get('/recent-songs',jwt.decodeToken, songController.getRecentSongs); // done
+
 router.get('/:id', songController.getOne); // done
 
 router.use(jwt.decodeToken);
+
+
 router.use(jwt.protect);
 router.post('/', songController.create); // done
 router.put('/:id', songController.update); // done

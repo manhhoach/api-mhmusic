@@ -134,3 +134,27 @@ export const forgotPassword = tryCatch(async (req: Request, res: Response, next:
 
 
 })
+
+export const updateRecentSongs= tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+    let queueSong=res.locals.user.recentSongs.split(';');
+    const LENGTH_QUEUE=10;
+    if(!queueSong.includes(req.body.songId.toString()))
+    {
+        if(queueSong.length>=LENGTH_QUEUE)
+        {
+            queueSong.shift();
+        }   
+        queueSong.push(req.body.songId)
+        let recentSongs=queueSong.join(';');
+
+        let result = await userService.update({recentSongs}, { id: res.locals.user.id });
+        if (result[0] === 1) {
+            res.json(responseSuccess("UPDATE SUCCESSFULLY"))
+        }
+        else {
+            res.json(responseError("UPDATE FAILED"))
+        }
+    }
+    else
+        res.json(responseSuccess("NOTHING UPDATE"))
+})

@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgotPassword = exports.resetPassword = exports.changePassword = exports.destroy = exports.updateMe = exports.login = exports.register = exports.getMe = void 0;
+exports.updateRecentSongs = exports.forgotPassword = exports.resetPassword = exports.changePassword = exports.destroy = exports.updateMe = exports.login = exports.register = exports.getMe = void 0;
 const userService = __importStar(require("./../services/user"));
 const response_1 = require("./../helper/response");
 const tryCatch_1 = __importDefault(require("./../helper/tryCatch"));
@@ -141,4 +141,24 @@ exports.forgotPassword = (0, tryCatch_1.default)((req, res, next) => __awaiter(v
     else {
         res.json("USER IS NOT EXIST");
     }
+}));
+exports.updateRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let queueSong = res.locals.user.recentSongs.split(';');
+    const LENGTH_QUEUE = 10;
+    if (!queueSong.includes(req.body.songId.toString())) {
+        if (queueSong.length >= LENGTH_QUEUE) {
+            queueSong.shift();
+        }
+        queueSong.push(req.body.songId);
+        let recentSongs = queueSong.join(';');
+        let result = yield userService.update({ recentSongs }, { id: res.locals.user.id });
+        if (result[0] === 1) {
+            res.json((0, response_1.responseSuccess)("UPDATE SUCCESSFULLY"));
+        }
+        else {
+            res.json((0, response_1.responseError)("UPDATE FAILED"));
+        }
+    }
+    else
+        res.json((0, response_1.responseSuccess)("NOTHING UPDATE"));
 }));

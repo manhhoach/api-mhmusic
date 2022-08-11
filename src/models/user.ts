@@ -12,6 +12,7 @@ export interface IUser extends Model<InferAttributes<IUser>, InferCreationAttrib
     password: string;
     type: number; // k đánh dấu creation optional xem
     avatar: string;
+    recentSongs: string;
     createdDate: CreationOptional<Date>;
 
 }
@@ -39,6 +40,9 @@ export function createUser (sequelize: Sequelize) {
         avatar: {
             type: new DataTypes.STRING(1024),
             defaultValue: '/user.png'
+        },
+        recentSongs:{
+            type: DataTypes.STRING(128)
         },
         type: {
             type: DataTypes.INTEGER.UNSIGNED,

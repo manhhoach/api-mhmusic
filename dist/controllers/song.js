@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
+exports.getRecentSongs = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
 const songService = __importStar(require("../services/song"));
 const response_1 = require("../helper/response");
 const pagination_1 = require("../helper/pagination");
@@ -110,4 +110,12 @@ exports.destroy = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, 
     else {
         res.json((0, response_1.responseError)("DELETE FAILED"));
     }
+}));
+exports.getRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let recentSongsId = res.locals.user.recentSongs.split(';');
+    let recentSongs = yield Promise.all(recentSongsId.map((id) => __awaiter(void 0, void 0, void 0, function* () {
+        let song = yield songService.getOne({ id: parseInt(id) }, false, false);
+        return song === null || song === void 0 ? void 0 : song.dataValues;
+    })));
+    res.json((0, response_1.responseSuccess)(recentSongs));
 }));
