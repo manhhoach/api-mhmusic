@@ -4,17 +4,17 @@ import * as songController from '../controllers/song'
 import * as jwt from '../middlewares/jwt_token';
 
 
-router.get('/', songController.getAll); // done
-router.get('/recent-songs',jwt.decodeToken, songController.getRecentSongs); // done
-
-router.get('/:id', songController.getOne); // done
+router.get('/', songController.getAll); 
+router.get('/recent-songs',jwt.decodeToken, songController.getRecentSongs); 
+router.post('/views/:id', songController.updateView); 
+router.get('/:id', songController.getOne); 
 
 router.use(jwt.decodeToken);
 
 
 router.use(jwt.protect);
-router.post('/', songController.create); // done
-router.put('/:id', songController.update); // done
-router.delete('/', songController.destroy); // done
+router.post('/', songController.create); 
+router.put('/:id', songController.update); 
+router.delete('/', songController.destroy); 
 
 export default router

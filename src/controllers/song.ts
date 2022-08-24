@@ -7,6 +7,9 @@ import sequelize from 'sequelize'
 import getUrl from '../helper/getUrlTracks'
 
 
+import redis from './../db/connectRedis';
+import macaddress from 'macaddress';
+
 
 export const getAll = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
     let condition: any = {};
@@ -49,7 +52,9 @@ export const create = tryCatch(async (req: Request, res: Response, next: NextFun
     else {
         data = { ...req.body }
     }
-    let song = await songService.create(data)
+    let song: any = await songService.create(data)
+    await redis.set(`songId:${song.id}`,song.view);
+
     res.json(responseSuccess(song));
 })
 
@@ -104,3 +109,19 @@ export const getRecentSongs = tryCatch(async (req: Request, res: Response, next:
     )
     res.json(responseSuccess(recentSongs))
 })
+
+
+export const updateView = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+    const songId = `songId:${req.params.id}`;
+    const macAddress = `macAddress:${await macaddress.one()}`;
+
+    const isOK = await redis.set(`${macAddress}-${songId}`, 'MH-MUSIC','EX', 60*3, 'NX'); 
+    let data=null;
+    if(isOK==='OK')
+    {
+       data= await redis.incrby(songId, 1);
+    }
+    res.json(responseSuccess(data))
+
+})
+

@@ -35,13 +35,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecentSongs = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
+exports.updateView = exports.getRecentSongs = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
 const songService = __importStar(require("../services/song"));
 const response_1 = require("../helper/response");
 const pagination_1 = require("../helper/pagination");
 const tryCatch_1 = __importDefault(require("../helper/tryCatch"));
 const sequelize_1 = __importDefault(require("sequelize"));
 const getUrlTracks_1 = __importDefault(require("../helper/getUrlTracks"));
+const connectRedis_1 = __importDefault(require("./../db/connectRedis"));
+const macaddress_1 = __importDefault(require("macaddress"));
 exports.getAll = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let condition = {};
     if (req.query.name) {
@@ -77,6 +79,7 @@ exports.create = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, v
         data = Object.assign({}, req.body);
     }
     let song = yield songService.create(data);
+    yield connectRedis_1.default.set(`songId:${song.id}`, song.view);
     res.json((0, response_1.responseSuccess)(song));
 }));
 exports.update = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -118,4 +121,14 @@ exports.getRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(v
         return song === null || song === void 0 ? void 0 : song.dataValues;
     })));
     res.json((0, response_1.responseSuccess)(recentSongs));
+}));
+exports.updateView = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const songId = `songId:${req.params.id}`;
+    const macAddress = `macAddress:${yield macaddress_1.default.one()}`;
+    const isOK = yield connectRedis_1.default.set(`${macAddress}-${songId}`, 'MH-MUSIC', 'EX', 60 * 3, 'NX');
+    let data = null;
+    if (isOK === 'OK') {
+        data = yield connectRedis_1.default.incrby(songId, 1);
+    }
+    res.json((0, response_1.responseSuccess)(data));
 }));

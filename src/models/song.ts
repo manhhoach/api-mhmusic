@@ -12,6 +12,7 @@ export interface ISong extends Model<InferAttributes<ISong>, InferCreationAttrib
     categoryId: number;
     singerId: number;
     performSinger: string;
+    view: number;
 }
 
 
@@ -57,6 +58,10 @@ export function createSong(sequelize: Sequelize) {
         },
         performSinger:{
             type: new DataTypes.STRING(256),
+        },
+        view:{
+            type: DataTypes.INTEGER.UNSIGNED,
+            defaultValue: 0
         },
         createdDate: {
             type: DataTypes.DATE,

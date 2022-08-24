@@ -17,6 +17,7 @@ require("dotenv/config"); // kỹ thuật mới
 const config_1 = __importDefault(require("./db/config"));
 const index_1 = __importDefault(require("./routes/index"));
 const cors_1 = __importDefault(require("cors"));
+const schedule_1 = __importDefault(require("./helper/schedule"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.use(express_1.default.json());
@@ -31,6 +32,7 @@ app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Server running on http://localhost:${port}`);
     try {
         yield config_1.default.authenticate();
+        schedule_1.default;
         console.log('Connection has been established successfully.');
     }
     catch (err) {

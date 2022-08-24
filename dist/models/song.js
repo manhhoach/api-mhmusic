@@ -47,6 +47,10 @@ function createSong(sequelize) {
         performSinger: {
             type: new sequelize_1.DataTypes.STRING(256),
         },
+        view: {
+            type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+            defaultValue: 0
+        },
         createdDate: {
             type: sequelize_1.DataTypes.DATE,
             defaultValue: sequelize_1.DataTypes.NOW
