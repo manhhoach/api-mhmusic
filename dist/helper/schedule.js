@@ -26,14 +26,10 @@ const job = node_schedule_1.default.scheduleJob('* */15 * * *', function () {
         })));
     });
 });
+const mapping = () => __awaiter(void 0, void 0, void 0, function* () {
+    let songs = yield models.song.findAll();
+    yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
+        return yield connectRedis_1.default.set(`songId:${song.id}`, song.view);
+    })));
+});
 exports.default = job;
-// map views from redis to mysql
-// const mappingView = async () => {
-//     let songs = await models.song.findAll();
-//     let data = await Promise.all(songs.map(async (song: any) => {
-//         let view = await redis.get(`songId:${song.id}`);
-//         if (view != song.view)
-//             return await models.song.update({ view: parseInt(view as string) }, { where: { id: song.id } })
-//     }))
-//     return data;
-// }

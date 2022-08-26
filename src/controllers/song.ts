@@ -53,7 +53,7 @@ export const create = tryCatch(async (req: Request, res: Response, next: NextFun
         data = { ...req.body }
     }
     let song: any = await songService.create(data)
-    await redis.set(`songId:${song.id}`,song.view);
+    await redis.set(`songId:${song.id}`, song.view);
 
     res.json(responseSuccess(song));
 })
@@ -123,5 +123,13 @@ export const updateView = tryCatch(async (req: Request, res: Response, next: Nex
     }
     res.json(responseSuccess(data))
 
+
 })
 
+
+// import sequelize2 from './../db/config';
+// let models = sequelize2.models;
+// let songs = await models.song.findAll();
+// await Promise.all(songs.map(async (song: any) => {
+//     return await redis.set(`songId:${song.id}`, song.view);
+// }))

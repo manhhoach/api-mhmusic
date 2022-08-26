@@ -132,3 +132,9 @@ exports.updateView = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 
     }
     res.json((0, response_1.responseSuccess)(data));
 }));
+// import sequelize2 from './../db/config';
+// let models = sequelize2.models;
+// let songs = await models.song.findAll();
+// await Promise.all(songs.map(async (song: any) => {
+//     return await redis.set(`songId:${song.id}`, song.view);
+// }))

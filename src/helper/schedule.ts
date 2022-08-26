@@ -13,16 +13,13 @@ const job = schedule.scheduleJob('* */15 * * *', async function () {
     }))
 });
 
+const mapping=async()=>{
+    let songs = await models.song.findAll();
+    await Promise.all(songs.map(async (song: any) => {
+        return await redis.set(`songId:${song.id}`,song.view);
+    }))
+}
+
 export default job
 
 
-// map views from redis to mysql
-// const mappingView = async () => {
-//     let songs = await models.song.findAll();
-//     let data = await Promise.all(songs.map(async (song: any) => {
-//         let view = await redis.get(`songId:${song.id}`);
-//         if (view != song.view)
-//             return await models.song.update({ view: parseInt(view as string) }, { where: { id: song.id } })
-//     }))
-//     return data;
-// }
