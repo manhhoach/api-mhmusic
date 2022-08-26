@@ -14,7 +14,7 @@ function createSinger(sequelize) {
             allowNull: false
         },
         description: {
-            type: sequelize_1.DataTypes.STRING(1024)
+            type: sequelize_1.DataTypes.STRING(2048)
         },
         avatar: {
             type: new sequelize_1.DataTypes.STRING(1024),

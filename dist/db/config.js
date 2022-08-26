@@ -12,10 +12,11 @@ const dbName = process.env.DB_NAME || 'mhmusic';
 const dbUser = process.env.DB_USER || 'root';
 const dbHost = process.env.DB_HOST || 'localhost';
 const dbPassword = process.env.DB_PASSWORD || undefined;
+const dbPort = parseInt(process.env.DB_PORT) || 3306;
 const sequelizeConnection = new sequelize_1.Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
     dialect: 'mysql',
-    port: 3306,
+    port: dbPort,
     timezone: "+07:00",
     define: {
         charset: 'utf8',

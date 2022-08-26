@@ -18,11 +18,11 @@ function createSong(sequelize) {
             allowNull: false
         },
         image: {
-            type: new sequelize_1.DataTypes.STRING(1024),
+            type: new sequelize_1.DataTypes.STRING(2048),
             allowNull: false
         },
         url: {
-            type: new sequelize_1.DataTypes.STRING(1024),
+            type: new sequelize_1.DataTypes.STRING(2048),
             allowNull: false
         },
         year: {

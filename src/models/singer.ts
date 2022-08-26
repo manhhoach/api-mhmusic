@@ -20,7 +20,7 @@ export function createSinger (sequelize: Sequelize) {
             allowNull: false
         },
         description: {
-            type: DataTypes.STRING(1024)
+            type: DataTypes.STRING(2048)
         },
         avatar: {
             type: new DataTypes.STRING(1024),

@@ -30,11 +30,11 @@ export function createSong(sequelize: Sequelize) {
             allowNull: false
         },
         image: {
-            type: new DataTypes.STRING(1024),
+            type: new DataTypes.STRING(2048),
             allowNull: false
         },
         url: {
-            type: new DataTypes.STRING(1024),
+            type: new DataTypes.STRING(2048),
             allowNull: false
         },
         year: {
