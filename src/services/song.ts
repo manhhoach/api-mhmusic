@@ -41,3 +41,18 @@ export async function update(data: any, condition: any) {
 export async function destroy(condition: any) {
     return models.song.destroy({ where: condition })
 }
+
+export async function getTop(limit: number, singer: boolean = false, category: boolean = false) {
+    
+    let includes: Includeable|Includeable [] = [ ];
+    if(singer)
+        includes.push({ model: sequelize.models.singer })
+    if(category) 
+        includes.push({ model: sequelize.models.category })
+
+    return models.song.findAll({
+        limit: limit,
+        order: [['view', 'DESC']],
+        include: includes
+    });
+}

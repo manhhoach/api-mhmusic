@@ -1,0 +1,28 @@
+{
+  "RECORDS": [
+    {
+      "id": 1,
+      "name": "Liên khúc nhạc 2013",
+      "year": 2013,
+      "userId": 7,
+      "type": 10,
+      "createdDate": "2022-8-11 08:24:12"
+    },
+    {
+      "id": 2,
+      "name": "Những bài hát hay nhất 2014",
+      "year": 2014,
+      "userId": 7,
+      "type": 0,
+      "createdDate": "2022-8-11 08:34:29"
+    },
+    {
+      "id": 3,
+      "name": "album 1",
+      "year": 2015,
+      "userId": 6,
+      "type": 0,
+      "createdDate": "2022-8-11 09:59:18"
+    }
+  ]
+}

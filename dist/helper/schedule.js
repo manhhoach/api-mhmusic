@@ -16,13 +16,16 @@ const config_1 = __importDefault(require("../db/config"));
 const connectRedis_1 = __importDefault(require("./../db/connectRedis"));
 const node_schedule_1 = __importDefault(require("node-schedule"));
 let models = config_1.default.models;
-const job = node_schedule_1.default.scheduleJob('* */15 * * *', function () {
+const job = node_schedule_1.default.scheduleJob('* */10 * * *', function () {
     return __awaiter(this, void 0, void 0, function* () {
         let songs = yield models.song.findAll();
         yield Promise.all(songs.map((song) => __awaiter(this, void 0, void 0, function* () {
             let view = yield connectRedis_1.default.get(`songId:${song.id}`);
-            if (view != song.view)
-                return yield models.song.update({ view: parseInt(view) }, { where: { id: song.id } });
+            let viewRedis = parseInt(view);
+            if (viewRedis > song.view)
+                return yield models.song.update({ view: viewRedis }, { where: { id: song.id } });
+            else
+                return yield connectRedis_1.default.set(`songId:${song.id}`, song.view);
         })));
     });
 });

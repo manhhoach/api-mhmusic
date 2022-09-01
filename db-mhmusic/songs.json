@@ -1,0 +1,124 @@
+{
+  "RECORDS": [
+    {
+      "id": 1,
+      "name": "Tìm em",
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/10/03/c/c/1/9/1538549680324_640.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW6AD78U/320",
+      "year": 2014,
+      "categoryId": 7,
+      "singerId": 1,
+      "performSinger": "Hồ Quang Hiếu",
+      "createdDate": "2022-7-30 11:13:44",
+      "view": 4
+    },
+    {
+      "id": 2,
+      "name": "Anh không đòi quà",
+      "image": "https://i.ytimg.com/vi/YlPH5jWbTpA/maxresdefault.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW69ZAWC/320",
+      "year": 2014,
+      "categoryId": 7,
+      "singerId": 2,
+      "performSinger": "Only C ft. Karik",
+      "createdDate": "2022-7-30 11:23:44",
+      "view": 1
+    },
+    {
+      "id": 3,
+      "name": "Nơi ấy con tìm về",
+      "image": "https://i.ytimg.com/vi/uvIgpYPAcaQ/maxresdefault.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW6A7F6F/320",
+      "year": 2011,
+      "categoryId": 7,
+      "singerId": 1,
+      "performSinger": "Hồ Quang Hiếu",
+      "createdDate": "2022-7-30 12:14:45",
+      "view": 1
+    },
+    {
+      "id": 18,
+      "name": "Uyên ương hồ điệp mộng",
+      "image": "https://i.ytimg.com/vi/m64dd7eLnD4/maxresdefault.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW77FUFI/320",
+      "year": 2011,
+      "categoryId": 7,
+      "singerId": 1,
+      "performSinger": "Hồ Quang Hiếu",
+      "createdDate": "2022-7-31 21:46:55",
+      "view": 1
+    },
+    {
+      "id": 19,
+      "name": "Một tình yêu đúng nghĩa",
+      "image": "https://i.ytimg.com/vi/k3PA-GjBvXc/maxresdefault.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW6COWB8/320",
+      "year": 2014,
+      "categoryId": 7,
+      "singerId": 1,
+      "performSinger": "Hồ Quang Hiếu",
+      "createdDate": "2022-7-31 21:48:54",
+      "view": 0
+    },
+    {
+      "id": 20,
+      "name": "Em chưa từng biết",
+      "image": "https://i.ytimg.com/vi/KrC4-kacT4k/maxresdefault.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW6Z0UID/320",
+      "year": 2014,
+      "categoryId": 7,
+      "singerId": 1,
+      "performSinger": "Hồ Quang Hiếu",
+      "createdDate": "2022-7-31 21:50:30",
+      "view": 0
+    },
+    {
+      "id": 21,
+      "name": "Mưa của ngày xưa",
+      "image": "https://photo-playlist-zmp3.zadn.vn/s2/v2/background-playlist?src=HavtoclCgWuG7IRsg4qRPg3JrBYU639X9aaZf5sEhtXj2shg3iAdDI5CU_PNmVfo8KnWzKoI-Y4a7MUdISBu9ITFOgTEa_mcBqaphXIR_7WkBsFxGVNyVY0cPFjNfxeiB60szGR4zYacTJ7t6Bob8I0xUFHLyg8jU7LflnkyYidoDWGwIcODwpF3n9ZAKKfmLGg5udq&cv=1&size=thumb_240_240",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW6Z0UIE/320",
+      "year": 2014,
+      "categoryId": 7,
+      "singerId": 1,
+      "performSinger": "Hồ Quang Hiếu",
+      "createdDate": "2022-7-31 21:53:26",
+      "view": 0
+    },
+    {
+      "id": 22,
+      "name": "Con bướm xuân",
+      "image": "https://i.ytimg.com/vi/-41E5B85rTI/maxresdefault.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW66A9D6/320",
+      "year": 2012,
+      "categoryId": 7,
+      "singerId": 1,
+      "performSinger": "Hồ Quang Hiếu",
+      "createdDate": "2022-7-31 21:54:25",
+      "view": 0
+    },
+    {
+      "id": 23,
+      "name": "Thích thì đến",
+      "image": "https://i.ytimg.com/vi/j4Jj29mUYS8/maxresdefault.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZWBWAIDA/320",
+      "year": 2020,
+      "categoryId": 7,
+      "singerId": 5,
+      "performSinger": "Lê Bảo Bình",
+      "createdDate": "2022-7-31 22:00:05",
+      "view": 0
+    },
+    {
+      "id": 24,
+      "name": "Giá như chưa từng quen",
+      "image": "https://i.ytimg.com/vi/Uomyp4iboME/maxresdefault.jpg",
+      "url": "http://api.mp3.zing.vn/api/streaming/audio/ZW6I8EFI/320",
+      "year": 2012,
+      "categoryId": 7,
+      "singerId": 6,
+      "performSinger": "HKT",
+      "createdDate": "2022-7-31 22:02:12",
+      "view": 0
+    }
+  ]
+}

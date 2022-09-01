@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateView = exports.getRecentSongs = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
+exports.getTop10Song = exports.getChart = exports.updateView = exports.getRecentSongs = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
 const songService = __importStar(require("../services/song"));
 const response_1 = require("../helper/response");
 const pagination_1 = require("../helper/pagination");
@@ -132,9 +132,10 @@ exports.updateView = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 
     }
     res.json((0, response_1.responseSuccess)(data));
 }));
-// import sequelize2 from './../db/config';
-// let models = sequelize2.models;
-// let songs = await models.song.findAll();
-// await Promise.all(songs.map(async (song: any) => {
-//     return await redis.set(`songId:${song.id}`, song.view);
-// }))
+exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let songs = yield songService.getTop(3);
+}));
+exports.getTop10Song = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let songs = yield songService.getTop(10);
+    res.json((0, response_1.responseSuccess)(songs));
+}));

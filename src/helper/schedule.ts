@@ -4,19 +4,22 @@ import schedule from 'node-schedule'
 
 let models = sequelize.models;
 
-const job = schedule.scheduleJob('* */15 * * *', async function () {
+const job = schedule.scheduleJob('* */10 * * *', async function () {
     let songs = await models.song.findAll();
     await Promise.all(songs.map(async (song: any) => {
         let view = await redis.get(`songId:${song.id}`);
-        if (view != song.view)
-            return await models.song.update({ view: parseInt(view as string) }, { where: { id: song.id } })
+        let viewRedis=parseInt(view as string);
+        if ( viewRedis > song.view)
+            return await models.song.update({ view: viewRedis }, { where: { id: song.id } })
+        else
+            return await redis.set(`songId:${song.id}`, song.view);
     }))
 });
 
-const mapping=async()=>{
+const mapping = async () => {
     let songs = await models.song.findAll();
     await Promise.all(songs.map(async (song: any) => {
-        return await redis.set(`songId:${song.id}`,song.view);
+        return await redis.set(`songId:${song.id}`, song.view);
     }))
 }
 

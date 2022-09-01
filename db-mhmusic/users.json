@@ -1,0 +1,54 @@
+{
+  "RECORDS": [
+    {
+      "id": 3,
+      "fullName": "Cụ Mạnh",
+      "email": "manhhn.nv5@gmail.com",
+      "password": "$10$z63ZRI5Jg/DsFuAohCzDDeo2odHw2ZSF1OXGnbOdpl1zIavN73oO.",
+      "avatar": "xxx.jpg",
+      "type": 0,
+      "createdDate": "2022-7-29 15:23:06",
+      "recentSongs": null
+    },
+    {
+      "id": 6,
+      "fullName": "Cụ Mạnh",
+      "email": "manhhn.nv@gmail.com",
+      "password": "$2a$10$IO1QPs3rGN5c7k4vaBukVuT9wG2u9EVcmHDmMhzG78RzeL.jsDpDi",
+      "avatar": "xxx.jpg",
+      "type": 0,
+      "createdDate": "2022-7-29 20:59:55",
+      "recentSongs": "3;4;5;6;7;8;9;10;11;1"
+    },
+    {
+      "id": 7,
+      "fullName": "Nhà thông thái sa mạc",
+      "email": "manhhn.nv1@gmail.com",
+      "password": "$2a$10$z63ZRI5Jg/DsFuAohCzDDeo2odHw2ZSF1OXGnbOdpl1zIavN73oO.",
+      "avatar": "/user.png",
+      "type": 10,
+      "createdDate": "2022-8-11 08:29:14",
+      "recentSongs": null
+    },
+    {
+      "id": 14,
+      "fullName": "admin",
+      "email": "admin1@gmail.com",
+      "password": "$2a$10$74yXeFXoHWOrqktuwjEV.un1sG78HIbWqhY/YH5IS48FuZkLhAo3a",
+      "avatar": "/user.png",
+      "type": 0,
+      "createdDate": "2022-8-17 20:45:55",
+      "recentSongs": null
+    },
+    {
+      "id": 24,
+      "fullName": "admin",
+      "email": "admin@gmail.com",
+      "password": "$2a$10$hXq13OC3tBLnrlGd//DTJOGqi1fQhF2b3PTucceGhKGcX/.cmXUdO",
+      "avatar": "/user.png",
+      "type": 0,
+      "createdDate": "2022-8-19 11:04:00",
+      "recentSongs": null
+    }
+  ]
+}

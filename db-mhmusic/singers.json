@@ -1,0 +1,32 @@
+{
+  "RECORDS": [
+    {
+      "id": 1,
+      "fullName": "Hồ Quang Hiếu",
+      "description": "Nguyễn Quang Hiếu, nổi tiếng với nghệ danh Hồ Quang Hiếu là một nam ca sĩ và diễn viên người Việt Nam. Anh sở hữu khuôn mặt điển trai, chất giọng đẹp, ấm áp phù hợp với các ca khúc ballad nhẹ nhàng, thành công sau bài hit đầu tiên trong sự nghiệp âm nhạc của mình trích từ album cùng tên \"Chỉ cần em hạnh phúc\".",
+      "avatar": "https://i.scdn.co/image/ab67616d0000b27372261e01a087f303e4a1ee5b",
+      "createdDate": "2022-7-28 14:45:28"
+    },
+    {
+      "id": 2,
+      "fullName": "Only C",
+      "description": "Only C tên thật là Nguyễn Phúc Thạch là một nhạc sĩ, ca sĩ, nhà sản xuất người Việt Nam",
+      "avatar": "https://static.wikia.nocookie.net/producerviet/images/8/8c/Only_C.jpeg/revision/latest?cb=20220628080953&path-prefix=vi",
+      "createdDate": "2022-7-30 10:04:20"
+    },
+    {
+      "id": 5,
+      "fullName": "Lê Bảo Bình",
+      "description": "Lê Bảo Bình hiện là một ca sĩ trẻ được nhiều người yêu thích và quan tâm hiện nay thông qua một số ca khúc nổi tiếng trên cộng đồng mạng",
+      "avatar": "https://photo-resize-zmp3.zmdcdn.me/w360_r1x1_jpeg/avatars/4/6/9/3/4693cff82edb7018039b8f9acc8fa40e.jpg",
+      "createdDate": "2022-7-31 21:59:00"
+    },
+    {
+      "id": 6,
+      "fullName": "HKT",
+      "description": "HKT là một nhóm nhạc pop người Việt Nam được Hải Âu Entertainment thành lập vào năm 2005 gồm ba thành viên: Hồ Gia Hùng, Lý Tuấn Kiệt, Phạm Linh Phương. Ba chữ cái đầu của những cái tên này ghép lại với nhau để cho ra cái tên chính thức của nhóm.",
+      "avatar": "https://vnn-imgs-f.vgcloud.vn/2019/05/19/17/thanh-vien-nhom-nhac-hkt-sau-13-nam-nguoi-tro-thanh-doanh-nhan-ke-suyt-tu-tu-vi-no-nan.jpg",
+      "createdDate": "2022-7-31 22:01:22"
+    }
+  ]
+}

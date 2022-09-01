@@ -127,9 +127,12 @@ export const updateView = tryCatch(async (req: Request, res: Response, next: Nex
 })
 
 
-// import sequelize2 from './../db/config';
-// let models = sequelize2.models;
-// let songs = await models.song.findAll();
-// await Promise.all(songs.map(async (song: any) => {
-//     return await redis.set(`songId:${song.id}`, song.view);
-// }))
+export const getChart = tryCatch(async(req: Request, res: Response, next: NextFunction) => {
+    let songs= await songService.getTop(3);
+})
+
+
+export const getTop10Song = tryCatch(async(req: Request, res: Response, next: NextFunction) => {
+    let songs= await songService.getTop(10);
+    res.json(responseSuccess(songs));
+})

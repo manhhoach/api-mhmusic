@@ -1,0 +1,22 @@
+{
+  "RECORDS": [
+    {
+      "id": 2,
+      "songId": 2,
+      "albumId": 1,
+      "createdDate": "2022-8-11 08:30:12"
+    },
+    {
+      "id": 3,
+      "songId": 2,
+      "albumId": 2,
+      "createdDate": "2022-8-11 08:36:01"
+    },
+    {
+      "id": 4,
+      "songId": 3,
+      "albumId": 3,
+      "createdDate": "2022-8-11 10:12:08"
+    }
+  ]
+}
