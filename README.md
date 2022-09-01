@@ -1,3 +1,3 @@
-Tạo file .env và config các biến: SECRET_KEY, googleClientID_mail, googleClientSecret_mail, refreshToken_mail, mail
-Vào src/db/config.ts sửa thông tin kết nối database
-Chạy npm i -> tsc -w -> npm run dev
+Tạo file .env và khai báo các biến: SECRET_KEY, googleClientID_mail, googleClientSecret_mail, refreshToken_mail, mail
+Sửa thông tin kết nối database tại src/db/config.ts
+Gõ npm i -> tsc -w -> npm run dev
