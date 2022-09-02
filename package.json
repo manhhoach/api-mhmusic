@@ -36,6 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "macaddress": "^0.5.3",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.37",
     "mysql2": "^2.3.3",
     "node-schedule": "^2.1.0",
     "nodemailer": "^6.7.7",

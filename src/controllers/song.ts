@@ -10,7 +10,8 @@ import getUrl from '../helper/getUrlTracks'
 import redis from './../db/connectRedis';
 import macaddress from 'macaddress';
 import convertTZ from '../helper/convertTimeZone';
-import moment from 'moment';
+import moment from 'moment-timezone';
+
 
 
 export const getAll = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
@@ -129,7 +130,7 @@ export const getChart = tryCatch(async (req: Request, res: Response, next: NextF
     let songs = await songService.getTop(3);
     let arr_time = [];
     for (let i = 0; i < 12; i++) {
-        arr_time.push(moment().subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'))
+        arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'))
     }
     console.log(arr_time)
     let data = await Promise.all(arr_time.map(async (time) => {

@@ -44,7 +44,7 @@ const sequelize_1 = __importDefault(require("sequelize"));
 const getUrlTracks_1 = __importDefault(require("../helper/getUrlTracks"));
 const connectRedis_1 = __importDefault(require("./../db/connectRedis"));
 const macaddress_1 = __importDefault(require("macaddress"));
-const moment_1 = __importDefault(require("moment"));
+const moment_timezone_1 = __importDefault(require("moment-timezone"));
 exports.getAll = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let condition = {};
     if (req.query.name) {
@@ -137,7 +137,7 @@ exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0,
     let songs = yield songService.getTop(3);
     let arr_time = [];
     for (let i = 0; i < 12; i++) {
-        arr_time.push((0, moment_1.default)().subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'));
+        arr_time.push((0, moment_timezone_1.default)().tz('Asia/Ho_Chi_Minh').subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'));
     }
     console.log(arr_time);
     let data = yield Promise.all(arr_time.map((time) => __awaiter(void 0, void 0, void 0, function* () {
