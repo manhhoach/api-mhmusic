@@ -131,6 +131,7 @@ export const getChart = tryCatch(async (req: Request, res: Response, next: NextF
     for (let i = 0; i < 12; i++) {
         arr_time.push(moment().subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'))
     }
+    console.log(arr_time)
     let data = await Promise.all(arr_time.map(async (time) => {
         let viewByHours = await Promise.all(songs.map(async (song: any) => {
             let view = await redis.get(`SONGID:${song.id}-TIME:${time}`)

@@ -139,6 +139,7 @@ exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0,
     for (let i = 0; i < 12; i++) {
         arr_time.push((0, moment_1.default)().subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'));
     }
+    console.log(arr_time);
     let data = yield Promise.all(arr_time.map((time) => __awaiter(void 0, void 0, void 0, function* () {
         let viewByHours = yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
             let view = yield connectRedis_1.default.get(`SONGID:${song.id}-TIME:${time}`);
