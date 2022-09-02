@@ -44,6 +44,7 @@ const sequelize_1 = __importDefault(require("sequelize"));
 const getUrlTracks_1 = __importDefault(require("../helper/getUrlTracks"));
 const connectRedis_1 = __importDefault(require("./../db/connectRedis"));
 const macaddress_1 = __importDefault(require("macaddress"));
+const moment_1 = __importDefault(require("moment"));
 exports.getAll = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let condition = {};
     if (req.query.name) {
@@ -134,6 +135,25 @@ exports.updateView = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 
 }));
 exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let songs = yield songService.getTop(3);
+    let arr_time = [];
+    for (let i = 0; i < 12; i++) {
+        arr_time.push((0, moment_1.default)().subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'));
+    }
+    let data = yield Promise.all(arr_time.map((time) => __awaiter(void 0, void 0, void 0, function* () {
+        let viewByHours = yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
+            let view = yield connectRedis_1.default.get(`SONGID:${song.id}-TIME:${time}`);
+            //console.log(`SONGID:${song.id}-TIME:${time}: `, view)
+            return {
+                id: song.id,
+                name: song.name,
+                view: view ? view : 0
+            };
+        })));
+        return {
+            time: time, viewByHours: viewByHours
+        };
+    })));
+    res.json((0, response_1.responseSuccess)(data));
 }));
 exports.getTop10Song = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let songs = yield songService.getTop(10);

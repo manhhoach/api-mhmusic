@@ -9,6 +9,8 @@ import getUrl from '../helper/getUrlTracks'
 
 import redis from './../db/connectRedis';
 import macaddress from 'macaddress';
+import convertTZ from '../helper/convertTimeZone';
+import moment from 'moment';
 
 
 export const getAll = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
@@ -58,7 +60,6 @@ export const create = tryCatch(async (req: Request, res: Response, next: NextFun
     res.json(responseSuccess(song));
 })
 
-
 export const update = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
     let data: any = {};
     if (req.body.songId && !req.body.url) {
@@ -86,7 +87,6 @@ export const update = tryCatch(async (req: Request, res: Response, next: NextFun
 
 })
 
-
 export const destroy = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
     let result = await Promise.all(
         req.body.ids.map(async (id: number) => await songService.destroy({ id: id }))
@@ -110,29 +110,46 @@ export const getRecentSongs = tryCatch(async (req: Request, res: Response, next:
     res.json(responseSuccess(recentSongs))
 })
 
-
 export const updateView = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
     const songId = `songId:${req.params.id}`;
     const macAddress = `macAddress:${await macaddress.one()}`;
 
-    const isOK = await redis.set(`${macAddress}-${songId}`, 'MH-MUSIC','EX', 60*3, 'NX'); 
-    let data=null;
-    if(isOK==='OK')
-    {
-       data= await redis.incrby(songId, 1);
+    const isOK = await redis.set(`${macAddress}-${songId}`, 'MH-MUSIC', 'EX', 60 * 3, 'NX');
+    let data = null;
+    if (isOK === 'OK') {
+        data = await redis.incrby(songId, 1);
     }
     res.json(responseSuccess(data))
 
 
 })
 
+export const getChart = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
 
-export const getChart = tryCatch(async(req: Request, res: Response, next: NextFunction) => {
-    let songs= await songService.getTop(3);
+    let songs = await songService.getTop(3);
+    let arr_time = [];
+    for (let i = 0; i < 12; i++) {
+        arr_time.push(moment().subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'))
+    }
+    let data = await Promise.all(arr_time.map(async (time) => {
+        let viewByHours = await Promise.all(songs.map(async (song: any) => {
+
+            let view = await redis.get(`SONGID:${song.id}-TIME:${time}`)
+            //console.log(`SONGID:${song.id}-TIME:${time}: `, view)
+            return {
+                id: song.id,
+                name: song.name,
+                view: view?view:0
+            }
+        }))
+        return {
+            time: time, viewByHours: viewByHours
+        }
+    }))
+    res.json(responseSuccess(data))
 })
 
-
-export const getTop10Song = tryCatch(async(req: Request, res: Response, next: NextFunction) => {
-    let songs= await songService.getTop(10);
+export const getTop10Song = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+    let songs = await songService.getTop(10);
     res.json(responseSuccess(songs));
 })

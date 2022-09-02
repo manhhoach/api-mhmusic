@@ -1,10 +1,19 @@
 import sequelize from '../db/config';
 import redis from './../db/connectRedis';
 import schedule from 'node-schedule'
-
+import convertTZ from './convertTimeZone'
 let models = sequelize.models;
 
-const job = schedule.scheduleJob('* */10 * * *', async function () {
+
+
+const mapping = async () => {
+    let songs = await models.song.findAll();
+    await Promise.all(songs.map(async (song: any) => {
+        return await redis.set(`songId:${song.id}`, song.view);
+    }))
+}
+
+const mapViewSchedule = schedule.scheduleJob('* */10 * * * *', async function () {
     let songs = await models.song.findAll();
     await Promise.all(songs.map(async (song: any) => {
         let view = await redis.get(`songId:${song.id}`);
@@ -16,13 +25,18 @@ const job = schedule.scheduleJob('* */10 * * *', async function () {
     }))
 });
 
-const mapping = async () => {
+
+const countViewEveryHourSchedule = schedule.scheduleJob ('0 0 * * * *', async()=>{
+    let timeStandard = convertTZ(new Date())
     let songs = await models.song.findAll();
     await Promise.all(songs.map(async (song: any) => {
-        return await redis.set(`songId:${song.id}`, song.view);
+        return await redis.set(`SONGID:${song.id}-TIME:${timeStandard}`, song.view, 'EX', 2*24*60*60); 
     }))
-}
+    
+});
 
-export default job
+
+
+export {mapViewSchedule, countViewEveryHourSchedule}
 
 

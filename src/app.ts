@@ -3,7 +3,7 @@ import 'dotenv/config'; // kỹ thuật mới
 import sequelizeConnection from './db/config'
 import routes from './routes/index'
 import cors from 'cors'
-import job from './helper/schedule'
+import {mapViewSchedule, countViewEveryHourSchedule} from './helper/schedule'
 
 const app: Application = express()
 const port = process.env.PORT || 3000
@@ -25,7 +25,8 @@ app.listen(port, async () => {
     console.log(`Server running on http://localhost:${port}`)
     try {
         await sequelizeConnection.authenticate()
-        job;
+        mapViewSchedule;
+        countViewEveryHourSchedule;
         console.log('Connection has been established successfully.');
     } catch (err) {
         console.log('Unable to connect to the database:', err);
