@@ -42,7 +42,8 @@ const countViewEveryHourSchedule = node_schedule_1.default.scheduleJob('0 0 * * 
     let timeStandard = (0, convertTimeZone_1.default)(new Date());
     let songs = yield models.song.findAll();
     yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield connectRedis_1.default.set(`SONGID:${song.id}-TIME:${timeStandard}`, song.view, 'EX', 2 * 24 * 60 * 60);
+        let view = yield connectRedis_1.default.get(`songId:${song.id}`);
+        return yield connectRedis_1.default.set(`SONGID:${song.id}-TIME:${timeStandard}`, parseInt(view), 'EX', 2 * 24 * 60 * 60);
     })));
 }));
 exports.countViewEveryHourSchedule = countViewEveryHourSchedule;

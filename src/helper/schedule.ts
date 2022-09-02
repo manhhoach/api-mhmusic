@@ -30,7 +30,8 @@ const countViewEveryHourSchedule = schedule.scheduleJob ('0 0 * * * *', async()=
     let timeStandard = convertTZ(new Date())
     let songs = await models.song.findAll();
     await Promise.all(songs.map(async (song: any) => {
-        return await redis.set(`SONGID:${song.id}-TIME:${timeStandard}`, song.view, 'EX', 2*24*60*60); 
+        let view = await redis.get(`songId:${song.id}`);
+        return await redis.set(`SONGID:${song.id}-TIME:${timeStandard}`, parseInt(view as string), 'EX', 2*24*60*60); 
     }))
     
 });
