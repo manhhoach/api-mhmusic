@@ -42,10 +42,11 @@ const pagination_1 = require("./../helper/pagination");
 const tryCatch_1 = __importDefault(require("./../helper/tryCatch"));
 const sequelize_1 = __importDefault(require("sequelize"));
 const albumSongService = __importStar(require("./../services/album_song"));
+const TYPE_ALBUM_ADMIN = 10;
 exports.getAll = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    let type = 10;
+    let type = TYPE_ALBUM_ADMIN;
     let condition = {};
-    if (req.query.type && res.locals.user) {
+    if (req.query.type == '0' && res.locals.user) {
         type = parseInt(req.query.type);
         condition.userId = res.locals.user.id;
     }

@@ -30,15 +30,15 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const userController = __importStar(require("./../controllers/user"));
 const jwt = __importStar(require("./../middlewares/jwt_token"));
-router.post('/register', userController.register); // done
-router.post('/login', userController.login); // done
-router.post('/forgot-password', userController.forgotPassword); //
-router.put('/reset-password/:token', userController.resetPassword); //
+router.post('/register', userController.register);
+router.post('/login', userController.login);
+router.post('/forgot-password', userController.forgotPassword);
+router.put('/reset-password/:token', userController.resetPassword);
 router.use(jwt.decodeToken);
 router.put('/recent-songs', userController.updateRecentSongs);
-router.put('/change-password', userController.changePassword); // done
-router.get('/me', userController.getMe); // done
-router.put('/me', userController.updateMe); // done
+router.put('/change-password', userController.changePassword);
+router.get('/me', userController.getMe);
+router.put('/me', userController.updateMe);
 router.use(jwt.protect);
-router.delete('/:id', userController.destroy); // done
+router.delete('/:id', userController.destroy);
 exports.default = router;

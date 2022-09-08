@@ -43,6 +43,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt = __importStar(require("./../middlewares/jwt_token"));
 const mailService = __importStar(require("./../services/mail"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const connectRedis_1 = __importDefault(require("./../db/connectRedis"));
 const comparePassword = (str, strHash) => {
     return bcryptjs_1.default.compareSync(str, strHash);
 };
@@ -143,22 +144,18 @@ exports.forgotPassword = (0, tryCatch_1.default)((req, res, next) => __awaiter(v
     }
 }));
 exports.updateRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    let queueSong = res.locals.user.recentSongs.split(';');
-    const LENGTH_QUEUE = 10;
-    if (!queueSong.includes(req.body.songId.toString())) {
-        if (queueSong.length >= LENGTH_QUEUE) {
-            queueSong.shift();
-        }
-        queueSong.push(req.body.songId);
-        let recentSongs = queueSong.join(';');
-        let result = yield userService.update({ recentSongs }, { id: res.locals.user.id });
-        if (result[0] === 1) {
-            res.json((0, response_1.responseSuccess)("UPDATE SUCCESSFULLY"));
-        }
-        else {
-            res.json((0, response_1.responseError)("UPDATE FAILED"));
-        }
+    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    const LENGTH_RECENTSONGS = 10;
+    let recentSongs = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
+    if (recentSongs.length >= LENGTH_RECENTSONGS) {
+        yield connectRedis_1.default.lpop(TEMPLATE_RECENTSONGS);
     }
-    else
-        res.json((0, response_1.responseSuccess)("NOTHING UPDATE"));
+    if (!recentSongs.includes(req.body.songId.toString())) {
+        yield connectRedis_1.default.rpush(TEMPLATE_RECENTSONGS, req.body.songId);
+        recentSongs = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
+        res.json((0, response_1.responseSuccess)(recentSongs));
+    }
+    else {
+        res.json((0, response_1.responseError)('UPDATE FAILED'));
+    }
 }));

@@ -7,7 +7,7 @@ import bcryptjs from 'bcryptjs'
 import * as jwt from './../middlewares/jwt_token'
 import * as mailService from './../services/mail'
 import jsonwebtoken from 'jsonwebtoken'
-
+import redis from './../db/connectRedis';
 
 
 const comparePassword = (str: string, strHash: string) => {
@@ -135,26 +135,31 @@ export const forgotPassword = tryCatch(async (req: Request, res: Response, next:
 
 })
 
-export const updateRecentSongs= tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-    let queueSong=res.locals.user.recentSongs.split(';');
-    const LENGTH_QUEUE=10;
-    if(!queueSong.includes(req.body.songId.toString()))
-    {
-        if(queueSong.length>=LENGTH_QUEUE)
-        {
-            queueSong.shift();
-        }   
-        queueSong.push(req.body.songId)
-        let recentSongs=queueSong.join(';');
 
-        let result = await userService.update({recentSongs}, { id: res.locals.user.id });
-        if (result[0] === 1) {
-            res.json(responseSuccess("UPDATE SUCCESSFULLY"))
-        }
-        else {
-            res.json(responseError("UPDATE FAILED"))
-        }
+
+
+
+export const updateRecentSongs = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+
+    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    const LENGTH_RECENTSONGS = 10;
+
+    let recentSongs = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
+
+    if (recentSongs.length >= LENGTH_RECENTSONGS) {
+        await redis.lpop(TEMPLATE_RECENTSONGS)
     }
-    else
-        res.json(responseSuccess("NOTHING UPDATE"))
+    if (!recentSongs.includes(req.body.songId.toString())) {
+        
+        await redis.rpush(TEMPLATE_RECENTSONGS, req.body.songId)
+        recentSongs = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
+        res.json(responseSuccess(recentSongs));
+    }
+    else {
+        res.json(responseError('UPDATE FAILED'))
+    }
+
+
+
+
 })

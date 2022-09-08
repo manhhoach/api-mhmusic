@@ -116,7 +116,8 @@ exports.destroy = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, 
     }
 }));
 exports.getRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    let recentSongsId = res.locals.user.recentSongs.split(';');
+    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    let recentSongsId = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
     let recentSongs = yield Promise.all(recentSongsId.map((id) => __awaiter(void 0, void 0, void 0, function* () {
         let song = yield songService.getOne({ id: parseInt(id) }, false, false);
         return song === null || song === void 0 ? void 0 : song.dataValues;
@@ -127,11 +128,13 @@ exports.updateView = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 
     const songId = `songId:${req.params.id}`;
     const macAddress = `macAddress:${yield macaddress_1.default.one()}`;
     const isOK = yield connectRedis_1.default.set(`${macAddress}-${songId}`, 'MH-MUSIC', 'EX', 60 * 3, 'NX');
-    let data = null;
     if (isOK === 'OK') {
-        data = yield connectRedis_1.default.incrby(songId, 1);
+        let data = yield connectRedis_1.default.incrby(songId, 1);
+        res.json((0, response_1.responseSuccess)(data));
     }
-    res.json((0, response_1.responseSuccess)(data));
+    else {
+        res.json((0, response_1.responseError)('INCRE VIEW FAILED'));
+    }
 }));
 exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let songs = yield songService.getTop(3);
@@ -139,7 +142,7 @@ exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0,
     for (let i = 0; i < 12; i++) {
         arr_time.push((0, moment_timezone_1.default)().tz('Asia/Ho_Chi_Minh').subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'));
     }
-    console.log(arr_time);
+    //console.log(arr_time)
     let data = yield Promise.all(arr_time.map((time) => __awaiter(void 0, void 0, void 0, function* () {
         let viewByHours = yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
             let view = yield connectRedis_1.default.get(`SONGID:${song.id}-TIME:${time}`);

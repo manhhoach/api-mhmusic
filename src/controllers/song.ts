@@ -101,7 +101,8 @@ export const destroy = tryCatch(async (req: Request, res: Response, next: NextFu
 })
 
 export const getRecentSongs = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-    let recentSongsId = res.locals.user.recentSongs.split(';');
+    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    let recentSongsId = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
     let recentSongs = await Promise.all(
         recentSongsId.map(async (id: string) => {
             let song: any = await songService.getOne({ id: parseInt(id) }, false, false);
@@ -116,12 +117,15 @@ export const updateView = tryCatch(async (req: Request, res: Response, next: Nex
     const macAddress = `macAddress:${await macaddress.one()}`;
 
     const isOK = await redis.set(`${macAddress}-${songId}`, 'MH-MUSIC', 'EX', 60 * 3, 'NX');
-    let data = null;
     if (isOK === 'OK') {
-        data = await redis.incrby(songId, 1);
+        let data = await redis.incrby(songId, 1);
+        res.json(responseSuccess(data))
     }
-    res.json(responseSuccess(data))
-
+    else
+    {
+        res.json(responseError('INCRE VIEW FAILED'))
+    }
+    
 
 })
 
@@ -132,7 +136,7 @@ export const getChart = tryCatch(async (req: Request, res: Response, next: NextF
     for (let i = 0; i < 12; i++) {
         arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'))
     }
-    console.log(arr_time)
+    //console.log(arr_time)
     let data = await Promise.all(arr_time.map(async (time) => {
         let viewByHours = await Promise.all(songs.map(async (song: any) => {
             let view = await redis.get(`SONGID:${song.id}-TIME:${time}`)

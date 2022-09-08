@@ -8,11 +8,13 @@ import { IAlbumSong } from './../models/album_song'
 import sequelize from 'sequelize'
 import * as albumSongService from './../services/album_song'
 
+const TYPE_ALBUM_ADMIN = 10;
+
 export const getAll = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
 
-    let type = 10;
+    let type = TYPE_ALBUM_ADMIN;
     let condition: any = {};
-    if (req.query.type && res.locals.user) {
+    if (req.query.type == '0' && res.locals.user) {
         type = parseInt(req.query.type as string);
         condition.userId = res.locals.user.id;
     }
@@ -73,7 +75,7 @@ export const destroy = tryCatch(async (req: Request, res: Response, next: NextFu
 
 export const getOne = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
     let data;
-    if (res.locals.user && req.query.type=="0") {
+    if (res.locals.user && req.query.type == "0") {
         data = await albumSongService.getOne({
             album_song: { albumId: parseInt(req.params.albumId) },
             album: { userId: res.locals.user.id }
