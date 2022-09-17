@@ -9,7 +9,6 @@ router.post('/forgot-password', userController.forgotPassword);
 router.put('/reset-password/:token', userController.resetPassword); 
 
 router.use( jwt.decodeToken)
-router.put('/recent-songs', userController.updateRecentSongs);
 router.put('/change-password', userController.changePassword)
 router.get('/me', userController.getMe);
 router.put('/me', userController.updateMe);

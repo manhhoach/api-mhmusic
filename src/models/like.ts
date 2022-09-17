@@ -1,4 +1,5 @@
 import { InferAttributes, Sequelize, DataTypes, Model, InferCreationAttributes, CreationOptional } from "sequelize";
+import {createUser} from './user'
 
 export interface ILike extends Model<InferAttributes<ILike>, InferCreationAttributes<ILike>> {
     id: CreationOptional<number>;
@@ -10,6 +11,7 @@ export interface ILike extends Model<InferAttributes<ILike>, InferCreationAttrib
 
 
 export function createLike(sequelize: Sequelize) {
+    const User=createUser(sequelize)
     const Like = sequelize.define<ILike>('like', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
@@ -18,6 +20,11 @@ export function createLike(sequelize: Sequelize) {
         },
         userId:{
             type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: false,
+            references: {
+                model: User,
+                key: 'id'
+            }
         },
         varId:{
             type: DataTypes.INTEGER.UNSIGNED,
@@ -32,6 +39,8 @@ export function createLike(sequelize: Sequelize) {
     },
         { timestamps: false }
     )
+    User.hasMany(Like, {foreignKey: 'userId'});
+    Like.belongsTo(User);
 
     return Like;
 }

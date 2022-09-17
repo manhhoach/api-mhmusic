@@ -35,10 +35,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.destroy = exports.create = exports.countLike = void 0;
+exports.getLiked = exports.destroy = exports.create = exports.countLike = void 0;
 const likeService = __importStar(require("./../services/like"));
 const response_1 = require("./../helper/response");
 const tryCatch_1 = __importDefault(require("./../helper/tryCatch"));
+const config_1 = __importDefault(require("./../db/config"));
+let models = config_1.default.models;
 exports.countLike = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let condition = Object.assign({}, req.query);
     let count = yield likeService.count(condition);
@@ -58,4 +60,19 @@ exports.destroy = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, 
     else {
         res.json((0, response_1.responseError)("UNLIKE FAILED"));
     }
+}));
+const strategy = {
+    ALBUM: models.album,
+    SINGER: models.singer,
+    SONG: models.song,
+};
+exports.getLiked = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let liked = yield likeService.getByCondition({
+        type: req.query.type,
+        userId: res.locals.user.id
+    });
+    let data = yield Promise.all(liked.map((ele) => __awaiter(void 0, void 0, void 0, function* () {
+        return yield strategy[req.query.type].findOne({ where: { id: ele.varId } });
+    })));
+    res.json((0, response_1.responseSuccess)(data));
 }));

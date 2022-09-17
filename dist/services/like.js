@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.destroy = exports.create = exports.count = void 0;
+exports.destroy = exports.getByCondition = exports.create = exports.count = void 0;
 const config_1 = __importDefault(require("./../db/config"));
 let models = config_1.default.models;
 function count(condition) {
@@ -29,6 +29,12 @@ function create(data) {
     });
 }
 exports.create = create;
+function getByCondition(data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return models.like.findAll({ where: data });
+    });
+}
+exports.getByCondition = getByCondition;
 function destroy(condition) {
     return __awaiter(this, void 0, void 0, function* () {
         return models.like.destroy({ where: condition });

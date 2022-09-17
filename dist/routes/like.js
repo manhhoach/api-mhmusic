@@ -32,6 +32,7 @@ const likeController = __importStar(require("./../controllers/like"));
 const jwt = __importStar(require("./../middlewares/jwt_token"));
 router.get('/count', likeController.countLike);
 router.use(jwt.decodeToken);
-router.post('/', likeController.create); // done
-router.delete('/', likeController.destroy); // done
+router.get('/liked', likeController.getLiked);
+router.post('/', likeController.create);
+router.delete('/', likeController.destroy);
 exports.default = router;

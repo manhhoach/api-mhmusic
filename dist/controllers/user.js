@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateRecentSongs = exports.forgotPassword = exports.resetPassword = exports.changePassword = exports.destroy = exports.updateMe = exports.login = exports.register = exports.getMe = void 0;
+exports.forgotPassword = exports.resetPassword = exports.changePassword = exports.destroy = exports.updateMe = exports.login = exports.register = exports.getMe = void 0;
 const userService = __importStar(require("./../services/user"));
 const response_1 = require("./../helper/response");
 const tryCatch_1 = __importDefault(require("./../helper/tryCatch"));
@@ -43,7 +43,6 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt = __importStar(require("./../middlewares/jwt_token"));
 const mailService = __importStar(require("./../services/mail"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const connectRedis_1 = __importDefault(require("./../db/connectRedis"));
 const comparePassword = (str, strHash) => {
     return bcryptjs_1.default.compareSync(str, strHash);
 };
@@ -141,21 +140,5 @@ exports.forgotPassword = (0, tryCatch_1.default)((req, res, next) => __awaiter(v
     }
     else {
         res.json("USER IS NOT EXIST");
-    }
-}));
-exports.updateRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
-    const LENGTH_RECENTSONGS = 10;
-    let recentSongs = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
-    if (recentSongs.length >= LENGTH_RECENTSONGS) {
-        yield connectRedis_1.default.lpop(TEMPLATE_RECENTSONGS);
-    }
-    if (!recentSongs.includes(req.body.songId.toString())) {
-        yield connectRedis_1.default.rpush(TEMPLATE_RECENTSONGS, req.body.songId);
-        recentSongs = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
-        res.json((0, response_1.responseSuccess)(recentSongs));
-    }
-    else {
-        res.json((0, response_1.responseError)('UPDATE FAILED'));
     }
 }));

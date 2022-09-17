@@ -36,7 +36,7 @@ sequelizeConnection.models.like = (0, like_1.createLike)(sequelizeConnection);
 //sequelizeConnection.models.user.sync({alter: true})
 //sequelizeConnection.models.album.sync({force: true})
 //sequelizeConnection.models.album_song.sync({force: true})
-//sequelizeConnection.models.like.sync({ force: true })
+//sequelizeConnection.models.like.sync({ alter: true })
 //sequelizeConnection.sync({force: true})
 // const deleteConstraint = () => {
 //     const queryInterface = sequelizeConnection.getQueryInterface()

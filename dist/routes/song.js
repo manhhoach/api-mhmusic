@@ -32,6 +32,7 @@ const songController = __importStar(require("../controllers/song"));
 const jwt = __importStar(require("../middlewares/jwt_token"));
 router.get('/', songController.getAll);
 router.get('/recent-songs', jwt.decodeToken, songController.getRecentSongs);
+router.put('/recent-songs', jwt.decodeToken, songController.updateRecentSongs);
 router.post('/views/:id', songController.updateView);
 router.get('/chart', songController.getChart);
 router.get('/top-10', songController.getTop10Song);

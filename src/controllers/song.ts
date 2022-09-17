@@ -6,10 +6,8 @@ import tryCatch from '../helper/tryCatch'
 import sequelize from 'sequelize'
 import getUrl from '../helper/getUrlTracks'
 
-
 import redis from './../db/connectRedis';
 import macaddress from 'macaddress';
-import convertTZ from '../helper/convertTimeZone';
 import moment from 'moment-timezone';
 
 
@@ -45,7 +43,7 @@ export const create = tryCatch(async (req: Request, res: Response, next: NextFun
         let url = await getUrl(req.body.songId)
         if (url.success === true) {
             data = {
-                ...req.body, url: `http://api.mp3.zing.vn/api/streaming/audio/${req.body.songId}/320`
+                ...req.body, url: `http://api.mp3.zing.vn/api/streaming/audio/${req.body.songId}/128`
             }
         }
         else {
@@ -136,11 +134,9 @@ export const getChart = tryCatch(async (req: Request, res: Response, next: NextF
     for (let i = 0; i < 12; i++) {
         arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'))
     }
-    //console.log(arr_time)
     let data = await Promise.all(arr_time.map(async (time) => {
         let viewByHours = await Promise.all(songs.map(async (song: any) => {
             let view = await redis.get(`SONGID:${song.id}-TIME:${time}`)
-            //console.log(`SONGID:${song.id}-TIME:${time}: `, view)
             return {
                 id: song.id,
                 name: song.name,
@@ -158,3 +154,28 @@ export const getTop10Song = tryCatch(async (req: Request, res: Response, next: N
     let songs = await songService.getTop(10);
     res.json(responseSuccess(songs));
 })
+
+
+
+export const updateRecentSongs = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+
+    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    const LENGTH_RECENTSONGS = 10;
+
+    let recentSongs = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
+
+    if (recentSongs.length >= LENGTH_RECENTSONGS) {
+        await redis.lpop(TEMPLATE_RECENTSONGS)
+    }
+    if (!recentSongs.includes(req.body.songId.toString())) {
+        
+        await redis.rpush(TEMPLATE_RECENTSONGS, req.body.songId)
+        recentSongs = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
+        res.json(responseSuccess(recentSongs));
+    }
+    else {
+        res.json(responseError('UPDATE FAILED'))
+    }
+
+})
+

@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTop10Song = exports.getChart = exports.updateView = exports.getRecentSongs = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
+exports.updateRecentSongs = exports.getTop10Song = exports.getChart = exports.updateView = exports.getRecentSongs = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
 const songService = __importStar(require("../services/song"));
 const response_1 = require("../helper/response");
 const pagination_1 = require("../helper/pagination");
@@ -70,7 +70,7 @@ exports.create = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, v
     if (req.body.songId && !req.body.url) {
         let url = yield (0, getUrlTracks_1.default)(req.body.songId);
         if (url.success === true) {
-            data = Object.assign(Object.assign({}, req.body), { url: `http://api.mp3.zing.vn/api/streaming/audio/${req.body.songId}/320` });
+            data = Object.assign(Object.assign({}, req.body), { url: `http://api.mp3.zing.vn/api/streaming/audio/${req.body.songId}/128` });
         }
         else {
             return res.json((0, response_1.responseError)("Song id or Song does not exist"));
@@ -142,11 +142,9 @@ exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0,
     for (let i = 0; i < 12; i++) {
         arr_time.push((0, moment_timezone_1.default)().tz('Asia/Ho_Chi_Minh').subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'));
     }
-    //console.log(arr_time)
     let data = yield Promise.all(arr_time.map((time) => __awaiter(void 0, void 0, void 0, function* () {
         let viewByHours = yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
             let view = yield connectRedis_1.default.get(`SONGID:${song.id}-TIME:${time}`);
-            //console.log(`SONGID:${song.id}-TIME:${time}: `, view)
             return {
                 id: song.id,
                 name: song.name,
@@ -162,4 +160,20 @@ exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0,
 exports.getTop10Song = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let songs = yield songService.getTop(10);
     res.json((0, response_1.responseSuccess)(songs));
+}));
+exports.updateRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    const LENGTH_RECENTSONGS = 10;
+    let recentSongs = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
+    if (recentSongs.length >= LENGTH_RECENTSONGS) {
+        yield connectRedis_1.default.lpop(TEMPLATE_RECENTSONGS);
+    }
+    if (!recentSongs.includes(req.body.songId.toString())) {
+        yield connectRedis_1.default.rpush(TEMPLATE_RECENTSONGS, req.body.songId);
+        recentSongs = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
+        res.json((0, response_1.responseSuccess)(recentSongs));
+    }
+    else {
+        res.json((0, response_1.responseError)('UPDATE FAILED'));
+    }
 }));

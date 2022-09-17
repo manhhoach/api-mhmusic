@@ -137,29 +137,3 @@ export const forgotPassword = tryCatch(async (req: Request, res: Response, next:
 
 
 
-
-
-export const updateRecentSongs = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-
-    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
-    const LENGTH_RECENTSONGS = 10;
-
-    let recentSongs = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
-
-    if (recentSongs.length >= LENGTH_RECENTSONGS) {
-        await redis.lpop(TEMPLATE_RECENTSONGS)
-    }
-    if (!recentSongs.includes(req.body.songId.toString())) {
-        
-        await redis.rpush(TEMPLATE_RECENTSONGS, req.body.songId)
-        recentSongs = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
-        res.json(responseSuccess(recentSongs));
-    }
-    else {
-        res.json(responseError('UPDATE FAILED'))
-    }
-
-
-
-
-})
