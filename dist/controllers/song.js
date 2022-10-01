@@ -56,8 +56,9 @@ exports.getAll = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, v
     if (req.query.categoryId) {
         condition.categoryId = parseInt(req.query.categoryId);
     }
+    let order = req.query.latest ? true : false;
     let pagination = (0, pagination_1.getPagination)(parseInt(req.query.page_index), parseInt(req.query.page_size));
-    let data = yield songService.getAll(condition, pagination, true, true);
+    let data = yield songService.getAll(condition, pagination, true, true, order);
     let response = (0, pagination_1.getPagingData)(data, parseInt(req.query.page_index), pagination.limit);
     res.json((0, response_1.responseSuccess)(response));
 }));

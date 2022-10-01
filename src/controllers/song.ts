@@ -23,8 +23,9 @@ export const getAll = tryCatch(async (req: Request, res: Response, next: NextFun
     if (req.query.categoryId) {
         condition.categoryId = parseInt(req.query.categoryId as string)
     }
+    let order = req.query.latest ? true : false;
     let pagination = getPagination(parseInt(req.query.page_index as string), parseInt(req.query.page_size as string))
-    let data = await songService.getAll(condition, pagination, true, true)
+    let data = await songService.getAll(condition, pagination, true, true, order)
     let response = getPagingData(data, parseInt(req.query.page_index as string), pagination.limit)
 
     res.json(responseSuccess(response));
@@ -119,11 +120,10 @@ export const updateView = tryCatch(async (req: Request, res: Response, next: Nex
         let data = await redis.incrby(songId, 1);
         res.json(responseSuccess(data))
     }
-    else
-    {
+    else {
         res.json(responseError('INCRE VIEW FAILED'))
     }
-    
+
 
 })
 
@@ -140,7 +140,7 @@ export const getChart = tryCatch(async (req: Request, res: Response, next: NextF
             return {
                 id: song.id,
                 name: song.name,
-                view: view?view:0
+                view: view ? view : 0
             }
         }))
         return {
@@ -168,7 +168,7 @@ export const updateRecentSongs = tryCatch(async (req: Request, res: Response, ne
         await redis.lpop(TEMPLATE_RECENTSONGS)
     }
     if (!recentSongs.includes(req.body.songId.toString())) {
-        
+
         await redis.rpush(TEMPLATE_RECENTSONGS, req.body.songId)
         recentSongs = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
         res.json(responseSuccess(recentSongs));

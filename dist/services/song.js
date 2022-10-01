@@ -15,17 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTop = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
 const config_1 = __importDefault(require("../db/config"));
 let models = config_1.default.models;
-function getAll(condition, pagination, singer = false, category = false) {
+function getAll(condition, pagination, singer = false, category = false, order = false) {
     return __awaiter(this, void 0, void 0, function* () {
         let includes = [];
         if (singer)
             includes.push({ model: config_1.default.models.singer });
         if (category)
             includes.push({ model: config_1.default.models.category });
+        let orderCreatedDate = order ? [['createdDate', 'DESC']] : undefined;
         return models.song.findAll({
             where: condition,
             limit: pagination.limit,
             offset: pagination.offset,
+            order: orderCreatedDate,
             include: includes
         });
     });
