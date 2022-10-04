@@ -30,9 +30,6 @@ function createUser(sequelize) {
             type: new sequelize_1.DataTypes.STRING(1024),
             defaultValue: '/user.png'
         },
-        recentSongs: {
-            type: sequelize_1.DataTypes.STRING(128)
-        },
         type: {
             type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             defaultValue: 0

@@ -13,7 +13,7 @@ const mapping = async () => {
     }))
 }
 
-const mapViewSchedule = schedule.scheduleJob('* */10 * * * *', async function () {
+const mapViewSchedule = schedule.scheduleJob('* */15 * * * *', async function () {
     let songs = await models.song.findAll();
     await Promise.all(songs.map(async (song: any) => {
         let view = await redis.get(`songId:${song.id}`);
