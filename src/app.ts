@@ -17,7 +17,7 @@ app.use(cors())
 app.use(routes)
 
 app.get('/', async (req: Request, res: Response) => {
-    res.send('helllo')
+    res.send('Welcome to MH-Music!')
 })
 
 

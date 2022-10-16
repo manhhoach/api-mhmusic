@@ -1,5 +1,4 @@
 import { Sequelize } from 'sequelize';
-import sequelize, { InferAttributes, DataTypes, Model, InferCreationAttributes, CreationOptional } from "sequelize";
 import { createUser } from '../models/user';
 import { createSinger } from './../models/singer';
 import { createCategory } from '../models/category';
@@ -25,6 +24,7 @@ const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
     },
 });
 
+
 sequelizeConnection.models.category = createCategory(sequelizeConnection);
 sequelizeConnection.models.user = createUser(sequelizeConnection)
 sequelizeConnection.models.singer = createSinger(sequelizeConnection)
@@ -42,16 +42,7 @@ sequelizeConnection.models.like = createLike(sequelizeConnection)
 //sequelizeConnection.models.album_song.sync({force: true})
 //sequelizeConnection.models.like.sync({ alter: true })
 
-//sequelizeConnection.sync({force: true})
-
-
-// const deleteConstraint = () => {
-//     const queryInterface = sequelizeConnection.getQueryInterface()
-//     queryInterface.removeConstraint('likes', 'likes_songId_userId_unique')
-//      queryInterface.removeIndex('likes', 'likes_albumId_userId_unique')
-//     // queryInterface.removeConstraint('likes', 'likes_singerId_userId_unique')
-// }
-// //deleteConstraint()
+//sequelizeConnection.sync({alter: true})
 
 
 

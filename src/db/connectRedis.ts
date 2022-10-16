@@ -1,5 +1,6 @@
 import Redis  from 'ioredis';
 
-const redis=new Redis (process.env.REDIS_URL as string);
+let connectionString=process.env.REDIS_URL as string|| '127.0.0.1:6379';
+const redis=new Redis (connectionString);
 
 export default redis
