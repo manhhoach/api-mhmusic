@@ -24,7 +24,7 @@ export function createSinger (sequelize: Sequelize) {
         },
         avatar: {
             type: new DataTypes.STRING(1024),
-            defaultValue: 'xxx.jpg'
+            defaultValue: '/user.png'
         },
         createdDate: {
             type: DataTypes.DATE,

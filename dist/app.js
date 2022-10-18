@@ -26,7 +26,7 @@ app.use(express_1.default.static('image'));
 app.use((0, cors_1.default)());
 app.use(index_1.default);
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send('helllo');
+    res.send('Welcome to MH-Music!');
 }));
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Server running on http://localhost:${port}`);

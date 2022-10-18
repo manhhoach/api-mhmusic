@@ -9,6 +9,7 @@ import getUrl from '../helper/getUrlTracks'
 import redis from './../db/connectRedis';
 import macaddress from 'macaddress';
 import moment from 'moment-timezone';
+import CONSTANT from './../helper/constant'
 
 
 
@@ -100,7 +101,7 @@ export const destroy = tryCatch(async (req: Request, res: Response, next: NextFu
 })
 
 export const getRecentSongs = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    const TEMPLATE_RECENTSONGS = `${CONSTANT.RECENT_SONG_OF_USER}:${res.locals.user.id}`;
     let recentSongsId = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);
     let recentSongs = await Promise.all(
         recentSongsId.map(async (id: string) => {
@@ -112,8 +113,8 @@ export const getRecentSongs = tryCatch(async (req: Request, res: Response, next:
 })
 
 export const updateView = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-    const songId = `songId:${req.params.id}`;
-    const macAddress = `macAddress:${await macaddress.one()}`;
+    const songId = `${CONSTANT.SONG_ID}:${req.params.id}`;
+    const macAddress = `${CONSTANT.MAC_ADDRESS}:${await macaddress.one()}`;
 
     const isOK = await redis.set(`${macAddress}-${songId}`, 'MH-MUSIC', 'EX', 60 * 3, 'NX');
     if (isOK === 'OK') {
@@ -136,7 +137,7 @@ export const getChart = tryCatch(async (req: Request, res: Response, next: NextF
     }
     let data = await Promise.all(arr_time.map(async (time) => {
         let viewByHours = await Promise.all(songs.map(async (song: any) => {
-            let view = await redis.get(`SONGID:${song.id}-TIME:${time}`)
+            let view = await redis.get(`${CONSTANT.SONG_ID}:${song.id}-${CONSTANT.TIME}:${time}`)
             return {
                 id: song.id,
                 name: song.name,
@@ -159,7 +160,7 @@ export const getTop10Song = tryCatch(async (req: Request, res: Response, next: N
 
 export const updateRecentSongs = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
 
-    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    const TEMPLATE_RECENTSONGS = `${CONSTANT.RECENT_SONG_OF_USER}:${res.locals.user.id}`;
     const LENGTH_RECENTSONGS = 10;
 
     let recentSongs = await redis.lrange(TEMPLATE_RECENTSONGS, 0, -1);

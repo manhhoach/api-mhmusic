@@ -18,7 +18,7 @@ function createSinger(sequelize) {
         },
         avatar: {
             type: new sequelize_1.DataTypes.STRING(1024),
-            defaultValue: 'xxx.jpg'
+            defaultValue: '/user.png'
         },
         createdDate: {
             type: sequelize_1.DataTypes.DATE,

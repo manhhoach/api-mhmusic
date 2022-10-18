@@ -1,0 +1,10 @@
+
+const CONSTANT={
+    SONG_ID:'SONGID',
+    TIME:'TIME',
+    RECENT_SONG_OF_USER: 'RECENTSONGOFUSER',
+    MAC_ADDRESS:'MACADDRESS',
+
+}
+
+export default CONSTANT

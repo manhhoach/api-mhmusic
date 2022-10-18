@@ -45,6 +45,7 @@ const getUrlTracks_1 = __importDefault(require("../helper/getUrlTracks"));
 const connectRedis_1 = __importDefault(require("./../db/connectRedis"));
 const macaddress_1 = __importDefault(require("macaddress"));
 const moment_timezone_1 = __importDefault(require("moment-timezone"));
+const constant_1 = __importDefault(require("./../helper/constant"));
 exports.getAll = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let condition = {};
     if (req.query.name) {
@@ -117,7 +118,7 @@ exports.destroy = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, 
     }
 }));
 exports.getRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    const TEMPLATE_RECENTSONGS = `${constant_1.default.RECENT_SONG_OF_USER}:${res.locals.user.id}`;
     let recentSongsId = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
     let recentSongs = yield Promise.all(recentSongsId.map((id) => __awaiter(void 0, void 0, void 0, function* () {
         let song = yield songService.getOne({ id: parseInt(id) }, false, false);
@@ -126,8 +127,8 @@ exports.getRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(v
     res.json((0, response_1.responseSuccess)(recentSongs));
 }));
 exports.updateView = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const songId = `songId:${req.params.id}`;
-    const macAddress = `macAddress:${yield macaddress_1.default.one()}`;
+    const songId = `${constant_1.default.SONG_ID}:${req.params.id}`;
+    const macAddress = `${constant_1.default.MAC_ADDRESS}:${yield macaddress_1.default.one()}`;
     const isOK = yield connectRedis_1.default.set(`${macAddress}-${songId}`, 'MH-MUSIC', 'EX', 60 * 3, 'NX');
     if (isOK === 'OK') {
         let data = yield connectRedis_1.default.incrby(songId, 1);
@@ -145,7 +146,7 @@ exports.getChart = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0,
     }
     let data = yield Promise.all(arr_time.map((time) => __awaiter(void 0, void 0, void 0, function* () {
         let viewByHours = yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
-            let view = yield connectRedis_1.default.get(`SONGID:${song.id}-TIME:${time}`);
+            let view = yield connectRedis_1.default.get(`${constant_1.default.SONG_ID}:${song.id}-${constant_1.default.TIME}:${time}`);
             return {
                 id: song.id,
                 name: song.name,
@@ -163,7 +164,7 @@ exports.getTop10Song = (0, tryCatch_1.default)((req, res, next) => __awaiter(voi
     res.json((0, response_1.responseSuccess)(songs));
 }));
 exports.updateRecentSongs = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const TEMPLATE_RECENTSONGS = `recentSongsUser:${res.locals.user.id}`;
+    const TEMPLATE_RECENTSONGS = `${constant_1.default.RECENT_SONG_OF_USER}:${res.locals.user.id}`;
     const LENGTH_RECENTSONGS = 10;
     let recentSongs = yield connectRedis_1.default.lrange(TEMPLATE_RECENTSONGS, 0, -1);
     if (recentSongs.length >= LENGTH_RECENTSONGS) {

@@ -22,6 +22,11 @@ const sequelizeConnection = new sequelize_1.Sequelize(dbName, dbUser, dbPassword
         charset: 'utf8',
         collate: 'utf8_unicode_ci'
     },
+    // dialectOptions: {
+    //     ssl: {
+    //         require: true
+    //     }
+    // }
 });
 sequelizeConnection.models.category = (0, category_1.createCategory)(sequelizeConnection);
 sequelizeConnection.models.user = (0, user_1.createUser)(sequelizeConnection);
@@ -30,12 +35,12 @@ sequelizeConnection.models.song = (0, song_1.createSong)(sequelizeConnection);
 sequelizeConnection.models.album = (0, album_1.createAlbum)(sequelizeConnection);
 sequelizeConnection.models.album_song = (0, album_song_1.createAlbumSong)(sequelizeConnection);
 sequelizeConnection.models.like = (0, like_1.createLike)(sequelizeConnection);
-//sequelizeConnection.models.category.sync({alter: true})
-//sequelizeConnection.models.singer.sync({alter: true})
-//sequelizeConnection.models.song.sync({alter: true})
-//sequelizeConnection.models.user.sync({alter: true})
+// sequelizeConnection.models.category.sync({ force: true })
+// sequelizeConnection.models.singer.sync({ force: true })
+// sequelizeConnection.models.song.sync({ force: true })
+//sequelizeConnection.models.user.sync({force: true})
 //sequelizeConnection.models.album.sync({force: true})
 //sequelizeConnection.models.album_song.sync({force: true})
-//sequelizeConnection.models.like.sync({ alter: true })
-sequelizeConnection.sync({ alter: true });
+//sequelizeConnection.models.like.sync({ force: true })
+//sequelizeConnection.sync({alter: true})
 exports.default = sequelizeConnection;

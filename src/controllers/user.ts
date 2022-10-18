@@ -7,7 +7,7 @@ import bcryptjs from 'bcryptjs'
 import * as jwt from './../middlewares/jwt_token'
 import * as mailService from './../services/mail'
 import jsonwebtoken from 'jsonwebtoken'
-import redis from './../db/connectRedis';
+
 
 
 const comparePassword = (str: string, strHash: string) => {

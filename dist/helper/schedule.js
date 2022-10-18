@@ -18,22 +18,23 @@ const connectRedis_1 = __importDefault(require("./../db/connectRedis"));
 const node_schedule_1 = __importDefault(require("node-schedule"));
 const convertTimeZone_1 = __importDefault(require("./convertTimeZone"));
 let models = config_1.default.models;
+const constant_1 = __importDefault(require("./constant"));
 const mapping = () => __awaiter(void 0, void 0, void 0, function* () {
     let songs = yield models.song.findAll();
     yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield connectRedis_1.default.set(`songId:${song.id}`, song.view);
+        return yield connectRedis_1.default.set(`${constant_1.default.SONG_ID}:${song.id}`, song.view);
     })));
 });
 const mapViewSchedule = node_schedule_1.default.scheduleJob('* */15 * * * *', function () {
     return __awaiter(this, void 0, void 0, function* () {
         let songs = yield models.song.findAll();
         yield Promise.all(songs.map((song) => __awaiter(this, void 0, void 0, function* () {
-            let view = yield connectRedis_1.default.get(`songId:${song.id}`);
+            let view = yield connectRedis_1.default.get(`${constant_1.default.SONG_ID}:${song.id}`);
             let viewRedis = parseInt(view);
             if (viewRedis > song.view)
                 return yield models.song.update({ view: viewRedis }, { where: { id: song.id } });
             else
-                return yield connectRedis_1.default.set(`songId:${song.id}`, song.view);
+                return yield connectRedis_1.default.set(`${constant_1.default.SONG_ID}:${song.id}`, song.view);
         })));
     });
 });
@@ -42,8 +43,8 @@ const countViewEveryHourSchedule = node_schedule_1.default.scheduleJob('0 0 * * 
     let timeStandard = (0, convertTimeZone_1.default)(new Date());
     let songs = yield models.song.findAll();
     yield Promise.all(songs.map((song) => __awaiter(void 0, void 0, void 0, function* () {
-        let view = yield connectRedis_1.default.get(`songId:${song.id}`);
-        return yield connectRedis_1.default.set(`SONGID:${song.id}-TIME:${timeStandard}`, parseInt(view), 'EX', 2 * 24 * 60 * 60);
+        let view = yield connectRedis_1.default.get(`${constant_1.default.SONG_ID}:${song.id}`);
+        return yield connectRedis_1.default.set(`${constant_1.default.SONG_ID}:${song.id}-${constant_1.default.TIME}:${timeStandard}`, parseInt(view), 'EX', 2 * 24 * 60 * 60);
     })));
 }));
 exports.countViewEveryHourSchedule = countViewEveryHourSchedule;
