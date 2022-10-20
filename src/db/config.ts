@@ -14,20 +14,33 @@ const dbHost = process.env.DB_HOST as string || 'localhost'
 const dbPassword = process.env.DB_PASSWORD as string || undefined
 const dbPort = parseInt(process.env.DB_PORT as string) || 3306
 
-const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
-    host: dbHost,
-    dialect: 'mysql',
-    port: dbPort,
+// const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
+//     host: dbHost,
+//     dialect: 'postgres',
+//     port: dbPort,
+//     timezone: "+07:00",
+//     define: {
+//         charset: 'utf8',
+//         collate: 'utf8_unicode_ci'
+//     },
+//     dialectOptions: {
+//         ssl: {
+//             require: true
+//         }
+//     }
+// });
+const sequelizeConnection = new Sequelize(process.env.DATABASE_URL as string, {
+    dialect: 'postgres',
     timezone: "+07:00",
     define: {
         charset: 'utf8',
         collate: 'utf8_unicode_ci'
     },
-    // dialectOptions: {
-    //     ssl: {
-    //         require: true
-    //     }
-    // }
+    dialectOptions: {
+        ssl: {
+            require: true
+        }
+    }
 });
 
 
@@ -43,14 +56,14 @@ sequelizeConnection.models.like = createLike(sequelizeConnection)
 // sequelizeConnection.models.category.sync({ force: true })
 // sequelizeConnection.models.singer.sync({ force: true })
 // sequelizeConnection.models.song.sync({ force: true })
-//sequelizeConnection.models.user.sync({force: true})
+// sequelizeConnection.models.user.sync({force: true})
 //sequelizeConnection.models.album.sync({force: true})
 //sequelizeConnection.models.album_song.sync({force: true})
 //sequelizeConnection.models.like.sync({ force: true })
 
 
 
-//sequelizeConnection.sync({alter: true})
+sequelizeConnection.sync({alter: true})
 
 export default sequelizeConnection
 

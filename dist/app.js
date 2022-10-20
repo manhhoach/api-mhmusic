@@ -19,7 +19,7 @@ const index_1 = __importDefault(require("./routes/index"));
 const cors_1 = __importDefault(require("cors"));
 const schedule_1 = require("./helper/schedule");
 const app = (0, express_1.default)();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static('image'));
