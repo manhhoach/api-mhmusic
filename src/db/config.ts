@@ -6,13 +6,14 @@ import { createSong } from '../models/song';
 import { createAlbum } from '../models/album';
 import { createAlbumSong } from '../models/album_song';
 import { createLike } from '../models/like';
-
+import importData from './../helper/importData';
 
 const dbName = process.env.DB_NAME as string || 'mhmusic';
 const dbUser = process.env.DB_USER as string || 'root'
 const dbHost = process.env.DB_HOST as string || 'localhost'
 const dbPassword = process.env.DB_PASSWORD as string || undefined
 const dbPort = parseInt(process.env.DB_PORT as string) || 3306
+
 
 const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
@@ -51,5 +52,8 @@ sequelizeConnection.models.like = createLike(sequelizeConnection)
 
 
 //sequelizeConnection.sync({alter: true})
+
+
+//importData(sequelizeConnection, 'db-mhmusic/likes.json', 'like')
 
 export default sequelizeConnection

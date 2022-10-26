@@ -2,24 +2,24 @@
   "RECORDS": [
     {
       "id": 2,
-      "userId": 1,
+      "userId": 3,
       "varId": 1,
       "type": "SONG",
-      "createdDate": null
+      "createdDate": "2022-8-11 08:24:12"
     },
     {
       "id": 3,
-      "userId": 2,
+      "userId": 6,
       "varId": 1,
       "type": "SONG",
-      "createdDate": null
+      "createdDate": "2022-8-11 08:24:12"
     },
     {
       "id": 4,
-      "userId": 1,
+      "userId": 3,
       "varId": 2,
       "type": "ALBUM",
-      "createdDate": null
+      "createdDate": "2022-8-11 08:24:12"
     }
   ]
 }
