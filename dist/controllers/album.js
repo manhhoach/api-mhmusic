@@ -58,7 +58,7 @@ exports.getAll = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, v
         condition.year = parseInt(req.query.year);
     }
     let pagination = (0, pagination_1.getPagination)(parseInt(req.query.page_index), parseInt(req.query.page_size));
-    let albums = yield albumService.getAll(condition, pagination);
+    let albums = yield albumService.getAllPaging(condition, pagination);
     let data = (0, pagination_1.getPagingData)(albums, parseInt(req.query.page_index), pagination.limit);
     res.json((0, response_1.responseSuccess)(data));
 }));

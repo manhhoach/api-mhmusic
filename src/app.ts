@@ -6,7 +6,7 @@ import cors from 'cors'
 import {mapViewSchedule, countViewEveryHourSchedule} from './helper/schedule'
 
 const app: Application = express()
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 3000
 
 
 app.use(express.json());

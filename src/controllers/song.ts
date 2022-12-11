@@ -26,7 +26,7 @@ export const getAll = tryCatch(async (req: Request, res: Response, next: NextFun
     }
     let order = req.query.latest ? true : false;
     let pagination = getPagination(parseInt(req.query.page_index as string), parseInt(req.query.page_size as string))
-    let data = await songService.getAll(condition, pagination, true, true, order)
+    let data = await songService.getAllPaging(condition, pagination, true, true, order)
     let response = getPagingData(data, parseInt(req.query.page_index as string), pagination.limit)
 
     res.json(responseSuccess(response));

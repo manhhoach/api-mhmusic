@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTop = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAll = void 0;
+exports.getTop = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAllPaging = exports.getAll = void 0;
 const config_1 = __importDefault(require("../db/config"));
 let models = config_1.default.models;
 function getAll(condition, pagination, singer = false, category = false, order = false) {
@@ -33,6 +33,24 @@ function getAll(condition, pagination, singer = false, category = false, order =
     });
 }
 exports.getAll = getAll;
+function getAllPaging(condition, pagination, singer = false, category = false, order = false) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let includes = [];
+        if (singer)
+            includes.push({ model: config_1.default.models.singer });
+        if (category)
+            includes.push({ model: config_1.default.models.category });
+        let orderCreatedDate = order ? [['createdDate', 'DESC']] : undefined;
+        return models.song.findAndCountAll({
+            where: condition,
+            limit: pagination.limit,
+            offset: pagination.offset,
+            order: orderCreatedDate,
+            include: includes
+        });
+    });
+}
+exports.getAllPaging = getAllPaging;
 function getOne(condition, singer = false, category = false) {
     return __awaiter(this, void 0, void 0, function* () {
         let includes = [];

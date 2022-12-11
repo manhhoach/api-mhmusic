@@ -28,7 +28,7 @@ export const getAll = tryCatch(async (req: Request, res: Response, next: NextFun
     }
 
     let pagination = getPagination(parseInt(req.query.page_index as string), parseInt(req.query.page_size as string))
-    let albums = await albumService.getAll(condition, pagination)
+    let albums = await albumService.getAllPaging(condition, pagination)
     let data = getPagingData(albums, parseInt(req.query.page_index as string), pagination.limit)
     res.json(responseSuccess(data));
 })

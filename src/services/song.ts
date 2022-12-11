@@ -22,6 +22,24 @@ export async function getAll(condition: any, pagination: { limit: number, offset
     });
 }
 
+export async function getAllPaging(condition: any, pagination: { limit: number, offset: number }, singer: boolean = false, category: boolean = false, order: boolean = false) {
+
+    let includes: Includeable | Includeable[] = [];
+    if (singer)
+        includes.push({ model: sequelize.models.singer })
+    if (category)
+        includes.push({ model: sequelize.models.category })
+
+    let orderCreatedDate: Order | undefined = order ? [['createdDate', 'DESC']] : undefined;
+
+    return models.song.findAndCountAll({
+        where: condition,
+        limit: pagination.limit,
+        offset: pagination.offset,
+        order: orderCreatedDate,
+        include: includes
+    });
+}
 
 
 export async function getOne(condition: any, singer: boolean = false, category: boolean = false) {

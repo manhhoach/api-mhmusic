@@ -9,10 +9,10 @@ function getPagination(page_index, page_size) {
 exports.getPagination = getPagination;
 ;
 function getPagingData(data, page_index, limit) {
-    const count = data.length;
+    const { count, rows } = data;
     const current_page = page_index ? page_index : 1;
     const total_pages = Math.ceil(count / limit);
-    return { total_items: count, total_pages, current_page, data };
+    return { total_items: count, total_pages, current_page, data: rows };
 }
 exports.getPagingData = getPagingData;
 ;

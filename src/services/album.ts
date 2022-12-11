@@ -10,6 +10,15 @@ export async function getAll(condition: any, pagination:{limit: number, offset: 
     });
 }
 
+export async function getAllPaging(condition: any, pagination:{limit: number, offset: number}){
+    return models.album.findAndCountAll({
+        where: condition,
+        limit: pagination.limit,
+        offset: pagination.offset,
+        order:[['createdDate','DESC']]
+    });
+}
+
 export async function getOne(condition: any){
     return models.album.findOne({
         where: condition
