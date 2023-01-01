@@ -1,23 +1,24 @@
-import { Sequelize, DataTypes, Model, CreationOptional, InferAttributes, InferCreationAttributes } from "sequelize";
+import { Sequelize, DataTypes, Optional, ModelDefined, Model } from "sequelize";
 import bcryptjs from "bcryptjs";
 // import {
 //     validate, validateOrReject, Contains, IsInt, Length, IsEmail, 
 //     IsFQDN, IsDate, Min, Max,
 //   } from 'class-validator';
 
-export interface IUser extends Model<InferAttributes<IUser>, InferCreationAttributes<IUser>>{
-    id: CreationOptional<number>;
+export interface IUser{
+    id: number;
     fullName: string;
     email: string;
     password: string;
     type: number;
     avatar: string;
-    createdDate: CreationOptional<Date>;
+    createdDate: Date;
 
 }
+type UserCreationAttributes = Optional<IUser, 'id'|'createdDate'|'avatar'|'type'>
 export function createUser (sequelize: Sequelize) {
 
-    const User = sequelize.define<IUser>('user', {
+    const User: ModelDefined<IUser, UserCreationAttributes> = sequelize.define('user', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
@@ -50,7 +51,7 @@ export function createUser (sequelize: Sequelize) {
         }
     }, { timestamps: false })
 
-    User.afterValidate((user)=>{
+    User.afterValidate((user: any)=>{
         if(user.password)   
         {
             let salt=bcryptjs.genSaltSync(10)

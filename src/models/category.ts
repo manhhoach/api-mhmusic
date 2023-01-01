@@ -1,16 +1,16 @@
-import { Sequelize, DataTypes, Model, CreationOptional, InferAttributes, InferCreationAttributes } from "sequelize";
+import { Sequelize, DataTypes, Optional, ModelDefined } from "sequelize";
 
-export interface ICategory extends Model<InferAttributes<ICategory>, InferCreationAttributes<ICategory>> {
-    id: CreationOptional<number>;
+export interface ICategory {
+    id: number;
     name: string;
     parentId: number;
-    createdDate: CreationOptional<Date>;
+    createdDate: Date;
 }
-
+type CategoryCreationAttributes = Optional<ICategory, 'id' | 'parentId' | 'createdDate'>
 
 export function createCategory(sequelize: Sequelize) {
-    
-    const Category = sequelize.define<ICategory>('category', {
+
+    const Category: ModelDefined<ICategory, CategoryCreationAttributes> = sequelize.define('category', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
@@ -21,7 +21,7 @@ export function createCategory(sequelize: Sequelize) {
             allowNull: false,
             unique: true
         },
-        parentId:{
+        parentId: {
             type: DataTypes.INTEGER.UNSIGNED,
             defaultValue: 0
         },
@@ -31,7 +31,7 @@ export function createCategory(sequelize: Sequelize) {
         }
     }, { timestamps: false })
 
-    
+
     return Category;
 }
 

@@ -39,8 +39,8 @@ exports.getLiked = exports.destroy = exports.create = exports.countLike = void 0
 const likeService = __importStar(require("./../services/like"));
 const response_1 = require("./../helper/response");
 const tryCatch_1 = __importDefault(require("./../helper/tryCatch"));
-const config_1 = __importDefault(require("./../db/config"));
-let models = config_1.default.models;
+const connectMysql_1 = __importDefault(require("../db/connectMysql"));
+let models = connectMysql_1.default.models;
 exports.countLike = (0, tryCatch_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let condition = Object.assign({}, req.query);
     let count = yield likeService.count(condition);

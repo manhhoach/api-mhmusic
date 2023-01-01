@@ -1,18 +1,18 @@
-import { InferAttributes, Sequelize, DataTypes, Model, InferCreationAttributes, CreationOptional } from "sequelize";
+import { Optional, Sequelize, DataTypes, ModelDefined } from "sequelize";
 import {createUser} from './user'
 
-export interface ILike extends Model<InferAttributes<ILike>, InferCreationAttributes<ILike>> {
-    id: CreationOptional<number>;
-    createdDate: CreationOptional<Date>;
+export interface ILike {
+    id: number;
+    createdDate: Date;
     varId: number;
     userId: number;
     type: number;
 }
-
+type LikeCreationAttributes=Optional<ILike, 'id'|'createdDate'>
 
 export function createLike(sequelize: Sequelize) {
     const User=createUser(sequelize)
-    const Like = sequelize.define<ILike>('like', {
+    const Like: ModelDefined<ILike, LikeCreationAttributes> = sequelize.define('like', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,

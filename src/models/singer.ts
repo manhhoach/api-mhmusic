@@ -1,15 +1,16 @@
-import { Sequelize, DataTypes, Model, CreationOptional, InferAttributes, InferCreationAttributes } from "sequelize";
+import { Sequelize, DataTypes,  Optional, ModelDefined } from "sequelize";
 
-export interface ISinger extends Model<InferAttributes<ISinger>, InferCreationAttributes<ISinger>>{
-    id: CreationOptional<number>;
+export interface ISinger {
+    id: number;
     fullName: string;
     description: string;
     avatar: string;
-    createdDate: CreationOptional<Date>;
+    createdDate: Date;
 }
+type SingerCreationAttributes=Optional<ISinger, 'id'|'createdDate'|'avatar'>
 export function createSinger (sequelize: Sequelize) {
    
-    const Singer = sequelize.define<ISinger>('singer', {
+    const Singer : ModelDefined<ISinger, SingerCreationAttributes> = sequelize.define('singer', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,

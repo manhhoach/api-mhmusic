@@ -1,4 +1,4 @@
-import sequelize from '../db/config'
+import sequelize from '../db/connectMysql'
 let models = sequelize.models;
 import { Includeable } from 'sequelize'
 import { Order } from 'sequelize';

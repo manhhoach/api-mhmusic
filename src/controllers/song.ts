@@ -124,8 +124,6 @@ export const updateView = tryCatch(async (req: Request, res: Response, next: Nex
     else {
         res.json(responseError('INCRE VIEW FAILED'))
     }
-
-
 })
 
 export const getChart = tryCatch(async (req: Request, res: Response, next: NextFunction) => {

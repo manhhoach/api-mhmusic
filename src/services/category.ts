@@ -1,4 +1,4 @@
-import sequelize from './../db/config'
+import sequelize from '../db/connectMysql'
 let models=sequelize.models;
 
 export async function getAll(condition: any){

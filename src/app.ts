@@ -1,9 +1,9 @@
 import express, { Application, Request, Response } from 'express'
 import 'dotenv/config'; // kỹ thuật mới
-import sequelizeConnection from './db/config'
+import sequelizeConnection from './db/connectMysql'
 import routes from './routes/index'
 import cors from 'cors'
-import {mapViewSchedule, countViewEveryHourSchedule} from './helper/schedule'
+import {setUpView, updateViewSchedule, countViewEveryHourSchedule} from './helper/schedule'
 
 const app: Application = express()
 const port = process.env.PORT || 3000
@@ -16,16 +16,16 @@ app.use(cors())
 
 app.use(routes)
 
-app.get('/', async (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
     res.send('Welcome to MH-Music!')
 })
-
+setUpView();
 
 app.listen(port, async () => {
     console.log(`Server running on http://localhost:${port}`)
     try {
         await sequelizeConnection.authenticate()
-        mapViewSchedule;
+        updateViewSchedule;
         countViewEveryHourSchedule;
         console.log('Connection has been established successfully.');
     } catch (err) {

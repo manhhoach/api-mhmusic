@@ -1,19 +1,20 @@
-import { InferAttributes, Sequelize, DataTypes, Model, InferCreationAttributes, CreationOptional } from "sequelize";
+import {  Sequelize, DataTypes, Optional, ModelDefined } from "sequelize";
 import { createSong } from './song';
 import { createAlbum } from './album'
 
-export interface IAlbumSong extends Model<InferAttributes<IAlbumSong>, InferCreationAttributes<IAlbumSong>> {
-    id: CreationOptional<number>;
-    createdDate: CreationOptional<Date>;
+export interface IAlbumSong {
+    id: number;
+    createdDate: Date;
     songId: number;
     albumId: number;
 }
+type AlbumSongCreationAttributes = Optional<IAlbumSong, 'id'|'createdDate'>;
 
 
 export function createAlbumSong(sequelize: Sequelize) {
     const Song = createSong(sequelize)
     const Album = createAlbum(sequelize)
-    const AlbumSong = sequelize.define<IAlbumSong>('album_song', {
+    const AlbumSong: ModelDefined<IAlbumSong, AlbumSongCreationAttributes>= sequelize.define('album_song', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,

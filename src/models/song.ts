@@ -1,25 +1,25 @@
-import { InferAttributes, Sequelize, DataTypes, Model, InferCreationAttributes, CreationOptional } from "sequelize";
+import { Sequelize, DataTypes, Optional, ModelDefined } from "sequelize";
 import { createCategory } from './category';
 import { createSinger } from './singer'
 
-export interface ISong extends Model<InferAttributes<ISong>, InferCreationAttributes<ISong>> {
-    id: CreationOptional<number>;
+export interface ISong {
+    id: number;
     name: string;
     image: string;
     year: number;
     url: string;
-    createdDate: CreationOptional<Date>;
+    createdDate: Date;
     categoryId: number;
     singerId: number;
     performSinger: string;
     view: number;
 }
-
+type SongCreationAttributes=Optional<ISong, 'id'|'view'|'createdDate'>
 
 export function createSong(sequelize: Sequelize) {
     const Category = createCategory(sequelize)
     const Singer = createSinger(sequelize)
-    const Song = sequelize.define<ISong>('song', {
+    const Song: ModelDefined<ISong, SongCreationAttributes> = sequelize.define('song', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,

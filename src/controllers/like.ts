@@ -4,7 +4,7 @@ import { responseSuccess, responseError } from './../helper/response'
 import tryCatch from './../helper/tryCatch'
 import { ILike } from './../models/like'
 
-import sequelize from './../db/config'
+import sequelize from '../db/connectMysql'
 let models=sequelize.models;
 
 export const countLike = tryCatch(async (req: Request, res: Response, next: NextFunction) => {

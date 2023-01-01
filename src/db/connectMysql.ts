@@ -1,12 +1,12 @@
 import { Sequelize } from 'sequelize';
 import { createUser } from '../models/user';
-import { createSinger } from './../models/singer';
+import { createSinger } from '../models/singer';
 import { createCategory } from '../models/category';
 import { createSong } from '../models/song';
 import { createAlbum } from '../models/album';
 import { createAlbumSong } from '../models/album_song';
 import { createLike } from '../models/like';
-import importData from './../helper/importData';
+
 
 const dbName = process.env.DB_NAME as string || 'mhmusic';
 const dbUser = process.env.DB_USER as string || 'root'

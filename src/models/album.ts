@@ -1,30 +1,32 @@
-import { Sequelize, DataTypes, Model, CreationOptional, InferAttributes, InferCreationAttributes } from "sequelize";
-import {createUser} from './user'
+import { Sequelize, DataTypes, Optional, ModelDefined } from "sequelize";
+import { createUser } from './user'
 
-export interface IAlbum extends Model<InferAttributes<IAlbum>, InferCreationAttributes<IAlbum>>{
-    id: CreationOptional<number>;
+export interface IAlbum {
+    id: number;
     name: string;
     year: number;
     userId: number;
     type: number;
-    createdDate: CreationOptional<Date>;
+    createdDate: Date;
 }
-export function createAlbum (sequelize: Sequelize) {
-    const User=createUser(sequelize)
-    const Album = sequelize.define<IAlbum>('album', {
+type AlbumSongCreationAttributes = Optional<IAlbum, 'id'| 'createdDate'>
+
+export function createAlbum(sequelize: Sequelize) {
+    const User = createUser(sequelize)
+    const Album: ModelDefined<IAlbum, AlbumSongCreationAttributes> = sequelize.define('album', {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
             primaryKey: true
-        }, 
+        },
         name: {
             type: new DataTypes.STRING(1024),
-            allowNull: false        
+            allowNull: false
         },
-        year:{
+        year: {
             type: DataTypes.INTEGER.UNSIGNED,
         },
-        userId:{
+        userId: {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false,
             references: {
@@ -32,7 +34,7 @@ export function createAlbum (sequelize: Sequelize) {
                 key: 'id'
             }
         },
-        type:{
+        type: {
             type: DataTypes.INTEGER.UNSIGNED,
         },
         createdDate: {
@@ -41,7 +43,7 @@ export function createAlbum (sequelize: Sequelize) {
         }
     }, { timestamps: false })
 
-    User.hasMany(Album, {foreignKey: 'userId'});
+    User.hasMany(Album, { foreignKey: 'userId' });
     Album.belongsTo(User);
 
     return Album;

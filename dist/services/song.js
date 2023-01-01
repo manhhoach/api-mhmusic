@@ -13,15 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTop = exports.destroy = exports.update = exports.create = exports.getOne = exports.getAllPaging = exports.getAll = void 0;
-const config_1 = __importDefault(require("../db/config"));
-let models = config_1.default.models;
+const connectMysql_1 = __importDefault(require("../db/connectMysql"));
+let models = connectMysql_1.default.models;
 function getAll(condition, pagination, singer = false, category = false, order = false) {
     return __awaiter(this, void 0, void 0, function* () {
         let includes = [];
         if (singer)
-            includes.push({ model: config_1.default.models.singer });
+            includes.push({ model: connectMysql_1.default.models.singer });
         if (category)
-            includes.push({ model: config_1.default.models.category });
+            includes.push({ model: connectMysql_1.default.models.category });
         let orderCreatedDate = order ? [['createdDate', 'DESC']] : undefined;
         return models.song.findAll({
             where: condition,
@@ -37,9 +37,9 @@ function getAllPaging(condition, pagination, singer = false, category = false, o
     return __awaiter(this, void 0, void 0, function* () {
         let includes = [];
         if (singer)
-            includes.push({ model: config_1.default.models.singer });
+            includes.push({ model: connectMysql_1.default.models.singer });
         if (category)
-            includes.push({ model: config_1.default.models.category });
+            includes.push({ model: connectMysql_1.default.models.category });
         let orderCreatedDate = order ? [['createdDate', 'DESC']] : undefined;
         return models.song.findAndCountAll({
             where: condition,
@@ -55,9 +55,9 @@ function getOne(condition, singer = false, category = false) {
     return __awaiter(this, void 0, void 0, function* () {
         let includes = [];
         if (singer)
-            includes.push({ model: config_1.default.models.singer });
+            includes.push({ model: connectMysql_1.default.models.singer });
         if (category)
-            includes.push({ model: config_1.default.models.category });
+            includes.push({ model: connectMysql_1.default.models.category });
         return models.song.findOne({ where: condition, include: includes });
     });
 }
@@ -84,9 +84,9 @@ function getTop(limit, singer = false, category = false) {
     return __awaiter(this, void 0, void 0, function* () {
         let includes = [];
         if (singer)
-            includes.push({ model: config_1.default.models.singer });
+            includes.push({ model: connectMysql_1.default.models.singer });
         if (category)
-            includes.push({ model: config_1.default.models.category });
+            includes.push({ model: connectMysql_1.default.models.category });
         return models.song.findAll({
             limit: limit,
             order: [['view', 'DESC']],

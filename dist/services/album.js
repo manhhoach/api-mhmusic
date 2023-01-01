@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.destroy = exports.update = exports.create = exports.getOne = exports.getAllPaging = exports.getAll = void 0;
-const config_1 = __importDefault(require("./../db/config"));
-let models = config_1.default.models;
+const connectMysql_1 = __importDefault(require("../db/connectMysql"));
+let models = connectMysql_1.default.models;
 function getAll(condition, pagination) {
     return __awaiter(this, void 0, void 0, function* () {
         return models.album.findAll({
