@@ -54,6 +54,4 @@ sequelizeConnection.models.like = createLike(sequelizeConnection)
 //sequelizeConnection.sync({alter: true})
 
 
-//importData(sequelizeConnection, 'db-mhmusic/likes.json', 'like')
-
 export default sequelizeConnection
