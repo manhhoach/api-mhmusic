@@ -17,16 +17,9 @@ export default class UserController {
         let { name } = req.body;
         let user = await this.userService.update(res.locals.user.id, name);
         res.status(201).json(responseSuccess(user))
-
     })
 
     public register = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        // let createUserDto=new IUserCreate(req.body)
-        // const errors = await validate(req.body)
-        // if (errors.length > 0) {
-        //     console.log();
-            
-        // }
         let { email, password, name } = req.body;
         let user = await this.userService.register(name, email, password)
         res.status(201).json(responseSuccess(user))
@@ -34,18 +27,20 @@ export default class UserController {
 
     public login = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
         let { email, password } = req.body;
-        // validate email and password and use next function
-
-
         let user = await this.userService.login(email, password)
         res.status(200).json(responseSuccess(user))
     })
 
     public changePassword = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        let { oldPassword, newPassword } = req.body;
-        let result = await this.userService.changePassword(res.locals.user, oldPassword, newPassword);
+        let { oldPassword, password } = req.body;
+        let result = await this.userService.changePassword(res.locals.user, oldPassword, password);
         res.status(201).json(responseSuccess(result))
+    })
 
+    public destroy = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+        let id = req.params.id;
+        let result = await this.userService.destroy(id);
+        res.status(200).json(responseSuccess(result))
     })
 }
 

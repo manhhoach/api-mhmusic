@@ -30,4 +30,11 @@ export default class AuthJwt {
             }
         }
     } 
+    public protect(req: Request, res: Response, next: NextFunction){
+        if(res.locals.user.type>0)
+        {
+            return next();
+        }
+        return next(new AppError(401, CONSTANT_MESSAGES.NOT_ALLOWED))
+    }
 }

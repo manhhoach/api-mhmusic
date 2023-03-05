@@ -1,7 +1,5 @@
 import UserRepository from '../repositories/user';
 import User from './../entities/user'
-import IUserCreate from '../dtos/user/user.create'
-import tryCatch from '../helpers/tryCatch';
 import AppError from './../helpers/appError';
 import { CONSTANT_MESSAGES } from './../helpers/constant'
 import AuthJwt from '../middlewares/jwt';
@@ -11,7 +9,7 @@ export default class UserService {
     private authJwt = new AuthJwt();
 
     public async register(name: string, email: string, password: string) {
-        let user: IUserCreate = { name: name, email: email, password: password }
+        let user = { name: name, email: email, password: password }
         return this.userRepository.register(user);
     }
 
@@ -50,6 +48,15 @@ export default class UserService {
         }
         else
             throw new AppError(400, CONSTANT_MESSAGES.INVALID_PASSWORD)
+    }
+
+    public async destroy(id: string) {
+        let result = await this.userRepository.destroy(id)
+        if (result.affected === 1) {
+            return null
+        }
+        else
+            throw new AppError(400, CONSTANT_MESSAGES.DELETE_FAILED)
     }
 
 }
