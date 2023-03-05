@@ -25,5 +25,25 @@ class UserRepository {
             return this.userRepository.save(data);
         });
     }
+    findOne(condition, requiredPassword = false) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let queryBuilder = this.userRepository.createQueryBuilder('user')
+                .where("user.id = :id", { id: condition.id })
+                .orWhere("user.email = :email", { email: condition.email });
+            if (requiredPassword)
+                queryBuilder.addSelect('user.password');
+            return queryBuilder.getOne();
+        });
+    }
+    update(condition, user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.userRepository.update(condition, user);
+        });
+    }
+    save(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.userRepository.save(user);
+        });
+    }
 }
 exports.default = UserRepository;

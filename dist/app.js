@@ -24,7 +24,9 @@ class App {
     useErrorHandler() {
         this.app.use('*', (err, req, res, next) => {
             console.log(err);
-            res.json((0, response_1.responseError)(err));
+            let message = err.message ? err.message : err;
+            message = message ? message : err.detail;
+            res.status(err.statusCode || 500).json((0, response_1.responseError)(message));
         });
     }
     useRoutes() {

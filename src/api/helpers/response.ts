@@ -6,8 +6,9 @@ export function responseSuccess(data: any): any {
 }
 
 export function responseError(error: any): any {
+    
     return {
         success: false,
-        error: error.detail ? error.detail : error
+        error: error
     }
 }

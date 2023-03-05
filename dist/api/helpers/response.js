@@ -11,7 +11,7 @@ exports.responseSuccess = responseSuccess;
 function responseError(error) {
     return {
         success: false,
-        error: error.detail ? error.detail : error
+        error: error
     };
 }
 exports.responseError = responseError;
