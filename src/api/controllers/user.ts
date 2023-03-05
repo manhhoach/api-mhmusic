@@ -2,9 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import UserService from './../services/user'
 import tryCatch from '../helpers/tryCatch';
 import { responseSuccess } from '../helpers/response';
-import { validate } from 'class-validator';
-import AppError from './../helpers/appError';
-
 
 export default class UserController {
     private userService = new UserService()

@@ -1,14 +1,20 @@
 import { Router } from 'express';
 import UserRoutes from './user';
 
+
 export default class IndexRouter {
     private router = Router();
-    private userRoutes = new UserRoutes();
+    private routes: any[]
+
     constructor() {
+        this.routes = [new UserRoutes()];
         this.initializeRoutes();
     }
     private initializeRoutes() {
-        this.router.use('/users', this.userRoutes.getRouter());
+        this.routes.forEach(route => {
+            this.router.use(route.path, route.getRouter());
+        })
+
     }
 
     public getRouter(): Router {

@@ -1,7 +1,7 @@
 import { IsString, Length, IsNotEmpty, IsOptional, IsEmail } from "class-validator"
 
 
-export default class UpdateUserDto {
+export default class UserDto {
     @IsOptional()
     @IsNotEmpty()
     name?: string;

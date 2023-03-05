@@ -10,7 +10,7 @@ export default class UserService {
 
     public async register(name: string, email: string, password: string) {
         let user = { name: name, email: email, password: password }
-        return this.userRepository.register(user);
+        return this.userRepository.create(user);
     }
 
     public async login(email: string, password: string) {

@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm'
-import classValidator ,{ Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from "class-validator"
+import { Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from "class-validator"
 import bcryptjs from 'bcryptjs'
 
 @Entity()
@@ -23,11 +23,11 @@ export default class User {
     })
     password: string;
 
-    @CreateDateColumn({ select: false })
-    createdAt: Date;
-
     @Column({ type: 'integer', default: 0 })
     type: number;
+
+    @CreateDateColumn({ select: false })
+    createdAt: Date;
 
     @BeforeUpdate()
     @BeforeInsert()

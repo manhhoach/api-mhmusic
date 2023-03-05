@@ -7,7 +7,7 @@ import UpdateUserDto from '../dtos/user/user.update'
 export default class UserRepository {
     private userRepository = AppDataSource.getRepository(User)
 
-    public async register(user: CreateUserDto) {
+    public async create(user: CreateUserDto) {
         let data = new User()
         data.name = user.name, data.email = user.email, data.password = user.password
         return this.userRepository.save(data)
