@@ -1,6 +1,7 @@
 import {DataSourceOptions} from 'typeorm'
 import 'dotenv/config';
 import User from './../api/entities/user'
+import Singer from './../api/entities/singer'
 
 export const ORM_CONFIG: DataSourceOptions={
     type: "postgres",
@@ -11,7 +12,7 @@ export const ORM_CONFIG: DataSourceOptions={
     database: process.env.DB_DATABASE,
     //synchronize: true,
     logging: true,
-    entities: [User],
+    entities: [User, Singer],
     subscribers: [],
     migrations: [],
 }

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import UserRoutes from './user';
+import SingerRoutes from './singer'
 
 
 export default class IndexRouter {
@@ -7,7 +8,7 @@ export default class IndexRouter {
     private routes: any[]
 
     constructor() {
-        this.routes = [new UserRoutes()];
+        this.routes = [new UserRoutes(), new SingerRoutes()];
         this.initializeRoutes();
     }
     private initializeRoutes() {

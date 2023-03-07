@@ -7,8 +7,4 @@ export default class SingerDto {
     @IsNotEmpty()
     @Length(0, 255)
     name: string;
-    
-    constructor(data: any) {
-        this.name = data.name;
-    }
 }

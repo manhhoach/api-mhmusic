@@ -6,7 +6,7 @@ export default class SingerDto {
     @Length(0, 255)
     name: string;
     
-    constructor(data: any) {
-        this.name = data.name;
-    }
+    // constructor(data: any) {
+    //     this.name = data.name;
+    // }
 }

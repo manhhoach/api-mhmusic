@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm'
 
 @Entity()
-export default class Singer {
+class Singer {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -11,3 +11,4 @@ export default class Singer {
     @CreateDateColumn({ select: false })
     createdAt: Date;
 }
+export default Singer

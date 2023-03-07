@@ -1,13 +1,14 @@
 import {
-    DeleteResult, Repository, getRepository, Entity, ObjectLiteral,
-    FindOneOptions, FindOptionsWhere, FindOptionsOrder
+    DeleteResult, Repository, ObjectLiteral,
+    FindOptionsWhere, FindOptionsOrder, UpdateResult
 } from "typeorm";
 import { AppDataSource } from './../databases/postgres'
 
 export default class BaseRepository<T extends ObjectLiteral> {
-    private repository: Repository<T>;
-
-    constructor(entity: typeof Entity) {
+    protected repository: Repository<T>;
+    
+    constructor(entity: any) {
+       
         this.repository = AppDataSource.getRepository(entity);
         // this.repository = getRepository(entity);
     }
@@ -21,26 +22,22 @@ export default class BaseRepository<T extends ObjectLiteral> {
         })
     }
 
-    getById(condition: FindOptionsWhere<T> | FindOptionsWhere<T>[] | undefined): Promise<T | null> {
+    getById(id: string): Promise<T | null> {
+        let condition: any = { id: id }
         return this.repository.findOne({
             where: condition
         })
     }
 
-    save(entity: T): Promise<T> {
-        return this.repository.save(entity);
+    save(data: T): Promise<T> {
+        return this.repository.save(data);
     }
 
-    create(obj: T): Promise<T> {
-        let e = this.repository.create(obj);
-        return this.repository.save(e);
+    update(condition: any, entity: T): Promise<UpdateResult> {
+        return this.repository.update(condition, entity);
     }
 
-    update(entity: T): Promise<T> {
-        return this.repository.save(entity);
-    }
-
-    delete(id: string): Promise<DeleteResult> {
-        return this.repository.delete(id);
+    delete(condition: any): Promise<DeleteResult> {
+        return this.repository.delete(condition);
     }
 }
