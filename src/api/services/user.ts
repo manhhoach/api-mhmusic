@@ -1,22 +1,26 @@
-import UserRepository from '../repositories/user';
+import BaseService from './base'
 import User from './../entities/user'
 import AppError from './../helpers/appError';
 import { CONSTANT_MESSAGES } from './../helpers/constant'
 import AuthJwt from '../middlewares/jwt';
+import UserRepository from '../repositories/user';
+import UpdateUserDto from "./../dtos/user/user.update"
+import CreateUserDto from "./../dtos/user/user.create"
+import LoginUserDto from './../dtos/user/user.login'
+import ChangePasswordDto from './../dtos/user/user.change.password'
 
-export default class UserService {
-    private userRepository = new UserRepository();
+export default class UserService extends BaseService<User>{
+    private userRepository: UserRepository=new UserRepository(User);
     private authJwt = new AuthJwt();
 
-    public async register(name: string, email: string, password: string) {
-        let user = { name: name, email: email, password: password }
-        return this.userRepository.create(user);
+    async register(data: CreateUserDto) {
+        return this.userRepository.createAndSave(data);
     }
 
-    public async login(email: string, password: string) {
-        let user = await this.userRepository.findOne({ email: email }, true)
+    async login(data: LoginUserDto) {
+        let user = await this.userRepository.findOne({ email: data.email }, true)
         if (user) {
-            let isCompare = user.comparePassword(password);
+            let isCompare = user.comparePassword(data.password);
             if (isCompare) {
                 let token = this.authJwt.signToken(user.id)
                 user = Object.assign(user, { password: undefined })
@@ -27,22 +31,12 @@ export default class UserService {
         throw new AppError(404, CONSTANT_MESSAGES.USER_NOT_FOUND)
     }
 
-    public async update(id: string, name: string) {
-        let user = await this.userRepository.update({ id: id }, { name: name })
-        if (user.affected === 1) {
-            let data = await this.userRepository.findOne({ id: id })
-            return data;
-        }
-        else
-            throw new AppError(400, CONSTANT_MESSAGES.UPDATE_FAILED)
-    }
-
-    public async changePassword(user: User,oldPassword: string, newPassword: string) {
-        let isCompare = user.comparePassword(oldPassword);
+    async changePassword(user: User, data: ChangePasswordDto) {
+        let isCompare = user.comparePassword(data.oldPassword);
         if (isCompare) {
-            user.password = newPassword;
-            let data = await this.userRepository.save(user);
-            if(data)
+            user.password = data.newPassword;
+            let userSaved = await this.userRepository.save(user);
+            if(userSaved)
                 return CONSTANT_MESSAGES.UPDATE_SUCCESSFULLY
             return CONSTANT_MESSAGES.UPDATE_FAILED    
         }
@@ -50,13 +44,14 @@ export default class UserService {
             throw new AppError(400, CONSTANT_MESSAGES.INVALID_PASSWORD)
     }
 
-    public async destroy(id: string) {
-        let result = await this.userRepository.destroy(id)
-        if (result.affected === 1) {
-            return null
+    async findByIdAndUpdate(id: string, obj: UpdateUserDto): Promise<User | null> {
+        let data = await this.getById(id)
+        if (!data) {
+          return null
         }
-        else
-            throw new AppError(400, CONSTANT_MESSAGES.DELETE_FAILED)
-    }
+        let entity = Object.assign(data, obj)
+        return this.save(entity)
+      }
+
 
 }

@@ -4,16 +4,15 @@ import {
 } from "typeorm";
 import { AppDataSource } from './../databases/postgres'
 
+
 export default class BaseRepository<T extends ObjectLiteral> {
     protected repository: Repository<T>;
     
     constructor(entity: any) {
-       
         this.repository = AppDataSource.getRepository(entity);
-        // this.repository = getRepository(entity);
     }
 
-    getAllAndCount(condition: FindOptionsWhere<T> | FindOptionsWhere<T>[] | undefined, limit: number, offset: number, order: FindOptionsOrder<T> | undefined) {
+    getAllAndCount(limit: number, offset: number, condition: FindOptionsWhere<T> | FindOptionsWhere<T>[] | undefined, order: FindOptionsOrder<T> | undefined) {
         return this.repository.findAndCount({
             where: condition,
             take: limit,
@@ -27,6 +26,11 @@ export default class BaseRepository<T extends ObjectLiteral> {
         return this.repository.findOne({
             where: condition
         })
+    }
+
+    createAndSave(obj: any): Promise<T[]>{
+        let entity = this.repository.create(obj)
+        return this.repository.save(entity)
     }
 
     save(data: T): Promise<T> {

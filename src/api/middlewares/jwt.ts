@@ -3,9 +3,10 @@ import { Request, Response, NextFunction } from 'express'
 import UserRepository from '../repositories/user';
 import AppError from './../helpers/appError';
 import { CONSTANT_MESSAGES } from './../helpers/constant'
+import User from './../entities/user'
 
 export default class AuthJwt {
-    private userRepository = new UserRepository()
+    private userRepository = new UserRepository(User)
     public signToken = (id: string) => {
         return jwt.sign({ id }, process.env.SECRET_KEY as string, { expiresIn: '7d' })
     }

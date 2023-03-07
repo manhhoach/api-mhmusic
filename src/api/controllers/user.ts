@@ -2,42 +2,40 @@ import { Request, Response, NextFunction } from 'express'
 import UserService from './../services/user'
 import tryCatch from '../helpers/tryCatch';
 import { responseSuccess } from '../helpers/response';
+import User from './../entities/user'
+import BaseController from './base'
 
-export default class UserController {
-    private userService = new UserService()
+export default class UserController extends BaseController<User>{
+    private userService = new UserService(User)
 
     public getMe(req: Request, res: Response, next: NextFunction) {
         res.status(200).json(responseSuccess(res.locals.user))
     }
 
     public updateMe = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        let { name } = req.body;
-        let user = await this.userService.update(res.locals.user.id, name);
+        let user = await this.userService.findByIdAndUpdate(res.locals.user.id, req.body);
         res.status(201).json(responseSuccess(user))
     })
 
     public register = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        let { email, password, name } = req.body;
-        let user = await this.userService.register(name, email, password)
+        let user = await this.userService.register(req.body)
         res.status(201).json(responseSuccess(user))
     })
 
     public login = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        let { email, password } = req.body;
-        let user = await this.userService.login(email, password)
+        let user = await this.userService.login(req.body)
         res.status(200).json(responseSuccess(user))
     })
 
     public changePassword = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        let { oldPassword, password } = req.body;
-        let result = await this.userService.changePassword(res.locals.user, oldPassword, password);
+        let result = await this.userService.changePassword(res.locals.user, req.body);
         res.status(201).json(responseSuccess(result))
     })
 
-    public destroy = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        let id = req.params.id;
-        let result = await this.userService.destroy(id);
-        res.status(200).json(responseSuccess(result))
-    })
+    // public destroy = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+    //     let id = req.params.id;
+    //     let result = await this.userService.findByIdAndDelete(id);
+    //     res.status(200).json(responseSuccess(result))
+    // })
 }
 

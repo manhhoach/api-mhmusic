@@ -1,4 +1,3 @@
-import { FindOptionsWhere, FindOptionsOrder } from 'typeorm'
 import Singer from './../entities/singer'
 import BaseRepository from './base'
 

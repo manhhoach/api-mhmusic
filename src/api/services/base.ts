@@ -1,23 +1,27 @@
 import BaseRepository from "../repositories/base";
-import {
-  DeleteResult, ObjectLiteral,
-  UpdateResult, FindOptionsWhere, FindOptionsOrder
-} from "typeorm";
+import { DeleteResult, ObjectLiteral, UpdateResult } from "typeorm";
+import { CONSTANT_MESSAGES } from "../helpers/constant";
 
 export default class BaseService<T extends ObjectLiteral> {
-  private repository: BaseRepository<T>;
+
+  protected repository: BaseRepository<T>;
   private entity: any;
+
   constructor(entity: any) {
     this.entity = entity;
     this.repository = new BaseRepository(entity);
   }
 
-  getAllAndCount(condition: FindOptionsWhere<T> | FindOptionsWhere<T>[] | undefined = undefined, limit: number = 0, offset: number = 0, order: FindOptionsOrder<T> | undefined): Promise<[T[], number]> {
-    return this.repository.getAllAndCount(condition, limit, offset, order);
+  getAllAndCount(limit: number, offset: number, condition: any, order: any) {
+    return this.repository.getAllAndCount(limit, offset, condition, order);
   }
 
   getById(id: string): Promise<T | null> {
     return this.repository.getById(id);
+  }
+
+  createAndSave(entity: any): Promise<T[]> {
+    return this.repository.createAndSave(entity);
   }
 
   save(data: T): Promise<T> {
@@ -27,10 +31,26 @@ export default class BaseService<T extends ObjectLiteral> {
   }
 
   update(condition: any, entity: T): Promise<UpdateResult> {
-    return this.repository.update(condition, entity);
+    return this.repository.update(condition, entity)
+  }
+
+  async findByIdAndUpdate(id: string, obj: any): Promise<T | null> {
+    let data = await this.repository.getById(id)
+    if (!data) {
+      return null
+    }
+    let entity = Object.assign(data, obj)
+    return this.repository.save(entity)
   }
 
   delete(condition: string | string[] | Object): Promise<DeleteResult> {
     return this.repository.delete(condition);
+  }
+
+  async findByIdAndDelete(id: string): Promise<null | string> {
+    let data = await this.repository.delete(id)
+    if (data.affected === 1)
+      return null;
+    return CONSTANT_MESSAGES.DELETE_FAILED
   }
 }

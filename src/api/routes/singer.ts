@@ -23,11 +23,11 @@ export default class SingerRoutes {
         
         this.router.use(this.authJwt.protect)
 
-        this.router.post('/', Validation(CreateSingerDto), this.singerController.create)
+        this.router.post('/', Validation(CreateSingerDto), this.singerController.createAndSave)
 
         this.router.delete('/:id', this.singerController.delete)
 
-        this.router.patch('/:id', Validation(UpdateSingerDto), this.singerController.update)
+        this.router.patch('/:id', Validation(UpdateSingerDto), this.singerController.findByIdAndUpdate)
     }
 
     public getRouter(): Router {
