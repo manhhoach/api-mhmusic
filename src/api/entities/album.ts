@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm'
+import Song from './song';
+import AlbumSong from './album_song';
 
 @Entity()
 export default class Album {
@@ -10,5 +12,24 @@ export default class Album {
 
     @CreateDateColumn()
     createdAt: Date;
+
+    @OneToMany(()=> AlbumSong, (albumSong)=>albumSong.album)
+    albumSongs: AlbumSong[]
+
+
+    // chatgpt
+    // @ManyToMany(()=>Song, (song)=>song.albums)
+    // @JoinTable({
+    //     name: "album_song",
+    //     joinColumn: {
+    //         name: "albumId",
+    //         referencedColumnName: "id"
+    //     },
+    //     inverseJoinColumn:{
+    //         name:"songId",
+    //         referencedColumnName: "id"
+    //     }
+    // })
+    // songs: Song[]
 
 }

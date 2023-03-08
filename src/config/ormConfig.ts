@@ -3,6 +3,8 @@ import 'dotenv/config';
 import User from './../api/entities/user'
 import Singer from './../api/entities/singer'
 import Song from './../api/entities/song'
+import Album from './../api/entities/album'
+import AlbumSong from '../api/entities/album_song';
 
 export const ORM_CONFIG: DataSourceOptions={
     type: "postgres",
@@ -13,7 +15,7 @@ export const ORM_CONFIG: DataSourceOptions={
     database: process.env.DB_DATABASE,
     synchronize: true,
     logging: true,
-    entities: [User, Singer, Song],
+    entities: [User, Singer, Song, Album, AlbumSong],
     subscribers: [],
     migrations: [],
 }

@@ -5,7 +5,7 @@ import Validation from './../helpers/validate'
 import CreateSingerDto from './../dtos/singer/singer.create'
 import UpdateSingerDto from './../dtos/singer/singer.update'
 
-export default class Singer2Routes extends BaseRoutes {
+export default class SingerRoutes extends BaseRoutes {
     private authJwt = new AuthJwt();
     private singerController = new SingerController();
     path = '/singers'
