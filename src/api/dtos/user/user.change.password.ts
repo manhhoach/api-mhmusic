@@ -1,19 +1,20 @@
-import { IsString, Length } from "class-validator"
+import { IsNotEmpty, IsString, Length } from "class-validator"
 
 
 export default class UserDto {
     
-
+    @IsNotEmpty()
     @IsString()
     @Length(8, 16)
     oldPassword: string;
-
+    
+    @IsNotEmpty()
     @IsString()
     @Length(8, 16)
     newPassword: string;
 
-    constructor(data: any) {
-        this.newPassword = data.newPassword;
-        this.oldPassword = data.oldPassword;
-    }
+    // constructor(data: any) {
+    //     this.newPassword = data.newPassword;
+    //     this.oldPassword = data.oldPassword;
+    // }
 }

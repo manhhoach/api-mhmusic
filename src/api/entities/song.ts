@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm'
-
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm'
+import Singer from './singer'
 
 @Entity()
 export default class Song {
@@ -11,17 +11,17 @@ export default class Song {
 
     @Column({ type: 'varchar', length: 512, nullable: false })
     url: string;
-
-    @Column({type: 'number'})
-    singerId: number;
+    
+    @ManyToOne(()=>Singer, (singer)=>singer.songs) /// auto generated singerId in db, but use singer id instead
+    singer: Singer;
 
     @Column({ type: 'varchar', length: 512, default: 'unknown'})
     performSinger: string;
 
-    @Column({type: 'number', default: 0})
+    @Column({type: 'integer', default: 0})
     view: number;
 
-    @CreateDateColumn({ select: false })
+    @CreateDateColumn()
     createdAt: Date;
 
 }

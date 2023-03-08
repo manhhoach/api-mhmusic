@@ -30,13 +30,18 @@ export default class BaseController<T extends ObjectLiteral> {
         const id = req.params.id;
         const data = await this.service.getById(id);
         if (!data) {
-            return res.status(404).json(responseError(data));
+            return res.status(404).json(responseError(CONSTANT_MESSAGES.DATA_NOT_FOUND));
         }
         res.status(200).json(responseSuccess(data))
     })
 
     createAndSave = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
         const data = await this.service.createAndSave(req.body);
+        res.status(201).json(responseSuccess(data));
+    })
+
+    save = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+        const data=await this.service.save(req.body);
         res.status(201).json(responseSuccess(data));
     })
 

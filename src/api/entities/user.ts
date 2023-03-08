@@ -32,9 +32,13 @@ export default class User {
     @BeforeUpdate()
     @BeforeInsert()
     hashPassword() {
-        console.log('password hashing');
-        const salt = bcryptjs.genSaltSync(10)
-        this.password = bcryptjs.hashSync(this.password, salt)
+        console.log(this);
+        
+        if(this.password){
+            const salt = bcryptjs.genSaltSync(10)
+            this.password = bcryptjs.hashSync(this.password, salt)
+        }
+        
     }
 
     comparePassword(password: string): boolean {

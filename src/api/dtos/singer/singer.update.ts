@@ -1,10 +1,9 @@
-import { IsString, Length, IsNotEmpty, IsOptional } from "class-validator"
+import { IsString, Length, IsNotEmpty } from "class-validator"
 
 
 export default class SingerDto {
-    @IsOptional()
-    @IsString()
     @IsNotEmpty()
+    @IsString()
     @Length(0, 255)
     name: string;
 }
