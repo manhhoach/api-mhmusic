@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinTable } from 'typeorm'
 import Singer from './singer'
 
 @Entity()
@@ -12,11 +12,12 @@ export default class Song {
     @Column({ type: 'varchar', length: 512, nullable: false })
     url: string;
     
-    @ManyToOne(()=>Singer, (singer)=>singer.songs) /// auto generated singerId in db, but use singer id instead
+    // auto generated singerId in db, but use singer instead
+    @ManyToOne(()=>Singer, (singer)=>singer.songs) //, {onDelete: "SET NULL" }) //  cascade: delete all songs if singer is deleted
     singer: Singer;
 
-    @Column({ type: 'varchar', length: 512, default: 'unknown'})
-    performSinger: string;
+    // @JoinTable()
+    // singerInfo: Singer
 
     @Column({type: 'integer', default: 0})
     view: number;

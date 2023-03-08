@@ -8,7 +8,11 @@ export default class SongRepository extends BaseRepository<Song>{
         super(Song)
     }
 
-    // save(song: CreateSongDto): Promise<Song> {
-        
-    // }
+    getDetailById(id: string){
+        return this.repository.createQueryBuilder("song").where("song.id = :id", {id: id}).innerJoinAndSelect("song.singer", "singer").select([
+            "song",
+            "singer.id",
+            "singer.name"
+        ]).getOne()
+    }
 }

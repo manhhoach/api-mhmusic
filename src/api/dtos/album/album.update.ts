@@ -1,6 +1,6 @@
 import { IsString, Length, IsNotEmpty } from "class-validator"
 
-export default class SingerDto {
+export default class AlbumDto {
     @IsNotEmpty()
     @IsString()
     @Length(0, 255)

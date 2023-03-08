@@ -1,5 +1,4 @@
-import { Length, IsNotEmpty, IsString, IsUUID} from "class-validator"
-
+import { Length, IsNotEmpty, IsString, IsUUID, IsUrl} from "class-validator"
 
 export default class SongDto { 
     @IsNotEmpty()
@@ -9,12 +8,9 @@ export default class SongDto {
     
     @IsNotEmpty()
     @IsString()
+    @IsUrl()
     @Length(0, 255)
     url: string;
-
-    @IsString()
-    @Length(0, 255)
-    performSinger: string;
 
     @IsNotEmpty()
     @IsString()

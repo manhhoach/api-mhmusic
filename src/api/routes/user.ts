@@ -2,36 +2,33 @@ import { Router } from 'express'
 import UserController from './../controllers/user'
 import AuthJwt from './../middlewares/jwt'
 import Validation from './../helpers/validate'
-import User from "./../entities/user"
 import CreateUserDto from './../dtos/user/user.create'
 import UpdateUserDto from './../dtos/user/user.update'
 import LoginUserDto from './../dtos/user/user.login'
 import ChangePasswordDto from './../dtos/user/user.change.password'
+import BaseRoutes from './base'
 
-export default class UserRoutes {
-    private router = Router();
-    public path: string = '/users'
+export default class UserRoutes extends BaseRoutes {
+
+    path = '/users'
     private authJwt = new AuthJwt();
-    private userController = new UserController(User);
+    private userController = new UserController();
     constructor() {
+        super()
         this.initializeRoutes()
     }
-    private initializeRoutes(): void {
-        this.router.post('/login', Validation(LoginUserDto), this.userController.login)
+    initializeRoutes(): void {
+        this.getRouter().post('/login', Validation(LoginUserDto), this.userController.login)
 
-        this.router.post('/register', Validation(CreateUserDto), this.userController.register)
+        this.getRouter().post('/register', Validation(CreateUserDto), this.userController.register)
 
-        this.router.get('/me', this.authJwt.verifyToken(false), this.userController.getMe)
+        this.getRouter().get('/me', this.authJwt.verifyToken(false), this.userController.getMe)
 
-        this.router.patch('/me', Validation(UpdateUserDto), this.authJwt.verifyToken(false), this.userController.updateMe)
+        this.getRouter().patch('/me', Validation(UpdateUserDto), this.authJwt.verifyToken(false), this.userController.updateMe)
 
-        this.router.delete('/:id', this.authJwt.verifyToken(false), this.authJwt.protect, this.userController.findByIdAndDelete)
+        this.getRouter().delete('/:id', this.authJwt.verifyToken(false), this.authJwt.protect, this.userController.findByIdAndDelete)
 
-        this.router.patch('/change-password', Validation(ChangePasswordDto), this.authJwt.verifyToken(true), this.userController.changePassword)
-    }
-
-    public getRouter(): Router {
-        return this.router;
+        this.getRouter().patch('/change-password', Validation(ChangePasswordDto), this.authJwt.verifyToken(true), this.userController.changePassword)
     }
 
 }

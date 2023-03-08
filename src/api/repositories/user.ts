@@ -5,6 +5,10 @@ import UpdateUserDto from "./../dtos/user/user.update"
 
 
 export default class UserRepository extends BaseRepository<User>{
+
+    constructor(){
+        super(User)
+    }
     
     findOne(condition: { id?: string, email?: string }, requiredPassword: boolean = false) {
         let queryBuilder = this.repository.createQueryBuilder('user')

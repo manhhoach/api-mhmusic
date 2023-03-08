@@ -1,37 +1,32 @@
-import { Router } from 'express'
-import Song from './../entities/song'
+import BaseRoutes from './base'
 import SongController from './../controllers/song'
 import AuthJwt from './../middlewares/jwt'
 import Validation from './../helpers/validate'
 import CreateSongDto from './../dtos/song/song.create'
-// import UpdateSongDto from './../dtos/song/song.update'
+import UpdateSongDto from './../dtos/song/song.update'
 
-export default class SongRoutes {
-    private router = Router();
-    public path: string = '/songs'
+export default class SongRoutes extends BaseRoutes {
+    path: string = '/songs'
     private authJwt = new AuthJwt();
-    private songController = new SongController(Song);
+    private songController = new SongController();
     constructor() {
+        super();
         this.initializeRoutes()
     }
-    private initializeRoutes(): void {
-       // this.router.get('/', this.songController.getAllAndCount)
-       // this.router.get('/recent-songs',this.authJwt.verifyToken(false), this.songController.getRecentSongs)
-      //  this.router.post('/recent-songs',this.authJwt.verifyToken(false), this.songController.updateRecentSongs)
-       // this.router.post('/views/:id', this.songController.updateView)
-       // this.router.get('/chart', this.songController.getChart)
-        this.router.get('/:id', this.songController.getById)
+    initializeRoutes(): void {
+        this.getRouter().get('/', this.songController.getAllAndCount)
+       // this.getRouter().get('/recent-songs',this.authJwt.verifyToken(false), this.songController.getRecentSongs)
+      //  this.getRouter().post('/recent-songs',this.authJwt.verifyToken(false), this.songController.updateRecentSongs)
+       // this.getRouter().post('/views/:id', this.songController.updateView)
+       // this.getRouter().get('/chart', this.songController.getChart)
+        this.getRouter().get('/:id', this.songController.getDetailById)
 
-        this.router.use(this.authJwt.verifyToken(false))
-        this.router.use(this.authJwt.protect)
+        this.getRouter().use(this.authJwt.verifyToken(false))
+        this.getRouter().use(this.authJwt.protect)
 
-        this.router.post('/', Validation(CreateSongDto), this.songController.createAndSave)
-        this.router.delete('/:id', this.songController.delete)
-       // this.router.patch('/:id', Validation(UpdateSongDto), this.songController.update)
-    }
-
-    public getRouter(): Router {
-        return this.router;
+        this.getRouter().post('/', Validation(CreateSongDto), this.songController.createAndSave)
+        this.getRouter().delete('/:id', this.songController.delete)
+        this.getRouter().patch('/:id', Validation(UpdateSongDto), this.songController.findByIdAndUpdate)
     }
 
 }

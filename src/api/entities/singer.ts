@@ -9,12 +9,11 @@ class Singer {
     @Column({ type: 'varchar', length: 255 })
     name: string;
 
-    
-    @OneToMany(()=>Song, (song)=>song.singer)
-    songs: Song[];
-
     @CreateDateColumn({ select: false })
     createdAt: Date;
+        
+    @OneToMany(()=>Song, (song)=>song.singer)
+    songs: Song[];
 
     
 }

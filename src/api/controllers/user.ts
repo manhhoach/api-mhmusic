@@ -6,7 +6,10 @@ import User from './../entities/user'
 import BaseController from './base'
 
 export default class UserController extends BaseController<User>{
-    private userService = new UserService(User)
+    constructor(){
+        super(User)
+    }
+    private userService = new UserService()
 
     public getMe(req: Request, res: Response, next: NextFunction) {
         res.status(200).json(responseSuccess(res.locals.user))
