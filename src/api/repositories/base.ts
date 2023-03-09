@@ -12,6 +12,10 @@ export default class BaseRepository<T extends ObjectLiteral> {
         this.repository = AppDataSource.getRepository(entity);
     }
 
+    getAll(condition: any){
+        return this.repository.findBy(condition)
+    }
+
     getAllAndCount(limit: number, offset: number, condition: FindOptionsWhere<T> | FindOptionsWhere<T>[] | undefined, order: FindOptionsOrder<T> | undefined) {
         return this.repository.findAndCount({
             where: condition,
