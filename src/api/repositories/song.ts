@@ -1,10 +1,8 @@
 import Song from './../entities/song'
 import BaseRepository from './base'
-import {REDIS_URL} from './../../config/redisConfig'
-import Redis from 'ioredis'
+import redis from './../databases/redis'
 
 export default class SongRepository extends BaseRepository<Song>{
-    private redis = new Redis(REDIS_URL) 
     constructor(){
         super(Song)
     }
@@ -17,26 +15,39 @@ export default class SongRepository extends BaseRepository<Song>{
         ]).getOne()
     }
 
-
-    popLastElement(key: string){
-        return this.redis.rpop(key)
+    increViews(id: string, views: number){
+        return this.repository.increment({id: id}, 'views', views)
     }
-    push(key: string, data: string){
-        return this.redis.lpush(key, data)
+
+
+    get(key: string){
+        return redis.get(key)
+    }
+    set(key: string, value: any){
+        return redis.set(key, value)
+    }
+    incr(key: string){
+        return redis.incr(key)
+    }
+    setKeyIfNotExistWithExpiredTime(key: string, value: string, time: number){
+        return redis.set(key, value, 'EX', time, 'NX')
+    }
+    rightPop(key: string){
+        return redis.rpop(key)
+    }
+    leftPush(key: string, data: string){
+        return redis.lpush(key, data)
     }
     getAllElement(key: string): Promise<string[]>{
-        return this.redis.lrange(key, 0, -1)
+        return redis.lrange(key, 0, -1)
     }
-    findInList(key: string, data: string){
-        return this.redis.lpos(key, data)
+    remove(key: string, data: string){
+        return redis.lrem(key, 1, data)
     }
-    removeFromList(key: string, data: string){
-        return this.redis.lrem(key, 1, data)
-    }
-    getLength(key: string){
-        return this.redis.llen(key)
+    length(key: string){
+        return redis.llen(key)
     }
     setExpires(key: string, value: number){
-        return this.redis.expire(key, value)
+        return redis.expire(key, value)
     }
 }

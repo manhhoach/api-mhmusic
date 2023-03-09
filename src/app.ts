@@ -4,6 +4,7 @@ import { responseError } from './api/helpers/response'
 import 'dotenv/config';
 import IndexRouter from './api/routes'
 
+
 class App {
     public PORT: number;
     public app: express.Application;
@@ -13,6 +14,7 @@ class App {
         this.app = express()
         this.PORT = parseInt(process.env.PORT as string) || 3000
         this.Router = new IndexRouter();
+        
 
         this.useMiddlewares()
         this.useRoutes()

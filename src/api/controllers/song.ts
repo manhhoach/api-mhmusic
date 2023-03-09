@@ -2,7 +2,7 @@ import Song from './../entities/song'
 import BaseController from './base'
 import tryCatch from '../helpers/tryCatch';
 import { responseSuccess, responseError } from '../helpers/response';
-import { CONSTANT_MESSAGES, REDIS_VARIABLES } from "../helpers/constant";
+import { CONSTANT_MESSAGES } from "../helpers/constant";
 import { NextFunction, Request, Response } from "express";
 import SongService from './../services/song';
 
@@ -33,4 +33,14 @@ export default class SongController extends BaseController<Song> {
         res.status(400).json(responseError(result))
     })
 
+    updateViews = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+        let result = await this.songService.updateViews(req.params.id);
+        if(result !==null)
+           return res.status(201).json(responseSuccess(result));
+        res.status(400).json(responseError(CONSTANT_MESSAGES.TOO_MANY_REQUESTS));
+    })
+
+    getChart = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+        
+    })
 }

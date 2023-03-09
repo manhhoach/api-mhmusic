@@ -17,8 +17,8 @@ export default class SongRoutes extends BaseRoutes {
         this.getRouter().get('/', this.songController.getAllAndCount)
         this.getRouter().get('/recent-songs',this.authJwt.verifyToken(false), this.songController.getRecentSongs)
         this.getRouter().patch('/recent-songs',this.authJwt.verifyToken(false), this.songController.updateRecentSongs)
-       // this.getRouter().post('/views/:id', this.songController.updateView)
-       // this.getRouter().get('/chart', this.songController.getChart)
+        this.getRouter().patch('/update-views/:id', this.songController.updateViews)
+        this.getRouter().get('/chart', this.songController.getChart)
         this.getRouter().get('/:id', this.songController.getDetailById)
 
         this.getRouter().use(this.authJwt.verifyToken(false))

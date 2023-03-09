@@ -15,7 +15,7 @@ export default class Song {
     url: string;
 
     @Column({type: 'integer', default: 0})
-    view: number;
+    views: number;
 
     @CreateDateColumn()
     createdAt: Date;
