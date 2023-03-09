@@ -5,10 +5,10 @@ export default class AlbumSongDto {
     @IsNotEmpty()
     @IsString()
     @IsUUID()
-    albumId: string;
+    album: string;
 
     @IsNotEmpty()
     @IsString()
     @IsUUID()
-    songId: string; 
+    song: string; 
 }

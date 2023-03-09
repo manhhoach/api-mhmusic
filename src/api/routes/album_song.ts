@@ -13,6 +13,7 @@ export default class AlbumSongRoutes extends BaseRoutes {
         this.initializeRoutes()
     }
     initializeRoutes(): void {
+        this.getRouter().get('/:id', this.albumSongController.getDetailById)
         
         this.getRouter().use(this.authJwt.verifyToken(false))
         

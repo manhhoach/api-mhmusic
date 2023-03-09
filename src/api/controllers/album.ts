@@ -6,4 +6,5 @@ export default class AlbumController extends BaseController<Album> {
     constructor(){
         super(Album)
     }
+    
 }

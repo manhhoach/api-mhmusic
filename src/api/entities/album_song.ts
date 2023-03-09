@@ -3,16 +3,16 @@ import Song from './song'
 import Album from './album';
 
 @Entity()
-@Unique("album_song_unique", ["albumId", "songId"])
+@Unique("album_song_unique", ["album", "song"])
 export default class AlbumSong {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({type: 'uuid'})
-    albumId: string
+    // @Column({type: 'uuid'})
+    // albumId: string
 
-    @Column({type: 'uuid'})
-    songId: string
+    // @Column({type: 'uuid'})
+    // songId: string
 
     @CreateDateColumn()
     createdAt: Date;

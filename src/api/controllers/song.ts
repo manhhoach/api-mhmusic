@@ -1,5 +1,4 @@
 import Song from './../entities/song'
-import Singer from '../entities/singer';
 import BaseController from './base'
 import tryCatch from '../helpers/tryCatch';
 import { responseSuccess, responseError } from '../helpers/response';
