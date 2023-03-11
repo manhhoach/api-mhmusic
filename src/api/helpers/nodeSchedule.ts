@@ -3,7 +3,7 @@ import SongRepository from '../repositories/song';
 import { REDIS_VARIABLES } from "../helpers/constant";
 import moment from 'moment-timezone';
 
-export const updateViewsOfAllSongs = nodeSchedule.scheduleJob('* */15 * * * *', async function () {
+export const updateViewsOfAllSongs = nodeSchedule.scheduleJob(`* */${REDIS_VARIABLES.VIEWS_UPDATE_MINUTES} * * * *`, async function () {
 
     let songRepository = new SongRepository();
     let allSongs = await songRepository.hgetAll(REDIS_VARIABLES.HASHES_VIEW_SONGS)
