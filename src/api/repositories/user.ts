@@ -1,7 +1,6 @@
 import User from './../entities/user'
 import BaseRepository from './base'
-import {UpdateResult} from "typeorm"
-import UpdateUserDto from "./../dtos/user/user.update"
+
 
 
 export default class UserRepository extends BaseRepository<User>{
@@ -19,10 +18,6 @@ export default class UserRepository extends BaseRepository<User>{
         if (requiredPassword)
             queryBuilder.addSelect('user.password')
         return queryBuilder.getOne()
-    }
-
-    update(condition: any, entity: UpdateUserDto): Promise<UpdateResult> {
-        return this.repository.update(condition, entity);
     }
     
 }

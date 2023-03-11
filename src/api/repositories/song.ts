@@ -13,13 +13,15 @@ export default class SongRepository extends BaseRepository<Song>{
             order: {"views": "DESC"}
         })
     }
-
     getDetailById(id: string){
         return this.repository.createQueryBuilder("song").where("song.id = :id", {id: id}).innerJoinAndSelect("song.singer", "singer").select([
             "song",
             "singer.id",
             "singer.name"
         ]).getOne()
+    }
+    increViews(id: string, views: number){
+        return this.repository.increment({id: id}, 'views', views)
     }
 
     hset(key: string, field: string, value: number){
@@ -35,14 +37,9 @@ export default class SongRepository extends BaseRepository<Song>{
         return redis.del(key)
     }
 
-    increViews(id: string, views: number){
-        return this.repository.increment({id: id}, 'views', views)
-    }
+    
     get(key: string){
         return redis.get(key)
-    }
-    set(key: string, value: any){
-        return redis.set(key, value)
     }
     incr(key: string){
         return redis.incr(key)
@@ -50,13 +47,16 @@ export default class SongRepository extends BaseRepository<Song>{
     setKeyIfNotExistWithExpiredTime(key: string, value: string, time: number){
         return redis.set(key, value, 'EX', time, 'NX')
     }
+    setKeyWithExpiredTime(key: string, value: any, time: number){
+        return redis.set(key, value, 'EX', time);
+    }
     rightPop(key: string){
         return redis.rpop(key)
     }
     leftPush(key: string, data: string){
         return redis.lpush(key, data)
     }
-    getAllElement(key: string): Promise<string[]>{
+    lrange(key: string): Promise<string[]>{
         return redis.lrange(key, 0, -1)
     }
     remove(key: string, data: string){

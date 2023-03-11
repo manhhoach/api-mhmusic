@@ -14,6 +14,7 @@ export default class SongService extends BaseService<Song>{
     getDetailById(id: string) {
         return this.songRepository.getDetailById(id)
     }
+    
     async updateRecentSongs(userId: string, songId: string) {
         const recentSongsUser = `${REDIS_VARIABLES.USER_ID}${userId}`;
         await this.songRepository.remove(recentSongsUser, songId);
@@ -31,7 +32,7 @@ export default class SongService extends BaseService<Song>{
 
     async getRecentSongs(userId: string) {
         const recentSongsUser = `${REDIS_VARIABLES.USER_ID}${userId}`;
-        let songIds = await this.songRepository.getAllElement(recentSongsUser)
+        let songIds = await this.songRepository.lrange(recentSongsUser)
         return Promise.all(songIds.map((songId) => {
             return this.songRepository.getById(songId)
         }))
@@ -42,29 +43,34 @@ export default class SongService extends BaseService<Song>{
         let keyMacAddressSong = `${REDIS_VARIABLES.MAC_ADDRESS}${await macAddress.one()}-${song}`;
         let isOk = await this.songRepository.setKeyIfNotExistWithExpiredTime(keyMacAddressSong, 'MUSIC', REDIS_VARIABLES.RESET_TIME_LISTEN_AGAIN);
         if (isOk === 'OK') {
-           let data = await this.songRepository.hincrby(REDIS_VARIABLES.HASHES_VIEW_SONGS, songId, 1)
-           return data;
+            let data = await this.songRepository.hincrby(REDIS_VARIABLES.HASHES_VIEW_SONGS, songId, 1)
+            return data;
         }
         return null;
     }
 
-    async getChartData(){
-        let songOfTop=await this.songRepository.getTopByViews(3);
+    async getChartData() {
+        let songOfTop = await this.songRepository.getTopByViews(REDIS_VARIABLES.NUMBER_SONG_IN_CHART);
         let arr_time = [];
         for (let i = 0; i < 12; i++) {
-            arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'))
+            arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(REDIS_VARIABLES.STEP_TIME * i, 'hours').format(REDIS_VARIABLES.FORMAT_TIME))
         }
-        return Promise.all(arr_time.map(async(time)=>{
-            let viewByHour=await Promise.all(songOfTop.map(async(song)=>{
-                let view = await this.songRepository.get(`${REDIS_VARIABLES.TIME}${time}-${REDIS_VARIABLES.SONG_ID}${song.id}`)
+        return Promise.all(arr_time.map(async (time) => {
+            let hourlyViews = await Promise.all(songOfTop.map(async (song) => {
+                let views = await this.songRepository.get(`${time}-${REDIS_VARIABLES.SONG_ID}${song.id}`)
                 return {
                     id: song.id,
                     name: song.name,
-                    view: view ? view : 0
+                    percentViews: views ? parseInt(views) : 0
                 }
             }))
+            let totalViews = hourlyViews.reduce((current, next) => current + next.percentViews, 0)
+            if (totalViews !== 0)
+                hourlyViews = hourlyViews.map((v => {
+                    return Object.assign(v, { percentViews: Math.round(v.percentViews * 100 / totalViews) })
+                }))
             return {
-                time: time, viewByHours: viewByHour
+                time: time, hourlyViews: hourlyViews
             }
         }))
     }

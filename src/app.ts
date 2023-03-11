@@ -3,7 +3,9 @@ import "reflect-metadata"
 import { responseError } from './api/helpers/response'
 import 'dotenv/config';
 import IndexRouter from './api/routes'
-
+import helmet from "helmet";
+import compression from 'compression'
+import cors from 'cors'
 
 class App {
     public PORT: number;
@@ -21,19 +23,21 @@ class App {
         this.useErrorHandler()
 
     }
-    useMiddlewares() {
+    private useMiddlewares() {
+        this.app.use(helmet())
+        this.app.use(compression())
+        this.app.use(cors())
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
     }
-    useErrorHandler() {
+    private useErrorHandler() {
         this.app.use('*', (err: any, req: Request, res: Response, next: NextFunction) => {
-            console.log(err);
             let message = err.message ? err.message : err;
             message = message ? message : err.detail;
             res.status(err.statusCode||500).json(responseError(message))
         })
     }
-    useRoutes() {
+    private useRoutes() {
         this.app.use('/api', this.Router.getRouter())
         this.app.get('/', (req: Request, res: Response)=>{
             res.send('WELCOME TO API MHMUSIC')
