@@ -41,6 +41,8 @@ export default class SongController extends BaseController<Song> {
     })
 
     getChart = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+        let result = await this.songService.getChartData();
+        res.status(200).json(responseSuccess(result));
         
     })
 }

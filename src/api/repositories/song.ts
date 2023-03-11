@@ -7,6 +7,13 @@ export default class SongRepository extends BaseRepository<Song>{
         super(Song)
     }
 
+    getTopByViews(limit: number){
+        return this.repository.find({
+            take: limit,
+            order: {"views": "DESC"}
+        })
+    }
+
     getDetailById(id: string){
         return this.repository.createQueryBuilder("song").where("song.id = :id", {id: id}).innerJoinAndSelect("song.singer", "singer").select([
             "song",
@@ -15,11 +22,22 @@ export default class SongRepository extends BaseRepository<Song>{
         ]).getOne()
     }
 
+    hset(key: string, field: string, value: number){
+        return redis.hset(key, field, value)
+    }
+    hgetAll(key: string){
+        return redis.hgetall(key)
+    }
+    hincrby(key: string, field: string, value: number){
+        return redis.hincrby(key, field, value)
+    }
+    del(key: string){
+        return redis.del(key)
+    }
+
     increViews(id: string, views: number){
         return this.repository.increment({id: id}, 'views', views)
     }
-
-
     get(key: string){
         return redis.get(key)
     }

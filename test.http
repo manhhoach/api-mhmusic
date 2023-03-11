@@ -1,0 +1,14 @@
+#### update view
+PATCH http://localhost:3000/api/songs/update-views/59a07e25-4829-4092-ba2c-841608f8ec36
+#### update view
+PATCH http://localhost:3000/api/songs/update-views/1aaad60a-ddf4-4264-a400-6cef5f8aa80d
+#### update view
+PATCH http://localhost:3000/api/songs/update-views/2589208d-776b-46f8-8d3a-dba25062ee49
+#### update view
+PATCH http://localhost:3000/api/songs/update-views/32b3b9e0-be0e-431f-bfdf-a19dfbdd9747
+#### update view
+PATCH http://localhost:3000/api/songs/update-views/9e421a2b-2b69-4265-85b5-4aea21d89f7c
+#### update view
+PATCH http://localhost:3000/api/songs/update-views/37d7cd4c-cdde-41f2-bc23-338e0e72d66d
+#### update view
+PATCH http://localhost:3000/api/songs/update-views/273ee346-a95e-4b3a-9892-b11191fc970c

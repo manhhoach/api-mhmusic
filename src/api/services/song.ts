@@ -3,7 +3,7 @@ import BaseService from './base'
 import SongRepository from '../repositories/song'
 import macAddress from 'macaddress'
 import { REDIS_VARIABLES, CONSTANT_MESSAGES } from "../helpers/constant";
-
+import moment from 'moment-timezone';
 
 export default class SongService extends BaseService<Song>{
     constructor() {
@@ -42,16 +42,31 @@ export default class SongService extends BaseService<Song>{
         let keyMacAddressSong = `${REDIS_VARIABLES.MAC_ADDRESS}${await macAddress.one()}-${song}`;
         let isOk = await this.songRepository.setKeyIfNotExistWithExpiredTime(keyMacAddressSong, 'MUSIC', REDIS_VARIABLES.RESET_TIME_LISTEN_AGAIN);
         if (isOk === 'OK') {
-            let view: any = await this.songRepository.get(song);
-            if (view !== null)
-                view = await this.songRepository.incr(song)
-            else {
-                view = await this.songRepository.set(song, 1)
-                return 1
-            }
-            return view;
+           let data = await this.songRepository.hincrby(REDIS_VARIABLES.HASHES_VIEW_SONGS, songId, 1)
+           return data;
         }
         return null;
+    }
+
+    async getChartData(){
+        let songOfTop=await this.songRepository.getTopByViews(3);
+        let arr_time = [];
+        for (let i = 0; i < 12; i++) {
+            arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(2 * i, 'hours').format('HH:00:00, D/M/Y'))
+        }
+        return Promise.all(arr_time.map(async(time)=>{
+            let viewByHour=await Promise.all(songOfTop.map(async(song)=>{
+                let view = await this.songRepository.get(`${REDIS_VARIABLES.TIME}${time}-${REDIS_VARIABLES.SONG_ID}${song.id}`)
+                return {
+                    id: song.id,
+                    name: song.name,
+                    view: view ? view : 0
+                }
+            }))
+            return {
+                time: time, viewByHours: viewByHour
+            }
+        }))
     }
 
 }
