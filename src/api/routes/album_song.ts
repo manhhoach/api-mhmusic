@@ -18,7 +18,7 @@ export default class AlbumSongRoutes extends BaseRoutes {
         
         this.getRouter().use(this.authJwt.protect)
 
-        this.getRouter().post('/', Validation(CreateAlbumSongDto), this.albumSongcontroller.create)
+        this.getRouter().post('/', Validation(CreateAlbumSongDto), this.albumSongcontroller.createAndSave)
 
         this.getRouter().delete('/:id', this.albumSongcontroller.delete)
     }

@@ -34,7 +34,7 @@ export default class UserRoutes extends BaseRoutes {
         let repository = new UserRepository()
         let service = new UserService(repository, auth)
         let controller = new UserController(service);
-        
+    
         let routes = new UserRoutes(controller, auth)
         routes.initializeRoutes();
         return routes;

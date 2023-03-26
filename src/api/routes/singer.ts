@@ -23,7 +23,7 @@ export default class SingerRoutes extends BaseRoutes{
 
         this.getRouter().use(this.authJwt.protect)
 
-        this.getRouter().post('/', Validation(CreateSingerDto), this.singerController.create)
+        this.getRouter().post('/', Validation(CreateSingerDto), this.singerController.createAndSave)
 
         this.getRouter().delete('/:id', this.singerController.delete)
 

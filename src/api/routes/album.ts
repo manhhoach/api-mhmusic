@@ -22,7 +22,7 @@ export default class AlbumRoutes extends BaseRoutes {
         
         this.getRouter().use(this.authJwt.protect)
 
-        this.getRouter().post('/', Validation(CreateAlbumDto), this.albumController.create)
+        this.getRouter().post('/', Validation(CreateAlbumDto), this.albumController.createAndSave)
 
         this.getRouter().delete('/:id', this.albumController.delete)
 

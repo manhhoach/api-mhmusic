@@ -4,7 +4,6 @@ import tryCatch from '../helpers/tryCatch';
 import { responseSuccess } from '../helpers/response';
 import User from './../entities/user'
 import BaseController from './base'
-import AuthJwt from '../middlewares/jwt';
 
 export default class UserController extends BaseController<User>{
     constructor(private userService: UserService){

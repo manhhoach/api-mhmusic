@@ -35,16 +35,22 @@ export default class BaseController<T extends ObjectLiteral> {
         res.status(200).json(responseSuccess(data))
     })
 
-    create = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        let data: any = this.service.create(req.body);
-        data = await this.service.save(data);
-        res.status(201).json(responseSuccess(data));
-    })
+    // create = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+    //     let data: any = this.service.create(req.body);
+    //     data = await this.service.save(data);
+    //     res.status(201).json(responseSuccess(data));
+    // })
 
     // save = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
     //     const data = await this.service.save(req.body);
     //     res.status(201).json(responseSuccess(data));
     // })
+
+    createAndSave = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+        let data: any = this.service.create(req.body);
+        data = await this.service.save(data);
+        res.status(201).json(responseSuccess(data));
+    })
 
     findByIdAndUpdate = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
         const id = req.params.id;

@@ -7,6 +7,7 @@
     "dev": "nodemon ./dist/index",
     "watch": "npx tsc -w",
     "start": "node ./dist/index",
+    "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -38,7 +39,12 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.14.6",
     "@types/node-schedule": "^2.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
     "nodemon": "^2.0.21",
+    "prettier": "^2.8.7",
     "typescript": "^4.9.5"
   }
 }

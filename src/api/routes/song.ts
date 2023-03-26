@@ -24,7 +24,7 @@ export default class SongRoutes extends BaseRoutes {
         this.getRouter().use(this.authJwt.verifyToken(false))
         this.getRouter().use(this.authJwt.protect)
 
-        this.getRouter().post('/', Validation(CreateSongDto), this.songController.create)
+        this.getRouter().post('/', Validation(CreateSongDto), this.songController.createAndSave)
         this.getRouter().delete('/:id', this.songController.delete)
         this.getRouter().patch('/:id', Validation(UpdateSongDto), this.songController.findByIdAndUpdate)
     }

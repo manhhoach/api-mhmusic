@@ -26,6 +26,11 @@ export default class BaseService<T extends ObjectLiteral> {
     return this.repository.save(data);
   }
 
+  createAndSave(obj: any): Promise<T> {
+    let data: any = this.create(obj);
+    return this.save(data)
+  }
+
   update(condition: any, entity: T): Promise<UpdateResult> {
     return this.repository.update(condition, entity)
   }
