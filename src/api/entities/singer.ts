@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from 'typeorm'
-import Song from './song'
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from 'typeorm';
+import Song from './song';
 
 @Entity()
 class Singer {
@@ -17,4 +17,4 @@ class Singer {
 
     
 }
-export default Singer
+export default Singer;

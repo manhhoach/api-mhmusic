@@ -28,20 +28,20 @@ export default class BaseService<T extends ObjectLiteral> {
 
   createAndSave(obj: any): Promise<T> {
     let data: any = this.create(obj);
-    return this.save(data)
+    return this.save(data);
   }
 
   update(condition: any, entity: T): Promise<UpdateResult> {
-    return this.repository.update(condition, entity)
+    return this.repository.update(condition, entity);
   }
 
   async findByIdAndUpdate(id: string, obj: any): Promise<T | null> {
-    let data = await this.repository.getById(id)
+    let data = await this.repository.getById(id);
     if (!data) {
-      return null
+      return null;
     }
-    let entity = Object.assign(data, obj)
-    return this.repository.save(entity)
+    let entity = Object.assign(data, obj);
+    return this.repository.save(entity);
   }
 
   delete(condition: string | string[] | Object): Promise<DeleteResult> {
@@ -49,9 +49,9 @@ export default class BaseService<T extends ObjectLiteral> {
   }
 
   async findByIdAndDelete(id: string): Promise<null | string> {
-    let data = await this.repository.delete(id)
+    let data = await this.repository.delete(id);
     if (data.affected === 1)
       return null;
-    return CONSTANT_MESSAGES.DELETE_FAILED
+    return CONSTANT_MESSAGES.DELETE_FAILED;
   }
 }

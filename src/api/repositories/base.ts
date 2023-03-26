@@ -2,7 +2,7 @@ import {
     DeleteResult, Repository, ObjectLiteral,
     FindOptionsWhere, FindOptionsOrder, UpdateResult
 } from "typeorm";
-import { AppDataSource } from './../databases/postgres'
+import { AppDataSource } from './../databases/postgres';
 
 
 export default class BaseRepository<T extends ObjectLiteral> {
@@ -13,7 +13,7 @@ export default class BaseRepository<T extends ObjectLiteral> {
     }
 
     getAll(condition: any){
-        return this.repository.findBy(condition)
+        return this.repository.findBy(condition);
     }
 
     getAllAndCount(limit: number, offset: number, condition: FindOptionsWhere<T> | FindOptionsWhere<T>[] | undefined, order: FindOptionsOrder<T> | undefined) {
@@ -22,18 +22,18 @@ export default class BaseRepository<T extends ObjectLiteral> {
             take: limit,
             skip: offset,
             order: order
-        })
+        });
     }
 
     getById(id: string): Promise<T | null> {
-        let condition: any = { id: id }
+        let condition: any = { id: id };
         return this.repository.findOne({
             where: condition
-        })
+        });
     }
 
     create(obj: any): T[]{
-        return this.repository.create(obj)
+        return this.repository.create(obj);
     }
 
     save(data: T): Promise<T> {

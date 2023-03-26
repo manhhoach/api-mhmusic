@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import Song from './song';
 import AlbumSong from './album_song';
 
@@ -14,7 +14,7 @@ export default class Album {
     createdAt: Date;
 
     @OneToMany(()=> AlbumSong, (albumSong)=>albumSong.album)
-    albumSongs: AlbumSong[]
+    albumSongs: AlbumSong[];
 
 
     // chatgpt

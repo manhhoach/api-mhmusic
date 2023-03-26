@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import UserRoutes from './user';
-import SingerRoutes from './singer'
-import SongRoutes from './song'
-import AlbumRoutes from './album'
-import AlbumSongRoutes from './album_song'
+import SingerRoutes from './singer';
+import SongRoutes from './song';
+import AlbumRoutes from './album';
+import AlbumSongRoutes from './album_song';
 
 export default class IndexRouter {
     private router = Router();
@@ -16,7 +16,7 @@ export default class IndexRouter {
         this.routes.forEach(route => {
             let routeElement = route.initRoutes();  
             this.router.use(routeElement.getPath(), routeElement.getRouter());
-        })
+        });
 
     }
 

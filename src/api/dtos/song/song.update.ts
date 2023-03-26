@@ -1,4 +1,4 @@
-import { Length, IsNotEmpty, IsString, IsUUID, IsUrl, IsOptional} from "class-validator"
+import { Length, IsNotEmpty, IsString, IsUUID, IsUrl, IsOptional} from "class-validator";
 
 export default class SongDto { 
     @IsOptional()

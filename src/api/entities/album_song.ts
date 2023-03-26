@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, Column, ManyToOne, Unique } from 'typeorm'
-import Song from './song'
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, Column, ManyToOne, Unique } from 'typeorm';
+import Song from './song';
 import Album from './album';
 
 @Entity()

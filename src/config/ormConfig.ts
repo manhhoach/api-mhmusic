@@ -1,9 +1,9 @@
-import {DataSourceOptions} from 'typeorm'
+import {DataSourceOptions} from 'typeorm';
 import 'dotenv/config';
-import User from './../api/entities/user'
-import Singer from './../api/entities/singer'
-import Song from './../api/entities/song'
-import Album from './../api/entities/album'
+import User from './../api/entities/user';
+import Singer from './../api/entities/singer';
+import Song from './../api/entities/song';
+import Album from './../api/entities/album';
 import AlbumSong from '../api/entities/album_song';
 
 export const ORM_CONFIG: DataSourceOptions={
@@ -18,4 +18,4 @@ export const ORM_CONFIG: DataSourceOptions={
     entities: [User, Singer, Song, Album, AlbumSong],
     subscribers: [],
     migrations: [],
-}
+};

@@ -1,4 +1,4 @@
-import { IsString, IsEmail, Length, IsNotEmpty } from "class-validator"
+import { IsString, IsEmail, Length, IsNotEmpty } from "class-validator";
 
 export default class UserDto {
 

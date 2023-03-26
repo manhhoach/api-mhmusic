@@ -1,7 +1,7 @@
 import BaseService from './base';
 import User from './../entities/user';
 import AppError from './../helpers/appError';
-import { CONSTANT_MESSAGES } from './../helpers/constant'
+import { CONSTANT_MESSAGES } from './../helpers/constant';
 import AuthJwt from '../middlewares/jwt';
 import UserRepository from '../repositories/user';
 import UpdateUserDto from "./../dtos/user/user.update";
@@ -11,7 +11,7 @@ import ChangePasswordDto from './../dtos/user/user.change.password';
 
 export default class UserService extends BaseService<User>{
     constructor(private userRepository: UserRepository, private authJwt: AuthJwt) {
-        super(userRepository)
+        super(userRepository);
     }
 
     async register(data: CreateUserDto) {
@@ -42,7 +42,7 @@ export default class UserService extends BaseService<User>{
             return CONSTANT_MESSAGES.UPDATE_FAILED;
         }
         else
-            throw new AppError(400, CONSTANT_MESSAGES.INVALID_PASSWORD)
+            throw new AppError(400, CONSTANT_MESSAGES.INVALID_PASSWORD);
     }
 
     async findByIdAndUpdate(id: string, obj: UpdateUserDto): Promise<User | null> {

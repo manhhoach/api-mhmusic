@@ -1,6 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm'
-import { Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from "class-validator"
-import bcryptjs from 'bcryptjs'
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from "class-validator";
+import bcryptjs from 'bcryptjs';
 
 @Entity()
 export default class User {
@@ -31,18 +31,16 @@ export default class User {
 
     @BeforeUpdate()
     @BeforeInsert()
-    hashPassword() {
-        console.log(this);
-        
+    hashPassword() { 
         if(this.password){
-            const salt = bcryptjs.genSaltSync(10)
-            this.password = bcryptjs.hashSync(this.password, salt)
+            const salt = bcryptjs.genSaltSync(10);
+            this.password = bcryptjs.hashSync(this.password, salt);
         }
         
     }
 
     comparePassword(password: string): boolean {
-        return bcryptjs.compareSync(password, this.password)
+        return bcryptjs.compareSync(password, this.password);
     }
 
 }
