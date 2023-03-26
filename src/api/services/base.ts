@@ -5,11 +5,9 @@ import { CONSTANT_MESSAGES } from "../helpers/constant";
 export default class BaseService<T extends ObjectLiteral> {
 
   protected repository: BaseRepository<T>;
-  private entity: any;
 
-  constructor(entity: any) {
-    this.entity = entity;
-    this.repository = new BaseRepository(entity);
+  constructor(baseRepository: BaseRepository<T>) {
+    this.repository = baseRepository;
   }
 
   getAllAndCount(limit: number, offset: number, condition: any, order: any) {
@@ -20,14 +18,12 @@ export default class BaseService<T extends ObjectLiteral> {
     return this.repository.getById(id);
   }
 
-  createAndSave(entity: any): Promise<T[]> {
-    return this.repository.createAndSave(entity);
+  create(obj: any): T[] {
+    return this.repository.create(obj);
   }
 
   save(data: T): Promise<T> {
-    let entitySave = new this.entity()
-    entitySave = Object.assign(entitySave, data)
-    return this.repository.save(entitySave);
+    return this.repository.save(data);
   }
 
   update(condition: any, entity: T): Promise<UpdateResult> {

@@ -1,17 +1,17 @@
 import BaseRoutes from './base'
 import SongController from './../controllers/song'
+import SongService from '../services/song'
+import SongRepository from '../repositories/song'
 import AuthJwt from './../middlewares/jwt'
 import Validation from './../helpers/validate'
 import CreateSongDto from './../dtos/song/song.create'
 import UpdateSongDto from './../dtos/song/song.update'
 
 export default class SongRoutes extends BaseRoutes {
+
     path: string = '/songs'
-    private authJwt = new AuthJwt();
-    private songController = new SongController();
-    constructor() {
-        super();
-        this.initializeRoutes()
+    constructor(private songController: SongController, authJwt: AuthJwt) {
+        super(authJwt);
     }
     initializeRoutes(): void {
         this.getRouter().get('/', this.songController.getAllAndCount)
@@ -24,9 +24,18 @@ export default class SongRoutes extends BaseRoutes {
         this.getRouter().use(this.authJwt.verifyToken(false))
         this.getRouter().use(this.authJwt.protect)
 
-        this.getRouter().post('/', Validation(CreateSongDto), this.songController.createAndSave)
+        this.getRouter().post('/', Validation(CreateSongDto), this.songController.create)
         this.getRouter().delete('/:id', this.songController.delete)
         this.getRouter().patch('/:id', Validation(UpdateSongDto), this.songController.findByIdAndUpdate)
+    }
+    static initRoutes(): SongRoutes {
+        let repository = new SongRepository()
+        let service = new SongService(repository)
+        let controller = new SongController(service);
+        const auth = new AuthJwt()
+        let routes = new SongRoutes(controller, auth)
+        routes.initializeRoutes();
+        return routes;
     }
 
 }

@@ -10,14 +10,12 @@ import LoginUserDto from './../dtos/user/user.login'
 import ChangePasswordDto from './../dtos/user/user.change.password'
 
 export default class UserService extends BaseService<User>{
-    constructor(){
-        super(User)
+    constructor(private userRepository: UserRepository, private authJwt: AuthJwt) {
+        super(userRepository)
     }
-    private userRepository: UserRepository=new UserRepository();
-    private authJwt = new AuthJwt();
 
     async register(data: CreateUserDto) {
-        return this.userRepository.createAndSave(data);
+        return this.userRepository.create(data);
     }
 
     async login(data: LoginUserDto) {

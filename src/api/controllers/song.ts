@@ -9,10 +9,9 @@ import SongService from './../services/song';
 
 export default class SongController extends BaseController<Song> {
 
-    constructor() {
-        super(Song)
+    constructor(private songService: SongService) {
+        super(songService)
     }
-    private songService = new SongService();
 
     getDetailById = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
         let data = await this.songService.getDetailById(req.params.id);

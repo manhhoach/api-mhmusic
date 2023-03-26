@@ -4,12 +4,12 @@ import tryCatch from '../helpers/tryCatch';
 import { responseSuccess } from '../helpers/response';
 import User from './../entities/user'
 import BaseController from './base'
+import AuthJwt from '../middlewares/jwt';
 
 export default class UserController extends BaseController<User>{
-    constructor(){
-        super(User)
+    constructor(private userService: UserService){
+        super(userService)
     }
-    private userService = new UserService()
 
     getMe(req: Request, res: Response, next: NextFunction) {
         res.status(200).json(responseSuccess(res.locals.user))

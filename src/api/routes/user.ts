@@ -1,5 +1,6 @@
-import { Router } from 'express'
 import UserController from './../controllers/user'
+import UserService from './../services/user'
+import UserRepository from '../repositories/user'
 import AuthJwt from './../middlewares/jwt'
 import Validation from './../helpers/validate'
 import CreateUserDto from './../dtos/user/user.create'
@@ -11,11 +12,8 @@ import BaseRoutes from './base'
 export default class UserRoutes extends BaseRoutes {
 
     path = '/users'
-    private authJwt = new AuthJwt();
-    private userController = new UserController();
-    constructor() {
-        super()
-        this.initializeRoutes()
+    constructor(private userController: UserController, authJwt: AuthJwt) {
+        super(authJwt)
     }
     initializeRoutes(): void {
         this.getRouter().post('/login', Validation(LoginUserDto), this.userController.login)
@@ -29,6 +27,17 @@ export default class UserRoutes extends BaseRoutes {
         this.getRouter().delete('/:id', this.authJwt.verifyToken(false), this.authJwt.protect, this.userController.findByIdAndDelete)
 
         this.getRouter().patch('/change-password', Validation(ChangePasswordDto), this.authJwt.verifyToken(true), this.userController.changePassword)
+    }
+
+    static initRoutes(): UserRoutes {
+        const auth = new AuthJwt()
+        let repository = new UserRepository()
+        let service = new UserService(repository, auth)
+        let controller = new UserController(service);
+        
+        let routes = new UserRoutes(controller, auth)
+        routes.initializeRoutes();
+        return routes;
     }
 
 }

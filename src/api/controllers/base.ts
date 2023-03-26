@@ -11,8 +11,8 @@ import QueryOptions from "./../helpers/queryOptions"
 export default class BaseController<T extends ObjectLiteral> {
     protected service: BaseService<T>;
 
-    constructor(entity: any) {
-        this.service = new BaseService(entity);
+    constructor(baseService: BaseService<T>) {
+        this.service = baseService;
     }
 
     getAllAndCount = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
@@ -35,15 +35,16 @@ export default class BaseController<T extends ObjectLiteral> {
         res.status(200).json(responseSuccess(data))
     })
 
-    createAndSave = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        const data = await this.service.createAndSave(req.body);
+    create = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+        let data: any = this.service.create(req.body);
+        data = await this.service.save(data);
         res.status(201).json(responseSuccess(data));
     })
 
-    save = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
-        const data=await this.service.save(req.body);
-        res.status(201).json(responseSuccess(data));
-    })
+    // save = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
+    //     const data = await this.service.save(req.body);
+    //     res.status(201).json(responseSuccess(data));
+    // })
 
     findByIdAndUpdate = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
         const id = req.params.id;
@@ -56,9 +57,7 @@ export default class BaseController<T extends ObjectLiteral> {
         if (!data)
             return res.status(404).json(responseError(CONSTANT_MESSAGES.DELETE_FAILED));
         await this.service.delete(req.params.id)
-        //if(data.affected===1)
         return res.status(200).json(responseSuccess(null));
-        //return res.status(400).json(responseError(CONSTANT_MESSAGES.DELETE_FAILED));   
 
     })
 

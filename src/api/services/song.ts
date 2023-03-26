@@ -1,4 +1,4 @@
-import Song from './../entities/singer'
+import Song from './../entities/song'
 import BaseService from './base'
 import SongRepository from '../repositories/song'
 import macAddress from 'macaddress'
@@ -6,11 +6,10 @@ import { REDIS_VARIABLES, CONSTANT_MESSAGES } from "../helpers/constant";
 import moment from 'moment-timezone';
 
 export default class SongService extends BaseService<Song>{
-    constructor() {
-        super(Song)
+    constructor(private songRepository: SongRepository) {
+        super(songRepository)
     }
-    private songRepository: SongRepository = new SongRepository()
-
+   
     getDetailById(id: string) {
         return this.songRepository.getDetailById(id)
     }

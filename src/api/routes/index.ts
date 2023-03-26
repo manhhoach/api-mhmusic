@@ -9,12 +9,12 @@ export default class IndexRouter {
     private router = Router();
     private routes: any[];
     constructor() {
-        this.routes = [UserRoutes, SingerRoutes, SongRoutes, AlbumRoutes, AlbumSongRoutes];
+        this.routes = [SingerRoutes, AlbumRoutes, AlbumSongRoutes, SongRoutes, UserRoutes];
         this.initializeRoutes();
     }
     private initializeRoutes() {
         this.routes.forEach(route => {
-            let routeElement = new route();  
+            let routeElement = route.initRoutes();  
             this.router.use(routeElement.getPath(), routeElement.getRouter());
         })
 

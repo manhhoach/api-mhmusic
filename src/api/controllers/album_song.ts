@@ -10,9 +10,8 @@ import { getPagingData } from '../helpers/pagination';
 
 
 export default class AlbumSongController extends BaseController<AlbumSong> {
-    private albumSongService: AlbumSongService = new AlbumSongService()
-    constructor() {
-        super(AlbumSong)
+    constructor(private albumSongService: AlbumSongService) {
+        super(albumSongService)
     }
     getDetailById = tryCatch(async (req: Request, res: Response, next: NextFunction) => {
         let page_index = parseInt(req.query.page_index as string) || PAGINATION_DATA.DEFAULT_PAGE_INDEX;

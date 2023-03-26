@@ -32,9 +32,8 @@ export default class BaseRepository<T extends ObjectLiteral> {
         })
     }
 
-    createAndSave(obj: any): Promise<T[]>{
-        let entity = this.repository.create(obj)
-        return this.repository.save(entity)
+    create(obj: any): T[]{
+        return this.repository.create(obj)
     }
 
     save(data: T): Promise<T> {
