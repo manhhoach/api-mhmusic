@@ -6,6 +6,7 @@ import AuthJwt from './../middlewares/jwt';
 import Validation from './../helpers/validate';
 import CreateSongDto from './../dtos/song/song.create';
 import UpdateSongDto from './../dtos/song/song.update';
+import { uploadMulter } from '../middlewares/upload';
 
 export default class SongRoutes extends BaseRoutes {
 
@@ -27,6 +28,8 @@ export default class SongRoutes extends BaseRoutes {
         this.getRouter().post('/', Validation(CreateSongDto), this.songController.createAndSave);
         this.getRouter().delete('/:id', this.songController.delete);
         this.getRouter().patch('/:id', Validation(UpdateSongDto), this.songController.findByIdAndUpdate);
+
+        this.getRouter().post('/upload', uploadMulter.single('file'), this.songController.upload);
     }
     static initRoutes(): SongRoutes {
         let repository = new SongRepository();

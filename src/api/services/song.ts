@@ -4,16 +4,18 @@ import SongRepository from '../repositories/song';
 import macAddress from 'macaddress';
 import { REDIS_VARIABLES, CONSTANT_MESSAGES } from "../helpers/constant";
 import moment from 'moment-timezone';
+import { AWS_S3_CONFIG } from './../../config/awsS3Config';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 export default class SongService extends BaseService<Song>{
     constructor(private songRepository: SongRepository) {
         super(songRepository);
     }
-   
+
     getDetailById(id: string) {
         return this.songRepository.getDetailById(id);
     }
-    
+
     async updateRecentSongs(userId: string, songId: string) {
         const recentSongsUser = `${REDIS_VARIABLES.USER_ID}${userId}`;
         await this.songRepository.remove(recentSongsUser, songId);
@@ -72,6 +74,28 @@ export default class SongService extends BaseService<Song>{
                 time: time, hourlyViews: hourlyViews
             };
         }));
+    }
+
+    sendToAwsS3(file: Buffer, fileName: string): Promise<string> {
+
+        return new Promise<string>((resolve, reject) => {
+            const params = {
+                Bucket: process.env.BUCKET_NAME,
+                Key: fileName,
+                Body: file
+            };
+            const s3 = new S3Client(AWS_S3_CONFIG);
+            s3.send(new PutObjectCommand(params))
+                .then((data) => {
+                    if (data.$metadata.httpStatusCode === 200)
+                        resolve(`https://${process.env.BUCKET_NAME}.s3.${process.env.REGION}.amazonaws.com/${fileName}`);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+
+        });
+
     }
 
 }
