@@ -5,7 +5,7 @@ import {genSaltSync, hashSync, compareSync} from 'bcrypt';
 @Entity({
     name: 'users'
 })
-export class User {
+export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 

@@ -29,8 +29,9 @@ message CreateUserDto{
 }
 
 message UpdateUserDto{
-    string name = 1;
-    int32 type = 2;
+    string id = 1;
+    string name = 2;
+    int32 type = 3;
 }
 
 message ChangePasswordDto{
