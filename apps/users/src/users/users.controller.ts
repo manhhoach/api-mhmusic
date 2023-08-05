@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto, FindOneUserDto } from '@app/common';
+import { CreateUserDto, UpdateUserDto, FindByEmailDto, FindByIdDto } from '@app/common';
 import { } from '@app/common';
 import { Payload, GrpcMethod } from '@nestjs/microservices';
 
@@ -18,9 +18,16 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @GrpcMethod('UserService', 'FindOneUser')
-  findOne(@Payload() findOneUserDto: FindOneUserDto) {
-    return this.usersService.findOne(findOneUserDto);
+  @GrpcMethod('UserService', 'FindByEmail')
+  findByEmail(@Payload() findByEmailDto: FindByEmailDto) {
+    console.log(findByEmailDto);
+    
+    return this.usersService.findOne(findByEmailDto);
+  }
+
+  @GrpcMethod('UserService', 'FindById')
+  findById(@Payload() findByIdDto: FindByIdDto) {
+    return this.usersService.findOne(findByIdDto);
   }
 
   @GrpcMethod('UserService', 'UpdateUser')

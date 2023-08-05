@@ -1,12 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "./",
-  "entryFile": "src/main",
+  "sourceRoot": "apps/apigateway/src",
+  "entryFile": "main",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/apigateway/tsconfig.app.json"
+    "tsConfigPath": "apps/apigateway/tsconfig.app.json",
+    "assets": [
+      "**/*.proto"
+    ],
+    "watchAssets": true
   },
   "monorepo": true,
   "root": "apps/apigateway",
@@ -14,8 +18,8 @@
     "apigateway": {
       "type": "application",
       "root": "apps/apigateway",
-      "entryFile": "src/main",
-      "sourceRoot": "./",
+      "entryFile": "main",
+      "sourceRoot": "apps/apigateway/src",
       "compilerOptions": {
         "tsConfigPath": "apps/apigateway/tsconfig.app.json"
       }
@@ -23,8 +27,8 @@
     "users": {
       "type": "application",
       "root": "apps/users",
-      "entryFile": "src/main",
-      "sourceRoot": "./",
+      "entryFile": "main",
+      "sourceRoot": "apps/users/src",
       "compilerOptions": {
         "tsConfigPath": "apps/users/tsconfig.app.json",
         "assets": [
@@ -40,6 +44,15 @@
       "sourceRoot": "libs/common/src",
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "songs": {
+      "type": "application",
+      "root": "apps/songs",
+      "entryFile": "main",
+      "sourceRoot": "apps/songs/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/songs/tsconfig.app.json"
       }
     }
   }

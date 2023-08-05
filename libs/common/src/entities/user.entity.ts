@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { Length, IsEmail } from "class-validator";
-import {genSaltSync, hashSync, compareSync} from 'bcrypt';
+import { genSaltSync, hashSync, compareSync } from 'bcrypt';
 
 @Entity({
     name: 'users'
@@ -33,12 +33,12 @@ export class UserEntity {
 
     @BeforeUpdate()
     @BeforeInsert()
-    hashPassword() { 
-        if(this.password){
+    hashPassword() {
+        if (this.password) {
             const salt = genSaltSync(10);
             this.password = hashSync(this.password, salt);
         }
-        
+
     }
 
     comparePassword(password: string): boolean {

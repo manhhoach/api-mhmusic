@@ -15,8 +15,11 @@ export interface User {
   type: number;
 }
 
-export interface FindOneUserDto {
+export interface FindByIdDto {
   id: string;
+}
+
+export interface FindByEmailDto {
   email: string;
 }
 
@@ -46,7 +49,9 @@ export const USER_PACKAGE_NAME = "user";
 export interface UserServiceClient {
   createUser(request: CreateUserDto): Observable<User>;
 
-  findOneUser(request: FindOneUserDto): Observable<User>;
+  findByEmail(request: FindByEmailDto): Observable<User|null>;
+
+  findById(request: FindByIdDto): Observable<User>;
 
   updateUser(request: UpdateUserDto): Observable<User>;
 
@@ -56,7 +61,9 @@ export interface UserServiceClient {
 export interface UserServiceController {
   createUser(request: CreateUserDto): Promise<User> | Observable<User> | User;
 
-  findOneUser(request: FindOneUserDto): Promise<User> | Observable<User> | User;
+  findByEmail(request: FindByEmailDto): Promise<User> | Observable<User> | User;
+
+  findById(request: FindByIdDto): Promise<User> | Observable<User> | User;
 
   updateUser(request: UpdateUserDto): Promise<User> | Observable<User> | User;
 
@@ -65,7 +72,7 @@ export interface UserServiceController {
 
 export function UserServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createUser", "findOneUser", "updateUser", "changePassword"];
+    const grpcMethods: string[] = ["createUser", "findByEmail", "findById", "updateUser", "changePassword"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);

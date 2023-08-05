@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   CreateUserDto, UserEntity,
-  UpdateUserDto, FindOneUserDto
+  UpdateUserDto, FindByEmailDto, FindByIdDto
 } from '@app/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,13 +22,22 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  findOne(findOneUserDto: FindOneUserDto) {
+  async findOne(findOneUserDto: FindByEmailDto | FindByIdDto) {
     let query = this.usersRepository.createQueryBuilder('users')
-      .where('email = :email', { email: findOneUserDto.email })
-      .orWhere('id = :id', { id: findOneUserDto.id })
-    if (findOneUserDto.email)
-      query = query.addSelect('users.password')
-    return query.getOne()
+    if ("email" in findOneUserDto)
+      query = query.where('email = :email', { email: findOneUserDto.email }).addSelect('users.password')
+    else if ("id" in findOneUserDto)
+      query = query.where('id = :id', { id: findOneUserDto.id })
+
+    return query.getOne();
+    
+    let user = await query.getOne();
+    console.log(user);
+
+    if (!user)
+      return null;
+    return user
+
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
