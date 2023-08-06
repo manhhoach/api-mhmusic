@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import {
   CreateUserDto, UserEntity,
-  UpdateUserDto, FindByEmailDto, FindByIdDto
+  UpdateUserDto, FindByEmailDto, FindByIdDto, MESSAGES
 } from '@app/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, QueryFailedError } from 'typeorm';
 
 
 @Injectable()
@@ -29,14 +29,20 @@ export class UsersService {
     else if ("id" in findOneUserDto)
       query = query.where('id = :id', { id: findOneUserDto.id })
 
-    return query.getOne();
-    
     let user = await query.getOne();
-    console.log(user);
 
-    if (!user)
-      return null;
+    // c1
+    if (!user) {
+      return new NotFoundException(MESSAGES.NOT_FOUND)
+    }
     return user
+
+    //c2
+    // if (!user) {
+    //   throw new NotFoundException(MESSAGES.NOT_FOUND)
+    // }
+    // return user
+
 
   }
 

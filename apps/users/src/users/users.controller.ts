@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto, FindByEmailDto, FindByIdDto } from '@app/common';
 import { } from '@app/common';
-import { Payload, GrpcMethod } from '@nestjs/microservices';
+import { Payload, GrpcMethod, RpcException } from '@nestjs/microservices';
 
 @Controller()
 export class UsersController {
@@ -19,10 +19,18 @@ export class UsersController {
   }
 
   @GrpcMethod('UserService', 'FindByEmail')
-  findByEmail(@Payload() findByEmailDto: FindByEmailDto) {
-    console.log(findByEmailDto);
-    
-    return this.usersService.findOne(findByEmailDto);
+  async findByEmail(@Payload() findByEmailDto: FindByEmailDto) {
+    // default, method return "Internal server error" if it have error
+    try{
+      let user = await this.usersService.findOne(findByEmailDto);
+      return user;
+    }
+    catch(err) {
+      console.log(err);
+      
+      throw new RpcException(err)
+    }
+
   }
 
   @GrpcMethod('UserService', 'FindById')

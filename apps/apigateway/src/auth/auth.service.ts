@@ -1,10 +1,11 @@
-import { BadGatewayException, Inject, Injectable, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { USER_SERVICE_NAME, UserServiceClient, UpdateUserDto, CreateUserDto, ChangePasswordDto } from '@app/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import { BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { USER_SERVICE_NAME, UserServiceClient, UpdateUserDto, CreateUserDto, ChangePasswordDto, User, MESSAGES } from '@app/common';
+import { ClientGrpc, RpcException } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
 import { genSaltSync, hashSync, compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { lastValueFrom } from 'rxjs';
+import { UserEntity } from '@app/common';
 
 const comparePassword = (password: string, hashedPassword: string): boolean => {
   return compareSync(password, hashedPassword);
@@ -21,18 +22,34 @@ export class AuthService implements OnModuleInit {
   }
 
   async register(createUserDto: CreateUserDto) {
-    try{
-      let user = await this.usersService.findByEmail({ email: createUserDto.email }).toPromise()
-      console.log(user);
-      
-      if (user) {
-        throw new BadGatewayException('Email already registered')
-      }
+    // c2
+    // try {
+    //   let user = await lastValueFrom(this.usersService.findByEmail({ email: createUserDto.email }))
+    //   console.log(user);
+
+    //   if (user)
+    //     throw new BadRequestException('Email already registered')
+    // }
+    // catch (error) {
+    //   if (error.details === MESSAGES.NOT_FOUND)
+    //     return this.usersService.createUser(createUserDto)
+    //   if (error instanceof BadRequestException)
+    //     throw new BadRequestException('Email already registered')
+
+    // }
+
+    // c1
+    let user = await lastValueFrom(this.usersService.findByEmail({ email: createUserDto.email }))
+    console.log(user);
+
+    if (user.name === 'NotFoundException') {
       return this.usersService.createUser(createUserDto)
     }
-    catch(error){
-      throw new Error(error)
+    else {
+      throw new BadRequestException('Email already registered')
     }
+
+
   }
 
   async login(loginDto: LoginDto) {

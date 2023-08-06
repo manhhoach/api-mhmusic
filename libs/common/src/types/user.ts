@@ -49,7 +49,7 @@ export const USER_PACKAGE_NAME = "user";
 export interface UserServiceClient {
   createUser(request: CreateUserDto): Observable<User>;
 
-  findByEmail(request: FindByEmailDto): Observable<User|null>;
+  findByEmail(request: FindByEmailDto): Observable<User>;
 
   findById(request: FindByIdDto): Observable<User>;
 
