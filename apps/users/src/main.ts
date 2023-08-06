@@ -3,6 +3,7 @@ import { UsersModule } from './users/users.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import {USER_PACKAGE_NAME} from '@app/common';
+import { ValidationPipe } from '@nestjs/common';
 
 console.log(__dirname)
 async function bootstrap() {
@@ -17,6 +18,7 @@ async function bootstrap() {
       }
     }
   )
+ // app.useGlobalPipes(new ValidationPipe())
   await app.listen()
 }
 bootstrap();

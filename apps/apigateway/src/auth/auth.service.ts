@@ -1,11 +1,11 @@
-import { BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { USER_SERVICE_NAME, UserServiceClient, UpdateUserDto, CreateUserDto, ChangePasswordDto, User, MESSAGES } from '@app/common';
+import { BadRequestException, Inject, Injectable, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { USER_SERVICE_NAME, UserServiceClient, UpdateUserDto, ChangePasswordDto, User, MESSAGES } from '@app/common';
 import { ClientGrpc, RpcException } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
 import { genSaltSync, hashSync, compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { lastValueFrom } from 'rxjs';
-import { UserEntity } from '@app/common';
+import { CreateUserDto } from '@app/common'
 
 const comparePassword = (password: string, hashedPassword: string): boolean => {
   return compareSync(password, hashedPassword);
@@ -22,48 +22,34 @@ export class AuthService implements OnModuleInit {
   }
 
   async register(createUserDto: CreateUserDto) {
-    // c2
-    // try {
-    //   let user = await lastValueFrom(this.usersService.findByEmail({ email: createUserDto.email }))
-    //   console.log(user);
-
-    //   if (user)
-    //     throw new BadRequestException('Email already registered')
-    // }
-    // catch (error) {
-    //   if (error.details === MESSAGES.NOT_FOUND)
-    //     return this.usersService.createUser(createUserDto)
-    //   if (error instanceof BadRequestException)
-    //     throw new BadRequestException('Email already registered')
-
-    // }
-
-    // c1
-    let user = await lastValueFrom(this.usersService.findByEmail({ email: createUserDto.email }))
-    console.log(user);
-
-    if (user.name === 'NotFoundException') {
-      return this.usersService.createUser(createUserDto)
+    try {
+      let user = await lastValueFrom(this.usersService.createUser(createUserDto))
+      return user;
     }
-    else {
-      throw new BadRequestException('Email already registered')
+    catch (error) {
+      if (error.details === MESSAGES.EMAIL_EXISTS)
+        throw new BadRequestException(error.details)
     }
-
-
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.usersService.findByEmail({ email: loginDto.email }).toPromise()
-    if (!user)
-      throw new NotFoundException('Email not found')
+    try {
+      const user = await this.usersService.findByEmail({ email: loginDto.email }).toPromise()
 
-    if (!comparePassword(loginDto.password, user.password))
-      throw new UnauthorizedException('Password is incorrect')
-    const payload = { id: user.id };
-    return {
-      ...user,
-      password: undefined,
-      accessToken: await this.jwtService.signAsync(payload)
+      if (!comparePassword(loginDto.password, user.password))
+        throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD)
+      const payload = { id: user.id };
+      return {
+        ...user,
+        password: undefined,
+        accessToken: await this.jwtService.signAsync(payload)
+      }
+    }
+    catch (error) {
+      if (error.details === MESSAGES.EMAIL_NOT_FOUND)
+        throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND)
+      if (error instanceof UnauthorizedException)
+        throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD)
     }
   }
 

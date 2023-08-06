@@ -12,10 +12,17 @@ import { Repository, QueryFailedError } from 'typeorm';
 export class UsersService {
   constructor(@InjectRepository(UserEntity) private readonly usersRepository: Repository<UserEntity>) { }
 
-  create(createUserDto: CreateUserDto) {
-    let user = new UserEntity()
-    user = Object.assign(user, createUserDto)
-    return this.usersRepository.save(user)
+  async create(createUserDto: CreateUserDto) {
+    console.log('user service')
+    let user = await this.usersRepository.findOne({
+      where: {email: createUserDto.email}
+    })
+    
+    if(user)
+    {
+      throw new BadRequestException(MESSAGES.EMAIL_EXISTS)
+    }
+    return this.usersRepository.save(Object.assign(new UserEntity(), createUserDto))
   }
 
   findAll() {
@@ -30,18 +37,11 @@ export class UsersService {
       query = query.where('id = :id', { id: findOneUserDto.id })
 
     let user = await query.getOne();
-
-    // c1
+    
     if (!user) {
-      return new NotFoundException(MESSAGES.NOT_FOUND)
+      throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND)
     }
     return user
-
-    //c2
-    // if (!user) {
-    //   throw new NotFoundException(MESSAGES.NOT_FOUND)
-    // }
-    // return user
 
 
   }
