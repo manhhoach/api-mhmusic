@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { lastValueFrom } from 'rxjs';
 import { CreateUserDto } from '@app/common'
 
+
 const comparePassword = (password: string, hashedPassword: string): boolean => {
   return compareSync(password, hashedPassword);
 }
@@ -47,10 +48,22 @@ export class AuthService implements OnModuleInit {
     }
     catch (error) {
       if (error.details === MESSAGES.EMAIL_NOT_FOUND)
-        throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND)
+        throw new NotFoundException(error.details)
       if (error instanceof UnauthorizedException)
         throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD)
     }
   }
 
+  async verifyToken(token: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(token);
+      let user = await lastValueFrom(this.usersService.findById({ id: payload.id }))
+      if (user)
+        return user;
+      else
+        throw new NotFoundException(MESSAGES.NOT_FOUND)
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
 }

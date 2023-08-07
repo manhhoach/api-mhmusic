@@ -12,8 +12,6 @@ export class UsersController {
   @GrpcMethod('UserService', 'CreateUser')
   async create(@Payload() createUserDto: CreateUserDto) {
     try {
-      console.log('user controller')
-      
       let user = await this.usersService.create(createUserDto);
       return user
     }
