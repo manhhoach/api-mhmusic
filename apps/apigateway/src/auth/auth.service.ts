@@ -1,8 +1,8 @@
 import { BadRequestException, Inject, Injectable, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { USER_SERVICE_NAME, UserServiceClient, UpdateUserDto, ChangePasswordDto, User, MESSAGES } from '@app/common';
-import { ClientGrpc, RpcException } from '@nestjs/microservices';
+import { USER_SERVICE_NAME, UserServiceClient, MESSAGES } from '@app/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
-import { genSaltSync, hashSync, compareSync } from 'bcrypt';
+import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { lastValueFrom } from 'rxjs';
 import { CreateUserDto } from '@app/common'

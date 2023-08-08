@@ -3,6 +3,7 @@ import { Body, Controller, Get, Inject, Injectable, OnModuleInit, Patch, Request
 import { ClientGrpc } from '@nestjs/microservices';
 import { AuthGuard } from './../auth/auth.guard';
 
+
 @Injectable()
 @Controller('users')
 export class UsersController implements OnModuleInit {
@@ -20,7 +21,8 @@ export class UsersController implements OnModuleInit {
     }
 
     @Patch('profile')
+    @UseGuards(AuthGuard)
     updateProfile(@Request() req, @Body() data) {
-        //   return this.usersService.update(req.user.id, data)
+        return this.usersService.updateUser({id: req.user.id, ...data})
     }
 }

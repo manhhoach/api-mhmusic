@@ -32,7 +32,6 @@ export interface CreateUserDto {
 export interface UpdateUserDto {
   id: string;
   name: string;
-  type: number;
 }
 
 export interface ChangePasswordDto {

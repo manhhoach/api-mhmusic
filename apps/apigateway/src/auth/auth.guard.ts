@@ -2,7 +2,6 @@ import {
     CanActivate,
     ExecutionContext,
     Injectable,
-    NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 
@@ -24,8 +23,6 @@ export class AuthGuard implements CanActivate {
         }
         try {
             let user = await this.authService.verifyToken(token)
-            console.log(user);
-            
             request.user = user;
         } catch (err) {
             throw err;

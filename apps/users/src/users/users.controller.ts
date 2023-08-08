@@ -1,16 +1,15 @@
-import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { FindByEmailDto, FindByIdDto } from '@app/common';
+import { FindByEmailDto, FindByIdDto, ValidateUpdateUserDto, ValidateCreateUserDto } from '@app/common';
 import { Payload, GrpcMethod, RpcException } from '@nestjs/microservices';
-import {CreateUserDto} from '../../../apigateway/src/auth/dto/create.user.dto';
-import {UpdateUserDto} from '../../../apigateway/src/auth/dto/update.user.dto';
+
 
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @GrpcMethod('UserService', 'CreateUser')
-  async create(@Payload() createUserDto: CreateUserDto) {
+  async create(@Payload() createUserDto: ValidateCreateUserDto) {
     try {
       let user = await this.usersService.create(createUserDto);
       return user
@@ -43,8 +42,15 @@ export class UsersController {
   }
 
   @GrpcMethod('UserService', 'UpdateUser')
-  update(@Payload() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(updateUserDto.id, updateUserDto);
+  async update(@Payload() updateUserDto: ValidateUpdateUserDto) {
+    try{
+      let user = await this.usersService.update(updateUserDto.id, updateUserDto);
+      return user
+    }
+    catch(err){
+      console.log(err)
+    }
+    
   }
 
 
