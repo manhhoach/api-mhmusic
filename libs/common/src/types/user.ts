@@ -35,8 +35,9 @@ export interface UpdateUserDto {
 }
 
 export interface ChangePasswordDto {
-  name: string;
-  type: number;
+  currentPassword: string;
+  newPassword: string;
+  id: string;
 }
 
 export interface Users {

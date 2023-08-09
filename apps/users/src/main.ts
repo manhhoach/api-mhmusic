@@ -3,7 +3,7 @@ import { UsersModule } from './users/users.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import {USER_PACKAGE_NAME} from '@app/common';
-import { ValidationPipe } from '@nestjs/common';
+import { GrpcValidationPipe } from '../../../libs/common/src/grpc.validation.pipe';
 
 
 async function bootstrap() {
@@ -18,7 +18,7 @@ async function bootstrap() {
       }
     }
   )
-  app.useGlobalPipes(new ValidationPipe({transform: true}))
+  app.useGlobalPipes(new GrpcValidationPipe())
   await app.listen()
 }
 bootstrap();

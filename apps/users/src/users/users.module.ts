@@ -4,8 +4,6 @@ import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '@app/common';
 import { typeOrmConfig } from './../config/typeorm.config'
-import { APP_PIPE } from '@nestjs/core';
-import { GrpcValidationPipe } from './grpc.validation.pipe';
 
 @Module({
   imports: [
@@ -13,9 +11,6 @@ import { GrpcValidationPipe } from './grpc.validation.pipe';
     TypeOrmModule.forFeature([UserEntity])
   ],
   controllers: [UsersController],
-  providers: [UsersService,{
-    provide: APP_PIPE,
-    useClass: GrpcValidationPipe
-  } ]
+  providers: [UsersService]
 })
 export class UsersModule { }

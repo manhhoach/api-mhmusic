@@ -38,8 +38,9 @@ message UpdateUserDto{
 }
 
 message ChangePasswordDto{
-    string name = 1;
-    int32 type = 2;
+    string currentPassword = 1;
+    string newPassword = 2;
+    string id = 3;
 }
 
 message Users{

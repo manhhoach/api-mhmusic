@@ -23,7 +23,7 @@ import { JwtModule } from '@nestjs/jwt';
     secret: 'process.env.JWT_SECRET',
     signOptions: {
       algorithm: 'HS256',
-      expiresIn: '1d'
+      expiresIn: '7d'
     },
   })
   ],

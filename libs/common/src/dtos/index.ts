@@ -1,2 +1,2 @@
-export * from './user/create.user.dto'
-export * from './user/update.user.dto'
+export * from '../../../../apps/users/src/users/dto/create.user'
+export * from '../../../../apps/users/src/users/dto/update.user'
