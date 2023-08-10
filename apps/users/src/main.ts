@@ -3,7 +3,7 @@ import { UsersModule } from './users/users.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import {USER_PACKAGE_NAME} from '@app/common';
-import { GrpcValidationPipe } from '../../../libs/common/src/grpc.validation.pipe';
+import { GrpcValidationPipe } from '@app/common';
 
 
 async function bootstrap() {
