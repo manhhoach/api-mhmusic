@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import {
-  CreateUserDto, UserEntity, ChangePasswordDto,
-  UpdateUserDto, FindByEmailDto, FindByIdDto, MESSAGES
-} from '@app/common';
-
+  CreateUserDto, ChangePasswordDto,
+  UpdateUserDto, FindByEmailDto, FindByIdDto,
+} from '@app/common/types/user';
+import { UserEntity, MESSAGES } from '@app/common'
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -63,7 +63,7 @@ export class UsersService {
       .where('id = :id', { id: changePasswordDto.id })
       .addSelect('users.password')
       .getOne()
-      
+
     if (!user) {
       throw new NotFoundException()
     }

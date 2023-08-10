@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { UsersModule } from './users/users.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import {USER_PACKAGE_NAME} from '@app/common';
+import { USER_PACKAGE_NAME } from '@app/common/types/user';
 import { GrpcValidationPipe } from '@app/common';
 
 

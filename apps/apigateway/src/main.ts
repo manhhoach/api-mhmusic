@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ApigatewayModule } from './apigateway.module';
-import {ValidationPipe} from '@nestjs/common'
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
   const app = await NestFactory.create(ApigatewayModule);

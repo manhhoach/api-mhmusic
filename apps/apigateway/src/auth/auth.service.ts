@@ -1,11 +1,12 @@
 import { BadRequestException, Inject, Injectable, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { USER_SERVICE_NAME, UserServiceClient, MESSAGES } from '@app/common';
+import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/types/user';
+import { MESSAGES } from '@app/common'
 import { ClientGrpc } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { lastValueFrom } from 'rxjs';
-import { CreateUserDto } from '@app/common'
+
 
 
 const comparePassword = (password: string, hashedPassword: string): boolean => {
@@ -22,7 +23,7 @@ export class AuthService implements OnModuleInit {
     this.usersService = this.client.getService<UserServiceClient>(USER_SERVICE_NAME)
   }
 
-  async register(createUserDto: CreateUserDto) {
+  async register(createUserDto) {
     try {
       let user = await lastValueFrom(this.usersService.createUser(createUserDto))
       return user;

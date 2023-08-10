@@ -1,7 +1,6 @@
 import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { CreateUserDto } from '@app/common';
 import { responseSucess } from '../helpers/response';
 
 @Controller('auth')
@@ -15,7 +14,7 @@ export class AuthController {
   }
 
   @Post('/register')
-  async register(@Body() createUserDto: CreateUserDto) {
+  async register(@Body() createUserDto) {
     let user = await this.authService.register(createUserDto)
     return responseSucess(HttpStatus.OK, user)
   }
