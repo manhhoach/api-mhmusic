@@ -1,8 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { FindByEmailDto, FindByIdDto, ValidateUpdateUserDto, ValidateCreateUserDto } from '@app/common';
 import { Payload, GrpcMethod, RpcException } from '@nestjs/microservices';
-
+import { GrpcValidationPipe } from './grpc.validation.pipe';
 
 @Controller()
 export class UsersController {
@@ -48,7 +48,7 @@ export class UsersController {
       return user
     }
     catch(err){
-      console.log(err)
+      throw new RpcException(err)
     }
     
   }

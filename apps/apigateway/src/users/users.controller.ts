@@ -2,6 +2,7 @@ import { USER_SERVICE_NAME, UserServiceClient } from '@app/common';
 import { Body, Controller, Get, Inject, Injectable, OnModuleInit, Patch, Request, UseGuards } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { AuthGuard } from './../auth/auth.guard';
+import { lastValueFrom } from 'rxjs';
 
 
 @Injectable()
@@ -22,7 +23,15 @@ export class UsersController implements OnModuleInit {
 
     @Patch('profile')
     @UseGuards(AuthGuard)
-    updateProfile(@Request() req, @Body() data) {
-        return this.usersService.updateUser({id: req.user.id, ...data})
+    async updateProfile(@Request() req, @Body() data) {
+        try{
+            let user = await lastValueFrom(this.usersService.updateUser({id: req.user.id, ...data}))
+            return user
+        }
+        catch(err){
+            console.log('errr', err);
+            
+        }
+        
     }
 }

@@ -13,9 +13,9 @@ import { GrpcValidationPipe } from './grpc.validation.pipe';
     TypeOrmModule.forFeature([UserEntity])
   ],
   controllers: [UsersController],
-  providers: [UsersService,{
-    provide: APP_PIPE,
-    useClass: GrpcValidationPipe
-  } ]
+  providers: [UsersService
+    // provide: APP_PIPE,
+    // useClass: GrpcValidationPipe
+  ]
 })
 export class UsersModule { }
