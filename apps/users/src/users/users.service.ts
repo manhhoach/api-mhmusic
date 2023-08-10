@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import {
-  CreateUserDto, UserEntity,
+  CreateUserDto, UserEntity, ChangePasswordDto,
   UpdateUserDto, FindByEmailDto, FindByIdDto, MESSAGES
 } from '@app/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, QueryFailedError } from 'typeorm';
+import { Repository } from 'typeorm';
 
 
 @Injectable()
@@ -14,11 +14,10 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     let user = await this.usersRepository.findOne({
-      where: {email: createUserDto.email}
+      where: { email: createUserDto.email }
     })
-    
-    if(user)
-    {
+
+    if (user) {
       throw new BadRequestException(MESSAGES.EMAIL_EXISTS)
     }
     return this.usersRepository.save(Object.assign(new UserEntity(), createUserDto))
@@ -36,7 +35,7 @@ export class UsersService {
       query = query.where('id = :id', { id: findOneUserDto.id })
 
     let user = await query.getOne();
-    
+
     if (!user) {
       throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND)
     }
@@ -57,5 +56,22 @@ export class UsersService {
 
   remove(id: string) {
     return `This action removes a #${id} user`;
+  }
+
+  async changePassword(changePasswordDto: ChangePasswordDto) {
+    let user = await this.usersRepository.createQueryBuilder('users')
+      .where('id = :id', { id: changePasswordDto.id })
+      .addSelect('users.password')
+      .getOne()
+      
+    if (!user) {
+      throw new NotFoundException()
+    }
+    let isCorrectPassword = user.comparePassword(changePasswordDto.currentPassword);
+    if (isCorrectPassword) {
+      user.password = changePasswordDto.newPassword;
+      return this.usersRepository.save(user)
+    }
+    throw new BadRequestException(MESSAGES.INCORRECT_PASSWORD)
   }
 }

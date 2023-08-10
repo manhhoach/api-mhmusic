@@ -1,8 +1,10 @@
 import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { FindByEmailDto, FindByIdDto, ValidateUpdateUserDto, ValidateCreateUserDto } from '@app/common';
+import { FindByEmailDto, FindByIdDto } from '@app/common';
 import { Payload, GrpcMethod, RpcException } from '@nestjs/microservices';
-import { GrpcValidationPipe } from './grpc.validation.pipe';
+import { ValidateUpdateUserDto } from './dto/update.user';
+import { ValidateCreateUserDto } from './dto/create.user';
+import { ValidateChangePassUserDto } from './dto/change-pass.user';
 
 @Controller()
 export class UsersController {
@@ -43,16 +45,27 @@ export class UsersController {
 
   @GrpcMethod('UserService', 'UpdateUser')
   async update(@Payload() updateUserDto: ValidateUpdateUserDto) {
-    try{
+    try {
       let user = await this.usersService.update(updateUserDto.id, updateUserDto);
       return user
     }
-    catch(err){
+    catch (err) {
       throw new RpcException(err)
     }
-    
   }
 
+  @GrpcMethod('UserService', 'ChangePassword')
+  async changePassword(@Payload() changePassUserDto: ValidateChangePassUserDto) {
+    try {
+      let result = await this.usersService.changePassword(changePassUserDto);
+      if (result) {
+        return;
+      }
+    }
+    catch (err) {
+      throw new RpcException(err)
+    }
+  }
 
   remove(@Payload() id: string) {
     return this.usersService.remove(id);

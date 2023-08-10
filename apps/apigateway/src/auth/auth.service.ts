@@ -47,10 +47,9 @@ export class AuthService implements OnModuleInit {
       }
     }
     catch (error) {
-      if (error.details === MESSAGES.EMAIL_NOT_FOUND)
-        throw new NotFoundException(error.details)
       if (error instanceof UnauthorizedException)
         throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD)
+      throw new NotFoundException(error.details)
     }
   }
 
