@@ -19,7 +19,7 @@ export class SingersController {
   }
 
   @MessagePattern('findOneSinger')
-  findOne(@Payload() id: number) {
+  findOne(@Payload() id: string) {
     return this.singersService.findOne(id);
   }
 
@@ -29,7 +29,7 @@ export class SingersController {
   }
 
   @MessagePattern('removeSinger')
-  remove(@Payload() id: number) {
+  remove(@Payload() id: string) {
     return this.singersService.remove(id);
   }
 }

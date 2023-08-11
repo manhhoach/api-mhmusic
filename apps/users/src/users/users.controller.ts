@@ -1,6 +1,6 @@
 import { Controller} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { FindByEmailDto, FindByIdDto } from '@app/common/types/user';
+import { FindByEmailDto, FindByIdDto } from '@app/common/proto/user';
 import { Payload, GrpcMethod, RpcException } from '@nestjs/microservices';
 import { ValidateUpdateUserDto } from './dto/update.user';
 import { ValidateCreateUserDto } from './dto/create.user';

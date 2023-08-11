@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import {
   CreateUserDto, ChangePasswordDto,
   UpdateUserDto, FindByEmailDto, FindByIdDto,
-} from '@app/common/types/user';
+} from '@app/common/proto/user';
 import { UserEntity, MESSAGES } from '@app/common'
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

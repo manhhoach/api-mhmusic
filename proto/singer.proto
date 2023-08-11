@@ -1,0 +1,44 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+
+package singer;
+
+service SingerService {
+    rpc CreateSinger(CreateSingerDto) returns (Singer){}
+    rpc FindAll(FindAllDto) returns (Singers){}
+    rpc FindById(FindByIdDto) returns (Singer){}
+    rpc UpdateSinger(UpdateSingerDto) returns (Singer){}
+    rpc DeleteSinger(FindByIdDto) returns (Empty){}
+}
+
+message Empty{}
+
+message Singer{
+    string id = 1;
+    string name = 2;
+    google.protobuf.Timestamp createdAt = 3;
+}
+message FindByIdDto{
+    string id = 1;
+}
+message FindAllDto{
+    int32 pageSize = 1;
+    int32 pageIndex = 2;
+    string order = 3;
+    string name = 4;
+}
+
+message CreateSingerDto{
+    string name = 1;
+}
+
+message UpdateSingerDto{
+    string id = 1;
+    string name = 2;
+}
+
+
+message Singers{
+    repeated Singer singers = 1;
+}

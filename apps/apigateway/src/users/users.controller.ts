@@ -2,7 +2,7 @@ import { MESSAGES, } from '@app/common';
 import { BadRequestException, Body, Controller, Get, HttpStatus, Inject, Injectable, NotFoundException, OnModuleInit, Patch, Request, UseGuards } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { AuthGuard } from './../auth/auth.guard';
-import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/types/user';
+import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
 import { responseSucess, responseError } from '../helpers/response';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common';
-import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/types/user';
+import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
 import { MESSAGES } from '@app/common'
 import { ClientGrpc } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
