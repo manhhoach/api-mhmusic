@@ -1,35 +1,38 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { GrpcMethod, Payload } from '@nestjs/microservices';
 import { SingersService } from './singers.service';
-import { CreateSingerDto } from './dto/create-singer.dto';
-import { UpdateSingerDto } from './dto/update-singer.dto';
+import { ValidateCreateSingerDto } from './dto/create-singer.dto';
+import { ValidateUpdateSingerDto } from './dto/update-singer.dto';
+import { ValidateFindAllDto } from './dto/find-all.dto';
+import { ValidateFindByIdDto } from './dto/find-by-id.dto';
 
 @Controller()
 export class SingersController {
-  constructor(private readonly singersService: SingersService) {}
+  constructor(private readonly singersService: SingersService) { }
 
-  @MessagePattern('createSinger')
-  create(@Payload() createSingerDto: CreateSingerDto) {
-    return this.singersService.create(createSingerDto);
+  @GrpcMethod('SingerService', 'createSinger')
+  async create(@Payload() createSingerDto: ValidateCreateSingerDto) {
+    let singer = await this.singersService.create(createSingerDto);
+    return singer
   }
 
-  @MessagePattern('findAllSingers')
-  findAll() {
-    return this.singersService.findAll();
+  @GrpcMethod('SingerService', 'findAll')
+  findAll(@Payload() findAllDto: ValidateFindAllDto) {
+    return this.singersService.findAll(findAllDto);
   }
 
-  @MessagePattern('findOneSinger')
-  findOne(@Payload() id: string) {
-    return this.singersService.findOne(id);
+  @GrpcMethod('SingerService', 'findById')
+  findById(@Payload() findByIdDto: ValidateFindByIdDto) {
+    return this.singersService.findById(findByIdDto.id);
   }
 
-  @MessagePattern('updateSinger')
-  update(@Payload() updateSingerDto: UpdateSingerDto) {
+  @GrpcMethod('SingerService', 'updateSinger')
+  update(@Payload() updateSingerDto: ValidateUpdateSingerDto) {
     return this.singersService.update(updateSingerDto.id, updateSingerDto);
   }
 
-  @MessagePattern('removeSinger')
-  remove(@Payload() id: string) {
-    return this.singersService.remove(id);
+  @GrpcMethod('SingerService', 'deleteSinger')
+  delete(@Payload() findByIdDto: ValidateFindByIdDto) {
+    return this.singersService.delete(findByIdDto.id);
   }
 }

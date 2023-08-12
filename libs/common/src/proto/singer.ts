@@ -1,7 +1,6 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
-import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "singer";
 
@@ -11,7 +10,7 @@ export interface Empty {
 export interface Singer {
   id: string;
   name: string;
-  createdAt: Timestamp | undefined;
+  createdAt: number;
 }
 
 export interface FindByIdDto {
@@ -22,7 +21,7 @@ export interface FindAllDto {
   pageSize: number;
   pageIndex: number;
   order: string;
-  name?: string;
+  name: string;
 }
 
 export interface CreateSingerDto {
