@@ -3,7 +3,7 @@ import { BadRequestException, Body, Controller, Get, HttpStatus, Inject, Injecta
 import { ClientGrpc } from '@nestjs/microservices';
 import { AuthGuard } from './../auth/auth.guard';
 import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
-import { responseSucess, responseError } from '../helpers/response';
+import { responseSucess, responseError } from '../../../../libs/common/src/helpers/response';
 
 @Injectable()
 @UseGuards(AuthGuard)
@@ -18,9 +18,9 @@ export class UsersController implements OnModuleInit {
 
     @Get('profile')
     getProfile(@Request() req) {
-        // return req.user
+        return req.user
         // try {
-        return responseSucess(HttpStatus.OK, req.user);
+        // return responseSucess(HttpStatus.OK, req.user);
         //   }
         //  catch (error) {
         //      return responseError(error);
@@ -31,11 +31,10 @@ export class UsersController implements OnModuleInit {
     async updateProfile(@Request() req, @Body() data: { name: string }) {
         try {
             let user = await this.usersService.updateUser({ id: req.user.id, ...data }).toPromise()
-            //  return user
-            return responseSucess(HttpStatus.OK, user)
+            return user
+            // return responseSucess(HttpStatus.OK, user)
         }
         catch (err) {
-            // return 
             throw new BadRequestException(err.details)
         }
     }
@@ -44,8 +43,8 @@ export class UsersController implements OnModuleInit {
     async changePassword(@Request() req, @Body() data: any) {
         try {
             let changePassUserDto = { id: req.user.id, ...data }
-            await this.usersService.changePassword(changePassUserDto).toPromise()
-            return responseSucess(HttpStatus.OK)
+            return this.usersService.changePassword(changePassUserDto).toPromise()
+            // return responseSucess(HttpStatus.OK)
         }
         catch (err) {
             if (err.details === MESSAGES.INCORRECT_PASSWORD)

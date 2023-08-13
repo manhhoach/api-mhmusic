@@ -35,22 +35,30 @@ export class SingersService {
     return getPagingData(data, findAllDto.pageIndex, limit);
   }
 
-  findById(id: string) {
-    return this.singerRepository.findOne({
+  async findById(id: string) {
+    let data = await this.singerRepository.findOne({
       where: { id: id }
     })
+    if (!data)
+      throw new NotFoundException()
+    return data
   }
 
   async update(id: string, updateSingerDto: ValidateUpdateSingerDto) {
-    let singer = await this.singerRepository.findOne({where: {id: id}})
-    if(!singer){
+    let singer = await this.singerRepository.findOne({ where: { id: id } })
+    if (!singer) {
       throw new NotFoundException()
     }
     singer = Object.assign(singer, updateSingerDto)
     return this.singerRepository.save(singer)
   }
 
-  delete(id: string) {
+  async delete(id: string) {
+    let data = await this.singerRepository.findOne({
+      where: { id: id }
+    })
+    if (!data)
+      throw new NotFoundException()
     return this.singerRepository.delete(id);
   }
 }

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Injectable, Inject, OnModuleInit } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Injectable, Inject, OnModuleInit, Query, BadRequestException, NotFoundException } from '@nestjs/common';
 import { SingerServiceClient } from '@app/common/proto/singer';
-import { SINGER_SERVICE_NAME, SINGER_PACKAGE_NAME } from '@app/common/proto/singer'
+import { SINGER_SERVICE_NAME } from '@app/common/proto/singer'
 import { ClientGrpc } from '@nestjs/microservices';
+import { PAGE_INDEX, PAGE_SIZE, ORDER } from '@app/common';
 
 
 @Injectable()
@@ -20,22 +21,49 @@ export class SingersController implements OnModuleInit {
   }
 
   @Get()
-  findAll() {
-    return this.singersService.findAll({} as any);
+  async findAll(@Query() query) {
+    let queryData = {
+      pageIndex: query.pageIndex ? query.pageIndex : PAGE_INDEX,
+      pageSize: query.pageSize ? query.pageSize : PAGE_SIZE,
+      order: query.order ? query.order : ORDER
+    }
+    let data = await this.singersService.findAll(queryData).toPromise()
+    data.data = data.data ? data.data : []
+    
+    return data
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.singersService.findById({ id });
+  async findOne(@Param('id') id: string) {
+    try {
+      let singer = await this.singersService.findById({ id }).toPromise()
+      return singer
+    }
+    catch (err) {
+      throw new NotFoundException(err.details)
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSingerDto) {
-    return this.singersService.updateSinger({ id, ...updateSingerDto });
+  async update(@Param('id') id: string, @Body() updateSingerDto) {
+    try {
+      let data = await this.singersService.updateSinger({ id, ...updateSingerDto }).toPromise();
+      return data
+    }
+    catch (err) {
+      throw new NotFoundException(err.details)
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.singersService.deleteSinger({ id });
+  async remove(@Param('id') id: string) {
+    try {
+      let singer = await this.singersService.deleteSinger({ id }).toPromise()
+      return singer
+    }
+    catch (err) {
+      throw new NotFoundException(err.details)
+    }
+
   }
 }
