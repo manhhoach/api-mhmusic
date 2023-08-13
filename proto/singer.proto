@@ -24,7 +24,6 @@ message FindAllDto{
     int32 pageSize = 1;
     int32 pageIndex = 2;
     string order = 3;
-    string name = 4;
 }
 
 message CreateSingerDto{
@@ -38,5 +37,8 @@ message UpdateSingerDto{
 
 
 message Singers{
-    repeated Singer singers = 1;
+    int32 totalItems = 1;
+    int32 totalPages = 2;
+    int32 currentPage = 3;
+    repeated Singer data = 4;
 }

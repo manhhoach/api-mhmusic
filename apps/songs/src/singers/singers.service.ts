@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SingerEntity } from '@app/common';
 import { Repository } from 'typeorm';
 import { ValidateFindAllDto } from './dto/find-all.dto';
+import { getPagination, getPagingData } from '@app/common/helpers/pagination';
 
 @Injectable()
 export class SingersService {
@@ -17,8 +18,21 @@ export class SingersService {
     return this.singerRepository.save(data)
   }
 
-  findAll(findAllDto: ValidateFindAllDto) {
-    return `This action returns all singers`;
+  async findAll(findAllDto: ValidateFindAllDto) {
+    const { skip, limit } = getPagination(findAllDto.pageSize, findAllDto.pageIndex);
+    let order: any = {};
+
+    if (findAllDto.order) {
+      const orderByField = findAllDto.order.split(' ')[0] || 'createdAt';
+      const orderOrder = findAllDto.order.split(' ')[1] || 'DESC';
+      order[orderByField] = orderOrder;
+    }
+    const data = await this.singerRepository.findAndCount({
+      skip: skip,
+      take: limit,
+      order: order,
+    });
+    return getPagingData(data, findAllDto.pageIndex, limit);
   }
 
   findById(id: string) {

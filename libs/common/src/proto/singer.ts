@@ -21,7 +21,6 @@ export interface FindAllDto {
   pageSize: number;
   pageIndex: number;
   order: string;
-  name: string;
 }
 
 export interface CreateSingerDto {
@@ -34,7 +33,10 @@ export interface UpdateSingerDto {
 }
 
 export interface Singers {
-  singers: Singer[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  data: Singer[];
 }
 
 export const SINGER_PACKAGE_NAME = "singer";

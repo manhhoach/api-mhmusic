@@ -5,6 +5,7 @@ import { Payload, GrpcMethod, RpcException } from '@nestjs/microservices';
 import { ValidateUpdateUserDto } from './dto/update.user';
 import { ValidateCreateUserDto } from './dto/create.user';
 import { ValidateChangePassUserDto } from './dto/change-pass.user';
+import { tryCatchGrpcException } from '@app/common/helpers/try.catch';
 
 @Controller()
 export class UsersController {
@@ -12,13 +13,7 @@ export class UsersController {
 
   @GrpcMethod('UserService', 'CreateUser')
   async create(@Payload() createUserDto: ValidateCreateUserDto) {
-    try {
-      let user = await this.usersService.create(createUserDto);
-      return user
-    }
-    catch (err) {
-      throw new RpcException(err)
-    }
+    return tryCatchGrpcException(this.usersService.create(createUserDto))
   }
 
 
@@ -28,43 +23,22 @@ export class UsersController {
 
   @GrpcMethod('UserService', 'FindByEmail')
   async findByEmail(@Payload() findByEmailDto: FindByEmailDto) {
-    // default, method return "Internal server error" if it have error
-    try {
-      let user = await this.usersService.findOne(findByEmailDto);
-      return user;
-    }
-    catch (err) {
-      throw new RpcException(err)
-    }
+    return tryCatchGrpcException(this.usersService.findOne(findByEmailDto))
   }
 
   @GrpcMethod('UserService', 'FindById')
   findById(@Payload() findByIdDto: FindByIdDto) {
-    return this.usersService.findOne(findByIdDto);
+    return tryCatchGrpcException(this.usersService.findOne(findByIdDto))
   }
 
   @GrpcMethod('UserService', 'UpdateUser')
   async update(@Payload() updateUserDto: ValidateUpdateUserDto) {
-    try {
-      let user = await this.usersService.update(updateUserDto.id, updateUserDto);
-      return user
-    }
-    catch (err) {
-      throw new RpcException(err)
-    }
+    return tryCatchGrpcException(this.usersService.update(updateUserDto.id, updateUserDto))
   }
 
   @GrpcMethod('UserService', 'ChangePassword')
   async changePassword(@Payload() changePassUserDto: ValidateChangePassUserDto) {
-    try {
-      let result = await this.usersService.changePassword(changePassUserDto);
-      if (result) {
-        return;
-      }
-    }
-    catch (err) {
-      throw new RpcException(err)
-    }
+    return tryCatchGrpcException(this.usersService.changePassword(changePassUserDto))
   }
 
   remove(@Payload() id: string) {

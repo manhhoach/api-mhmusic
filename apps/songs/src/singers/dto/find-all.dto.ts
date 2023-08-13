@@ -11,9 +11,4 @@ export class ValidateFindAllDto {
     @IsString()
     @IsNotEmpty()
     order: string;
-
-
-    @IsString()
-    @IsNotEmpty()
-    name: string;
 }

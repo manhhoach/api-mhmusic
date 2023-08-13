@@ -6,7 +6,7 @@ export const getPagination = (pageSize: number, pageIndex: number) => {
 
 export const getPagingData = (data: any, pageIndex: number, limit: number) => {
     const records = data[0], count = data[1];
-    const current_page = pageIndex ? pageIndex : 1;
-    const total_pages = Math.ceil(count / limit);
-    return { total_items: count, total_pages, current_page, data: records };
+    const currentPage = pageIndex ? pageIndex : 1;
+    const totalPages = Math.ceil(count / limit);
+    return { totalItems: count, totalPages, currentPage, data: records };
 };
