@@ -15,11 +15,11 @@ import { AuthModule } from './../auth/auth.module';
         options: {
           package: USER_PACKAGE_NAME,
           protoPath: join(__dirname, '../../../proto/user.proto'),
-          url: 'localhost:5001'
-        }
-      }
+          url: 'localhost:5001',
+        },
+      },
     ]),
   ],
-  controllers: [UsersController]
+  controllers: [UsersController],
 })
-export class UsersModule { }
+export class UsersModule {}

@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { SingersController } from './singers.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { SINGER_SERVICE_NAME, SINGER_PACKAGE_NAME } from '@app/common/proto/singer'
+import {
+  SINGER_SERVICE_NAME,
+  SINGER_PACKAGE_NAME,
+} from '@app/common/proto/singer';
 
 @Module({
   imports: [
@@ -13,12 +16,12 @@ import { SINGER_SERVICE_NAME, SINGER_PACKAGE_NAME } from '@app/common/proto/sing
         options: {
           package: SINGER_PACKAGE_NAME,
           protoPath: join(__dirname, '../../../proto/singer.proto'),
-          url: 'localhost:5002'
-        }
-      }
-    ])
+          url: 'localhost:5002',
+        },
+      },
+    ]),
   ],
   controllers: [SingersController],
-  providers: []
+  providers: [],
 })
-export class SingersModule { }
+export class SingersModule {}

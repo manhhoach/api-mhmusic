@@ -25,7 +25,10 @@ export class AlbumSongsController {
 
   @MessagePattern('updateAlbumSong')
   update(@Payload() updateAlbumSongDto: UpdateAlbumSongDto) {
-    return this.albumSongsService.update(updateAlbumSongDto.id, updateAlbumSongDto);
+    return this.albumSongsService.update(
+      updateAlbumSongDto.id,
+      updateAlbumSongDto,
+    );
   }
 
   @MessagePattern('removeAlbumSong')

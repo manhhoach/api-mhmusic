@@ -2,25 +2,33 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ValidateCreateSingerDto } from './dto/create-singer.dto';
 import { ValidateUpdateSingerDto } from './dto/update-singer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SingerEntity } from '@app/common';
 import { Repository } from 'typeorm';
-import { ValidateFindAllDto } from './dto/find-all.dto';
-import { getPagination, getPagingData } from '@app/common/helpers/pagination';
+
+import {
+  SingerEntity,
+  ValidateFindAllDto,
+  getPagination,
+  getPagingData,
+} from '@app/common';
 
 @Injectable()
 export class SingersService {
-  constructor(@InjectRepository(SingerEntity) private readonly singerRepository: Repository<SingerEntity>) {
-
-  }
+  constructor(
+    @InjectRepository(SingerEntity)
+    private readonly singerRepository: Repository<SingerEntity>,
+  ) {}
   create(createSingerDto: ValidateCreateSingerDto) {
-    let data = new SingerEntity()
-    data = Object.assign(data, createSingerDto)
-    return this.singerRepository.save(data)
+    let data = new SingerEntity();
+    data = Object.assign(data, createSingerDto);
+    return this.singerRepository.save(data);
   }
 
   async findAll(findAllDto: ValidateFindAllDto) {
-    const { skip, limit } = getPagination(findAllDto.pageSize, findAllDto.pageIndex);
-    let order: any = {};
+    const { skip, limit } = getPagination(
+      findAllDto.pageSize,
+      findAllDto.pageIndex,
+    );
+    const order: any = {};
 
     if (findAllDto.order) {
       const orderByField = findAllDto.order.split(' ')[0] || 'createdAt';
@@ -36,29 +44,27 @@ export class SingersService {
   }
 
   async findById(id: string) {
-    let data = await this.singerRepository.findOne({
-      where: { id: id }
-    })
-    if (!data)
-      throw new NotFoundException()
-    return data
+    const data = await this.singerRepository.findOne({
+      where: { id: id },
+    });
+    if (!data) throw new NotFoundException();
+    return data;
   }
 
   async update(id: string, updateSingerDto: ValidateUpdateSingerDto) {
-    let singer = await this.singerRepository.findOne({ where: { id: id } })
-    if (!singer) {
-      throw new NotFoundException()
+    let data = await this.singerRepository.findOne({ where: { id: id } });
+    if (!data) {
+      throw new NotFoundException();
     }
-    singer = Object.assign(singer, updateSingerDto)
-    return this.singerRepository.save(singer)
+    data = Object.assign(data, updateSingerDto);
+    return this.singerRepository.save(data);
   }
 
   async delete(id: string) {
-    let data = await this.singerRepository.findOne({
-      where: { id: id }
-    })
-    if (!data)
-      throw new NotFoundException()
+    const data = await this.singerRepository.findOne({
+      where: { id: id },
+    });
+    if (!data) throw new NotFoundException();
     return this.singerRepository.delete(id);
   }
 }

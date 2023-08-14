@@ -1,37 +1,39 @@
 import {
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-    ManyToOne,
-    OneToMany,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { SingerEntity } from './singer.entity';
 import { AlbumSongEntity } from './album-songs.entity';
 
 @Entity({
-    name: 'songs'
+  name: 'songs',
 })
 export class SongEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column({ length: 255 })
-    name: string;
+  @Column({ length: 255 })
+  name: string;
 
-    @Column({ length: 512, nullable: false })
-    url: string;
+  @Column({ length: 512, nullable: false })
+  url: string;
 
-    @Column({ default: 0 })
-    views: number;
+  @Column({ default: 0 })
+  views: number;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    // auto generated singerId in db, but use singer instead
-    @ManyToOne(() => SingerEntity, (singer) => singer.songs, { onDelete: 'SET NULL' }) //, {onDelete: "SET NULL" }) //  cascade: delete all songs if singer is deleted
-    singer: SingerEntity;
+  // auto generated singerId in db, but use singer instead
+  @ManyToOne(() => SingerEntity, (singer) => singer.songs, {
+    onDelete: 'SET NULL',
+  }) //, {onDelete: "SET NULL" }) //  cascade: delete all songs if singer is deleted
+  singer: SingerEntity;
 
-    @OneToMany(() => AlbumSongEntity, (albumSong) => albumSong.song)
-    albumSongs: AlbumSongEntity[];
+  @OneToMany(() => AlbumSongEntity, (albumSong) => albumSong.song)
+  albumSongs: AlbumSongEntity[];
 }

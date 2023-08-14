@@ -5,8 +5,4 @@ import { SongsService } from './songs.service';
 export class SongsController {
   constructor(private readonly songsService: SongsService) {}
 
-  @Get()
-  getHello(): string {
-    return this.songsService.getHello();
-  }
 }

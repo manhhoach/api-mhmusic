@@ -1,3 +1,3 @@
-export const PAGE_SIZE: number = 5;
-export const PAGE_INDEX: number = 1;
-export const ORDER: string = "createdAt DESC";
+export const PAGE_SIZE = 5;
+export const PAGE_INDEX = 1;
+export const ORDER = 'createdAt DESC';

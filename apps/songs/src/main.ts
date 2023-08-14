@@ -14,15 +14,14 @@ async function bootstrap() {
       options: {
         protoPath: [
           join(__dirname, '../../../proto/singer.proto'),
-          join(__dirname, '../../../proto/album.proto')
+          join(__dirname, '../../../proto/album.proto'),
         ],
         package: [SINGER_PACKAGE_NAME, ALBUM_PACKAGE_NAME],
-        url: 'localhost:5002'
-      }
-    }
-  )
-  app.useGlobalPipes(new GrpcValidationPipe())
-  await app.listen()
+        url: 'localhost:5002',
+      },
+    },
+  );
+  app.useGlobalPipes(new GrpcValidationPipe());
+  await app.listen();
 }
 bootstrap();
-
