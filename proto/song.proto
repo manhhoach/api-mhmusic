@@ -1,0 +1,53 @@
+syntax="proto3";
+
+package song;
+
+service SongService{
+    rpc CreateSong(CreateSongDto) returns (Song){}
+    rpc FindAll(FindAllDto) returns (Songs){}
+    rpc FindById(FindByIdDto) returns (Song){}
+    rpc UpdateSong(UpdateSongDto) returns (Song){}
+    rpc DeleteSong(FindByIdDto) returns (Empty){}
+}
+
+
+message Singer{
+    string id = 1;
+    string name = 2;
+    int64 createdAt = 3;
+}
+message Song{
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    int32 view = 4;
+    int64 createdAt = 5;
+    Singer singer = 6;
+}
+message Songs{
+    int32 totalItems = 1;
+    int32 totalPages = 2;
+    int32 currentPage = 3;
+    repeated Song data = 4;
+}
+
+message Empty{}
+message FindByIdDto{
+    string id = 1;
+}
+message FindAllDto{
+    int32 pageSize = 1;
+    int32 pageIndex = 2;
+    string order = 3;
+}
+message CreateSongDto{
+    string name = 1;
+    string url = 2;
+    string singer = 3;
+}
+message UpdateSongDto{
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    string singer = 4;
+}

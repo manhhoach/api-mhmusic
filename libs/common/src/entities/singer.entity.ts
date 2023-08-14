@@ -5,7 +5,7 @@ import {
     CreateDateColumn,
     OneToMany,
 } from 'typeorm';
-// import { SongEntity } from './song.entity';
+import { SongEntity } from './song.entity';
 
 @Entity({
     name: 'singers'
@@ -20,6 +20,6 @@ export class SingerEntity {
     @CreateDateColumn({ select: false })
     createdAt: Date;
 
-    // @OneToMany(() => SongModel, (song) => song.singer)
-    // songs: SongModel[];
+    @OneToMany(() => SongEntity, (song) => song.singer)
+    songs: SongEntity[];
 }

@@ -1,35 +1,38 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { GrpcMethod, Payload } from '@nestjs/microservices';
 import { AlbumsService } from './albums.service';
-import { CreateAlbumDto } from './dto/create-album.dto';
-import { UpdateAlbumDto } from './dto/update-album.dto';
+import { ValidateCreateAlbumDto } from './dto/create-album.dto';
+import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
+import { ValidateFindAllDto } from './dto/find-all.dto';
+import { tryCatchGrpcException } from '@app/common/helpers/try.catch';
+import { ValidateFindByIdDto } from './dto/find-by-id.dto';
 
 @Controller()
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
-  @MessagePattern('createAlbum')
-  create(@Payload() createAlbumDto: CreateAlbumDto) {
-    return this.albumsService.create(createAlbumDto);
+  @GrpcMethod('AlbumService', 'createAlbum')
+  async create(@Payload() createAlbumDto: ValidateCreateAlbumDto) {
+    return tryCatchGrpcException(this.albumsService.create(createAlbumDto))
   }
 
-  @MessagePattern('findAllAlbums')
-  findAll() {
-    return this.albumsService.findAll();
+  @GrpcMethod('AlbumService', 'findAll')
+  findAll(@Payload() findAllDto: ValidateFindAllDto) {
+    return tryCatchGrpcException(this.albumsService.findAll(findAllDto))
   }
 
-  @MessagePattern('findOneAlbum')
-  findOne(@Payload() id: number) {
-    return this.albumsService.findOne(id);
+  @GrpcMethod('AlbumService', 'findById')
+  findById(@Payload() findByIdDto: ValidateFindByIdDto) {
+    return tryCatchGrpcException(this.albumsService.findById(findByIdDto.id))
   }
 
-  @MessagePattern('updateAlbum')
-  update(@Payload() updateAlbumDto: UpdateAlbumDto) {
-    return this.albumsService.update(updateAlbumDto.id, updateAlbumDto);
+  @GrpcMethod('AlbumService', 'updateAlbum')
+  update(@Payload() updateAlbumDto: ValidateUpdateAlbumDto) {
+    return tryCatchGrpcException(this.albumsService.update(updateAlbumDto.id, updateAlbumDto))
   }
 
-  @MessagePattern('removeAlbum')
-  remove(@Payload() id: number) {
-    return this.albumsService.remove(id);
+  @GrpcMethod('AlbumService', 'deleteAlbum')
+  delete(@Payload() findByIdDto: ValidateFindByIdDto) {
+    return tryCatchGrpcException(this.albumsService.delete(findByIdDto.id))
   }
 }

@@ -1,26 +1,64 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAlbumDto } from './dto/create-album.dto';
-import { UpdateAlbumDto } from './dto/update-album.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { ValidateCreateAlbumDto } from './dto/create-album.dto';
+import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
+import { AlbumEntity } from '@app/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ValidateFindAllDto } from './dto/find-all.dto';
+import { getPagination, getPagingData } from '@app/common/helpers/pagination';
 
 @Injectable()
 export class AlbumsService {
-  create(createAlbumDto: CreateAlbumDto) {
-    return 'This action adds a new album';
+  constructor(@InjectRepository(AlbumEntity) private readonly albumRepository: Repository<AlbumEntity>) {
+
+  }
+  create(createAlbumDto: ValidateCreateAlbumDto) {
+    let data = new AlbumEntity()
+    data = Object.assign(data, createAlbumDto)
+    return this.albumRepository.save(data)
   }
 
-  findAll() {
-    return `This action returns all albums`;
+  async findAll(findAllDto: ValidateFindAllDto) {
+    const { skip, limit } = getPagination(findAllDto.pageSize, findAllDto.pageIndex);
+    let order: any = {};
+
+    if (findAllDto.order) {
+      const orderByField = findAllDto.order.split(' ')[0] || 'createdAt';
+      const orderOrder = findAllDto.order.split(' ')[1] || 'DESC';
+      order[orderByField] = orderOrder;
+    }
+    const data = await this.albumRepository.findAndCount({
+      skip: skip,
+      take: limit,
+      order: order,
+    });
+    return getPagingData(data, findAllDto.pageIndex, limit);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} album`;
+  async findById(id: string) {
+    let data = await this.albumRepository.findOne({
+      where: { id: id }
+    })
+    if (!data)
+      throw new NotFoundException()
+    return data
   }
 
-  update(id: number, updateAlbumDto: UpdateAlbumDto) {
-    return `This action updates a #${id} album`;
+  async update(id: string, updateAlbumDto: ValidateUpdateAlbumDto) {
+    let data = await this.albumRepository.findOne({ where: { id: id } })
+    if (!data) {
+      throw new NotFoundException()
+    }
+    data = Object.assign(data, updateAlbumDto)
+    return this.albumRepository.save(data)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} album`;
+  async delete(id: string) {
+    let data = await this.albumRepository.findOne({
+      where: { id: id }
+    })
+    if (!data)
+      throw new NotFoundException()
+    return this.albumRepository.delete(id);
   }
 }

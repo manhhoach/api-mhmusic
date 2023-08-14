@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package album;
+
+service AlbumService {
+    rpc CreateAlbum(CreateAlbumDto) returns (Album){}
+    rpc FindAll(FindAllDto) returns (Albums){}
+    rpc FindById(FindByIdDto) returns (Album){}
+    rpc UpdateAlbum(UpdateAlbumDto) returns (Album){}
+    rpc DeleteAlbum(FindByIdDto) returns (Empty){}
+}
+
+message Empty{}
+
+message Album{
+    string id = 1;
+    string name = 2;
+    int64 createdAt = 3;
+}
+message FindByIdDto{
+    string id = 1;
+}
+message FindAllDto{
+    int32 pageSize = 1;
+    int32 pageIndex = 2;
+    string order = 3;
+}
+
+message CreateAlbumDto{
+    string name = 1;
+}
+
+message UpdateAlbumDto{
+    string id = 1;
+    string name = 2;
+}
+
+
+message Albums{
+    int32 totalItems = 1;
+    int32 totalPages = 2;
+    int32 currentPage = 3;
+    repeated Album data = 4;
+}
