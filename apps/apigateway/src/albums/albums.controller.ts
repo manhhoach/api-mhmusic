@@ -12,24 +12,23 @@ import {
   Query,
   NotFoundException,
 } from '@nestjs/common';
-import { SingerServiceClient, SINGER_SERVICE_NAME } from '@app/common/proto/singer';
+import { AlbumServiceClient, ALBUM_SERVICE_NAME } from '@app/common/proto/album';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PAGE_INDEX, PAGE_SIZE, ORDER } from '@app/common';
+import { lastValueFrom } from 'rxjs';
 
+
+@Controller('albums')
 @Injectable()
-@Controller('singers')
-export class SingersController implements OnModuleInit {
-  private singersService: SingerServiceClient;
-  constructor(@Inject(SINGER_SERVICE_NAME) private client: ClientGrpc) {}
-
+export class AlbumsController implements OnModuleInit {
+  private albumsService: AlbumServiceClient;
+  constructor(@Inject(ALBUM_SERVICE_NAME) private client: ClientGrpc) { }
   onModuleInit() {
-    this.singersService =
-      this.client.getService<SingerServiceClient>(SINGER_SERVICE_NAME);
+    this.albumsService = this.client.getService<AlbumServiceClient>(ALBUM_SERVICE_NAME)
   }
-
   @Post()
-  create(@Body() createSingerDto) {
-    return this.singersService.createSinger(createSingerDto);
+  create(@Body() createAlbumDto) {
+    return this.albumsService.createAlbum(createAlbumDto);
   }
 
   @Get()
@@ -39,7 +38,7 @@ export class SingersController implements OnModuleInit {
       pageSize: query.pageSize ? query.pageSize : PAGE_SIZE,
       order: query.order ? query.order : ORDER,
     };
-    const data = await this.singersService.findAll(queryData).toPromise();
+    const data = await lastValueFrom(this.albumsService.findAll(queryData));
     data.data = data.data ? data.data : [];
 
     return data;
@@ -48,20 +47,16 @@ export class SingersController implements OnModuleInit {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
-      const singer = await this.singersService.findById({ id }).toPromise();
-      return singer;
+      return await lastValueFrom(this.albumsService.findById({ id }));
     } catch (err) {
       throw new NotFoundException(err.details);
     }
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateSingerDto) {
+  async update(@Param('id') id: string, @Body() updateAlbumDto) {
     try {
-      const data = await this.singersService
-        .updateSinger({ id, ...updateSingerDto })
-        .toPromise();
-      return data;
+      return await lastValueFrom(this.albumsService.updateAlbum({ id, ...updateAlbumDto }))
     } catch (err) {
       throw new NotFoundException(err.details);
     }
@@ -70,8 +65,7 @@ export class SingersController implements OnModuleInit {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
-      const singer = await this.singersService.deleteSinger({ id }).toPromise();
-      return singer;
+      return await lastValueFrom(this.albumsService.deleteAlbum({ id }));
     } catch (err) {
       throw new NotFoundException(err.details);
     }
