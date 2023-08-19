@@ -14,14 +14,14 @@ service SongService{
 message Singer{
     string id = 1;
     string name = 2;
-    int64 createdAt = 3;
+    string createdAt = 3;
 }
 message Song{
     string id = 1;
     string name = 2;
     string url = 3;
     int32 view = 4;
-    int64 createdAt = 5;
+    string createdAt = 5;
     Singer singer = 6;
 }
 message Songs{

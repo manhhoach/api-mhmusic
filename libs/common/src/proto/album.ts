@@ -10,7 +10,7 @@ export interface Empty {
 export interface Album {
   id: string;
   name: string;
-  createdAt: number;
+  createdAt: string;
 }
 
 export interface FindByIdDto {

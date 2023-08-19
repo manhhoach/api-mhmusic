@@ -15,7 +15,7 @@ message Empty{}
 message Singer{
     string id = 1;
     string name = 2;
-    int64 createdAt = 3;
+    string createdAt = 3;
 }
 message FindByIdDto{
     string id = 1;

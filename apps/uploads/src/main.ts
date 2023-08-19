@@ -12,9 +12,9 @@ async function bootstrap() {
       persistent: true,
       queueOptions:{
         durable: true
-      }
+      },
     }
   });
-  app.listen();
+  await app.listen();
 }
 bootstrap();

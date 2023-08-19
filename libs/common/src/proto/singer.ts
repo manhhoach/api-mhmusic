@@ -10,7 +10,7 @@ export interface Empty {
 export interface Singer {
   id: string;
   name: string;
-  createdAt: number;
+  createdAt: string;
 }
 
 export interface FindByIdDto {
