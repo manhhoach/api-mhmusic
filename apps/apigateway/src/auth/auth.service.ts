@@ -30,7 +30,7 @@ export class AuthService implements OnModuleInit {
   onModuleInit() {
     this.usersService =
       this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
-  }
+  } 0
 
   async register(createUserDto) {
     try {

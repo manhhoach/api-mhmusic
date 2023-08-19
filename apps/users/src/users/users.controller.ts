@@ -5,7 +5,7 @@ import { Payload, GrpcMethod } from '@nestjs/microservices';
 import { ValidateUpdateUserDto } from './dto/update-user.dto';
 import { ValidateCreateUserDto } from './dto/create-user.dto';
 import { ValidateChangePassUserDto } from './dto/change-pass.user';
-import { tryCatchGrpcException } from '@app/common';
+import { tryCatchRpcException } from '@app/common';
 
 @Controller()
 export class UsersController {
@@ -13,7 +13,7 @@ export class UsersController {
 
   @GrpcMethod('UserService', 'CreateUser')
   async create(@Payload() createUserDto: ValidateCreateUserDto) {
-    return tryCatchGrpcException(this.usersService.create(createUserDto));
+    return tryCatchRpcException(this.usersService.create(createUserDto));
   }
 
   findAll() {
@@ -22,17 +22,17 @@ export class UsersController {
 
   @GrpcMethod('UserService', 'FindByEmail')
   async findByEmail(@Payload() findByEmailDto: FindByEmailDto) {
-    return tryCatchGrpcException(this.usersService.findOne(findByEmailDto));
+    return tryCatchRpcException(this.usersService.findOne(findByEmailDto));
   }
 
   @GrpcMethod('UserService', 'FindById')
   findById(@Payload() findByIdDto: FindByIdDto) {
-    return tryCatchGrpcException(this.usersService.findOne(findByIdDto));
+    return tryCatchRpcException(this.usersService.findOne(findByIdDto));
   }
 
   @GrpcMethod('UserService', 'UpdateUser')
   async update(@Payload() updateUserDto: ValidateUpdateUserDto) {
-    return tryCatchGrpcException(
+    return tryCatchRpcException(
       this.usersService.update(updateUserDto.id, updateUserDto),
     );
   }
@@ -41,7 +41,7 @@ export class UsersController {
   async changePassword(
     @Payload() changePassUserDto: ValidateChangePassUserDto,
   ) {
-    return tryCatchGrpcException(
+    return tryCatchRpcException(
       this.usersService.changePassword(changePassUserDto),
     );
   }

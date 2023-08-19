@@ -6,7 +6,7 @@ import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
 import {
   ValidateFindAllDto,
   ValidateFindByIdDto,
-  tryCatchGrpcException,
+  tryCatchRpcException,
 } from '@app/common';
 
 @Controller()
@@ -15,28 +15,28 @@ export class AlbumsController {
 
   @GrpcMethod('AlbumService', 'createAlbum')
   async create(@Payload() createAlbumDto: ValidateCreateAlbumDto) {
-    return tryCatchGrpcException(this.albumsService.create(createAlbumDto));
+    return tryCatchRpcException(this.albumsService.create(createAlbumDto));
   }
 
   @GrpcMethod('AlbumService', 'findAll')
   findAll(@Payload() findAllDto: ValidateFindAllDto) {
-    return tryCatchGrpcException(this.albumsService.findAll(findAllDto));
+    return tryCatchRpcException(this.albumsService.findAll(findAllDto));
   }
 
   @GrpcMethod('AlbumService', 'findById')
   findById(@Payload() findByIdDto: ValidateFindByIdDto) {
-    return tryCatchGrpcException(this.albumsService.findById(findByIdDto.id));
+    return tryCatchRpcException(this.albumsService.findById(findByIdDto.id));
   }
 
   @GrpcMethod('AlbumService', 'updateAlbum')
   update(@Payload() updateAlbumDto: ValidateUpdateAlbumDto) {
-    return tryCatchGrpcException(
+    return tryCatchRpcException(
       this.albumsService.update(updateAlbumDto.id, updateAlbumDto),
     );
   }
 
   @GrpcMethod('AlbumService', 'deleteAlbum')
   delete(@Payload() findByIdDto: ValidateFindByIdDto) {
-    return tryCatchGrpcException(this.albumsService.delete(findByIdDto.id));
+    return tryCatchRpcException(this.albumsService.delete(findByIdDto.id));
   }
 }

@@ -6,7 +6,7 @@ import { ValidateUpdateSingerDto } from './dto/update-singer.dto';
 import {
   ValidateFindAllDto,
   ValidateFindByIdDto,
-  tryCatchGrpcException,
+  tryCatchRpcException,
 } from '@app/common';
 
 @Controller()
@@ -15,28 +15,28 @@ export class SingersController {
 
   @GrpcMethod('SingerService', 'createSinger')
   async create(@Payload() createSingerDto: ValidateCreateSingerDto) {
-    return tryCatchGrpcException(this.singersService.create(createSingerDto));
+    return tryCatchRpcException(this.singersService.create(createSingerDto));
   }
 
   @GrpcMethod('SingerService', 'findAll')
   findAll(@Payload() findAllDto: ValidateFindAllDto) {
-    return tryCatchGrpcException(this.singersService.findAll(findAllDto));
+    return tryCatchRpcException(this.singersService.findAll(findAllDto));
   }
 
   @GrpcMethod('SingerService', 'findById')
   findById(@Payload() findByIdDto: ValidateFindByIdDto) {
-    return tryCatchGrpcException(this.singersService.findById(findByIdDto.id));
+    return tryCatchRpcException(this.singersService.findById(findByIdDto.id));
   }
 
   @GrpcMethod('SingerService', 'updateSinger')
   update(@Payload() updateSingerDto: ValidateUpdateSingerDto) {
-    return tryCatchGrpcException(
+    return tryCatchRpcException(
       this.singersService.update(updateSingerDto.id, updateSingerDto),
     );
   }
 
   @GrpcMethod('SingerService', 'deleteSinger')
   delete(@Payload() findByIdDto: ValidateFindByIdDto) {
-    return tryCatchGrpcException(this.singersService.delete(findByIdDto.id));
+    return tryCatchRpcException(this.singersService.delete(findByIdDto.id));
   }
 }

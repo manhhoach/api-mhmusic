@@ -1,6 +1,6 @@
 import { RpcException } from '@nestjs/microservices';
 
-export const tryCatchGrpcException = async (promise: Promise<any>) => {
+export const tryCatchRpcException = async (promise: Promise<any>) => {
   try {
     return await promise;
   } catch (err) {
