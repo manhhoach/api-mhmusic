@@ -1,4 +1,4 @@
 export * from './pagination';
 export * from './response';
-export * from './try.catch';
+export * from '../exceptions/try.catch.rpc';
 export * from './handle.file-name'

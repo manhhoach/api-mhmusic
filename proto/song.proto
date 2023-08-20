@@ -4,9 +4,9 @@ package song;
 
 service SongService{
     rpc CreateSong(CreateSongDto) returns (Song){}
-    rpc FindAll(FindAllDto) returns (Songs){}
-    rpc FindById(FindByIdDto) returns (Song){}
-    rpc UpdateSong(UpdateSongDto) returns (Song){}
+    rpc FindAll(FindAllDto) returns (SongInfos){}
+    rpc FindById(FindByIdDto) returns (SongInfo){}
+    rpc UpdateSong(UpdateSongDto) returns (SongInfo){}
     rpc DeleteSong(FindByIdDto) returns (Empty){}
 }
 
@@ -14,7 +14,6 @@ service SongService{
 message Singer{
     string id = 1;
     string name = 2;
-    string createdAt = 3;
 }
 message Song{
     string id = 1;
@@ -22,13 +21,20 @@ message Song{
     string url = 3;
     int32 view = 4;
     string createdAt = 5;
+}
+message SongInfo{
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    int32 view = 4;
+    string createdAt = 5;
     Singer singer = 6;
 }
-message Songs{
+message SongInfos{
     int32 totalItems = 1;
     int32 totalPages = 2;
     int32 currentPage = 3;
-    repeated Song data = 4;
+    repeated SongInfo data = 4;
 }
 
 message Empty{}

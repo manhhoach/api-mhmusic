@@ -52,12 +52,11 @@ export class SongsService {
   }
 
   async update(id: string, updateSongDto: ValidateUpdateSongDto) {
-    let data = await this.songRepository.findOne({ where: { id: id } });
-    if (!data) {
+    let data = await this.songRepository.update({ id: id }, updateSongDto as any);
+    if (data.affected === 0) {
       throw new NotFoundException();
     }
-    data = Object.assign(data, updateSongDto);
-    return this.songRepository.save(data);
+    return this.songRepository.findOne({ where: { id: id } });
   }
 
   async delete(id: string) {

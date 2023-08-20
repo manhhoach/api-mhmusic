@@ -1,9 +1,24 @@
 import { Module } from '@nestjs/common';
-import { SongsService } from './songs.service';
 import { SongsController } from './songs.controller';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { SONG_PACKAGE_NAME, SONG_SERVICE_NAME } from '@app/common/proto/song';
+import { join } from 'path';
 
 @Module({
+  imports: [
+    ClientsModule.register([
+      {
+        name: SONG_SERVICE_NAME,
+        transport: Transport.GRPC,
+        options: {
+          package: SONG_PACKAGE_NAME,
+          protoPath: join(__dirname, '../../../proto/song.proto'),
+          url: 'localhost:5002',
+        }
+      }
+    ])
+  ],
   controllers: [SongsController],
-  providers: [SongsService]
+  providers: []
 })
 export class SongsModule {}

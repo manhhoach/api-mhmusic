@@ -13,8 +13,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { SingerServiceClient, SINGER_SERVICE_NAME } from '@app/common/proto/singer';
-import { ClientGrpc } from '@nestjs/microservices';
+import { ClientGrpc, RpcException } from '@nestjs/microservices';
 import { PAGE_INDEX, PAGE_SIZE, ORDER } from '@app/common';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 @Controller('singers')
@@ -39,7 +40,7 @@ export class SingersController implements OnModuleInit {
       pageSize: query.pageSize ? query.pageSize : PAGE_SIZE,
       order: query.order ? query.order : ORDER,
     };
-    const data = await this.singersService.findAll(queryData).toPromise();
+    const data = await lastValueFrom(this.singersService.findAll(queryData));
     data.data = data.data ? data.data : [];
 
     return data;
@@ -48,19 +49,17 @@ export class SingersController implements OnModuleInit {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
-      const singer = await this.singersService.findById({ id }).toPromise();
+      const singer = await lastValueFrom(this.singersService.findById({ id }));
       return singer;
     } catch (err) {
-      throw new NotFoundException(err.details);
+      throw new RpcException(err.details);
     }
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateSingerDto) {
     try {
-      const data = await this.singersService
-        .updateSinger({ id, ...updateSingerDto })
-        .toPromise();
+      const data = await lastValueFrom(this.singersService.updateSinger({ id, ...updateSingerDto }))
       return data;
     } catch (err) {
       throw new NotFoundException(err.details);
@@ -70,7 +69,7 @@ export class SingersController implements OnModuleInit {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
-      const singer = await this.singersService.deleteSinger({ id }).toPromise();
+      const singer = await lastValueFrom(this.singersService.deleteSinger({ id }));
       return singer;
     } catch (err) {
       throw new NotFoundException(err.details);

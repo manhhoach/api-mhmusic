@@ -7,7 +7,6 @@ export const protobufPackage = "song";
 export interface Singer {
   id: string;
   name: string;
-  createdAt: string;
 }
 
 export interface Song {
@@ -16,14 +15,22 @@ export interface Song {
   url: string;
   view: number;
   createdAt: string;
+}
+
+export interface SongInfo {
+  id: string;
+  name: string;
+  url: string;
+  view: number;
+  createdAt: string;
   singer: Singer | undefined;
 }
 
-export interface Songs {
+export interface SongInfos {
   totalItems: number;
   totalPages: number;
   currentPage: number;
-  data: Song[];
+  data: SongInfo[];
 }
 
 export interface Empty {
@@ -57,11 +64,11 @@ export const SONG_PACKAGE_NAME = "song";
 export interface SongServiceClient {
   createSong(request: CreateSongDto): Observable<Song>;
 
-  findAll(request: FindAllDto): Observable<Songs>;
+  findAll(request: FindAllDto): Observable<SongInfos>;
 
-  findById(request: FindByIdDto): Observable<Song>;
+  findById(request: FindByIdDto): Observable<SongInfo>;
 
-  updateSong(request: UpdateSongDto): Observable<Song>;
+  updateSong(request: UpdateSongDto): Observable<SongInfo>;
 
   deleteSong(request: FindByIdDto): Observable<Empty>;
 }
@@ -69,11 +76,11 @@ export interface SongServiceClient {
 export interface SongServiceController {
   createSong(request: CreateSongDto): Promise<Song> | Observable<Song> | Song;
 
-  findAll(request: FindAllDto): Promise<Songs> | Observable<Songs> | Songs;
+  findAll(request: FindAllDto): Promise<SongInfos> | Observable<SongInfos> | SongInfos;
 
-  findById(request: FindByIdDto): Promise<Song> | Observable<Song> | Song;
+  findById(request: FindByIdDto): Promise<SongInfo> | Observable<SongInfo> | SongInfo;
 
-  updateSong(request: UpdateSongDto): Promise<Song> | Observable<Song> | Song;
+  updateSong(request: UpdateSongDto): Promise<SongInfo> | Observable<SongInfo> | SongInfo;
 
   deleteSong(request: FindByIdDto): Promise<Empty> | Observable<Empty> | Empty;
 }

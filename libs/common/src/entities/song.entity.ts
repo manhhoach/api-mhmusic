@@ -30,6 +30,7 @@ export class SongEntity {
 
   // auto generated singerId in db, but use singer instead
   @ManyToOne(() => SingerEntity, (singer) => singer.songs, {
+    eager: true,
     onDelete: 'SET NULL',
   }) //, {onDelete: "SET NULL" }) //  cascade: delete all songs if singer is deleted
   singer: SingerEntity;
