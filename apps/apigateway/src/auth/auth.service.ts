@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -7,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
-import { MESSAGES } from '@app/common';
+import { MESSAGES, tryCatchHttpException, tryCatchRpcException } from '@app/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
 import { compareSync } from 'bcrypt';
@@ -25,52 +26,34 @@ export class AuthService implements OnModuleInit {
   constructor(
     @Inject(USER_SERVICE_NAME) private client: ClientGrpc,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   onModuleInit() {
     this.usersService =
       this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
-  } 0
+  }
 
-  async register(createUserDto) {
-    try {
-      const user = await lastValueFrom(
-        this.usersService.createUser(createUserDto),
-      );
-      return user;
-    } catch (error) {
-      if (error.details === MESSAGES.EMAIL_EXISTS)
-        throw new BadRequestException(error.details);
-    }
+  register(createUserDto) {
+    return this.usersService.createUser(createUserDto)
   }
 
   async login(loginDto: LoginDto) {
-    try {
-      const user = await this.usersService
-        .findByEmail({ email: loginDto.email })
-        .toPromise();
+    const user = await lastValueFrom(this.usersService.findByEmail({ email: loginDto.email }))
+    if (!comparePassword(loginDto.password, user.password))
+      throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD);
 
-      if (!comparePassword(loginDto.password, user.password))
-        throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD);
-      const payload = { id: user.id };
-      return {
-        ...user,
-        password: undefined,
-        accessToken: await this.jwtService.signAsync(payload),
-      };
-    } catch (error) {
-      if (error instanceof UnauthorizedException)
-        throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD);
-      throw new NotFoundException(error.details);
-    }
+    const payload = { id: user.id };
+    return {
+      ...user,
+      password: undefined,
+      accessToken: await this.jwtService.signAsync(payload)
+    };
   }
 
   async verifyToken(token: string) {
     try {
       const payload = await this.jwtService.verifyAsync(token);
-      const user = await lastValueFrom(
-        this.usersService.findById({ id: payload.id }),
-      );
+      const user = await lastValueFrom(this.usersService.findById({ id: payload.id }));
       if (user) return user;
       else throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND);
     } catch {

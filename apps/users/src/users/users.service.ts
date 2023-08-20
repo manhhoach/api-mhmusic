@@ -25,13 +25,10 @@ export class UsersService {
     const user = await this.usersRepository.findOne({
       where: { email: createUserDto.email },
     });
-
     if (user) {
       throw new BadRequestException(MESSAGES.EMAIL_EXISTS);
     }
-    return this.usersRepository.save(
-      Object.assign(new UserEntity(), createUserDto),
-    );
+    return this.usersRepository.save(Object.assign(new UserEntity(), createUserDto));
   }
 
   findAll() {
@@ -41,9 +38,7 @@ export class UsersService {
   async findOne(findOneUserDto: FindByEmailDto | FindByIdDto) {
     let query = this.usersRepository.createQueryBuilder('users');
     if ('email' in findOneUserDto)
-      query = query
-        .where('email = :email', { email: findOneUserDto.email })
-        .addSelect('users.password');
+      query = query.where('email = :email', { email: findOneUserDto.email }).addSelect('users.password');
     else if ('id' in findOneUserDto)
       query = query.where('id = :id', { id: findOneUserDto.id });
 

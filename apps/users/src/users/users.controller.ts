@@ -12,7 +12,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @GrpcMethod('UserService', 'CreateUser')
-  async create(@Payload() createUserDto: ValidateCreateUserDto) {
+  create(@Payload() createUserDto: ValidateCreateUserDto) {
     return tryCatchRpcException(this.usersService.create(createUserDto));
   }
 
@@ -21,7 +21,7 @@ export class UsersController {
   }
 
   @GrpcMethod('UserService', 'FindByEmail')
-  async findByEmail(@Payload() findByEmailDto: FindByEmailDto) {
+  findByEmail(@Payload() findByEmailDto: FindByEmailDto) {
     return tryCatchRpcException(this.usersService.findOne(findByEmailDto));
   }
 
@@ -31,16 +31,14 @@ export class UsersController {
   }
 
   @GrpcMethod('UserService', 'UpdateUser')
-  async update(@Payload() updateUserDto: ValidateUpdateUserDto) {
+  update(@Payload() updateUserDto: ValidateUpdateUserDto) {
     return tryCatchRpcException(
       this.usersService.update(updateUserDto.id, updateUserDto),
     );
   }
 
   @GrpcMethod('UserService', 'ChangePassword')
-  async changePassword(
-    @Payload() changePassUserDto: ValidateChangePassUserDto,
-  ) {
+  changePassword(@Payload() changePassUserDto: ValidateChangePassUserDto) {
     return tryCatchRpcException(
       this.usersService.changePassword(changePassUserDto),
     );

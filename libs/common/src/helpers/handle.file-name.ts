@@ -1,4 +1,4 @@
-export const handleFileName = (fileName: string) => {
+export const removeVietnameseTone = (fileName: string) => {
     let str = fileName.slice(0, fileName.lastIndexOf('.'));
     /* eslint-disable no-useless-escape */
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -27,6 +27,18 @@ export const handleFileName = (fileName: string) => {
     // Bỏ dấu câu, kí tự đặc biệt
     str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, "");
     str = str.toLowerCase();
-    str = str.replace(/ /g, '.');
+    str = str.replace(/ /g, '');
     return str;
 };
+
+export const getFormatFile = (fileName: string)=>{
+    let arr = fileName.split('.')
+    return arr[arr.length-1]
+}
+
+export const handleFileName = (fileName: string)=>{
+    let file_name = removeVietnameseTone(fileName)
+    console.log(file_name);
+    
+    return file_name+getFormatFile(fileName)
+}

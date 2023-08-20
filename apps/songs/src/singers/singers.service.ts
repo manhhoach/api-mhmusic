@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import {
+  MESSAGES,
   SingerEntity,
   ValidateFindAllDto,
   getPagination,
@@ -47,14 +48,14 @@ export class SingersService {
     const data = await this.singerRepository.findOne({
       where: { id: id },
     });
-    if (!data) throw new NotFoundException();
+    if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
     return data;
   }
 
   async update(id: string, updateSingerDto: ValidateUpdateSingerDto) {
     let data = await this.singerRepository.findOne({ where: { id: id } });
     if (!data) {
-      throw new NotFoundException();
+      throw new NotFoundException(MESSAGES.NOT_FOUND);
     }
     data = Object.assign(data, updateSingerDto);
     return this.singerRepository.save(data);
@@ -64,7 +65,7 @@ export class SingersService {
     const data = await this.singerRepository.findOne({
       where: { id: id },
     });
-    if (!data) throw new NotFoundException();
+    if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
     return this.singerRepository.delete(id);
   }
 }

@@ -1,0 +1,9 @@
+
+// format response
+singer - done 
+album - done v1
+auth - done 
+uploads - done
+
+features
+search by elastic

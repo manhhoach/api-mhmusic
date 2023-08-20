@@ -4,6 +4,8 @@ export const tryCatchRpcException = async (promise: Promise<any>) => {
   try {
     return await promise;
   } catch (err) {
-    throw new RpcException(err);
+    console.log('err in grpc' , err.response);
+      
+    throw new RpcException(JSON.stringify(err.response));
   }
 };

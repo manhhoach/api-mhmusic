@@ -3,6 +3,7 @@ import { ValidateCreateAlbumDto } from './dto/create-album.dto';
 import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
 import {
   AlbumEntity,
+  MESSAGES,
   ValidateFindAllDto,
   getPagination,
   getPagingData,
@@ -46,14 +47,14 @@ export class AlbumsService {
     const data = await this.albumRepository.findOne({
       where: { id: id },
     });
-    if (!data) throw new NotFoundException();
+    if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
     return data;
   }
 
   async update(id: string, updateAlbumDto: ValidateUpdateAlbumDto) {
     let data = await this.albumRepository.findOne({ where: { id: id } });
     if (!data) {
-      throw new NotFoundException();
+      throw new NotFoundException(MESSAGES.NOT_FOUND);
     }
     data = Object.assign(data, updateAlbumDto);
     return this.albumRepository.save(data);
@@ -63,7 +64,7 @@ export class AlbumsService {
     const data = await this.albumRepository.findOne({
       where: { id: id },
     });
-    if (!data) throw new NotFoundException();
+    if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
     return this.albumRepository.delete(id);
   }
 }

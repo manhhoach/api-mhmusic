@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { lastValueFrom } from 'rxjs';
-const MAX_MB_SIZE = 25;
+import { MESSAGE_PATTERN, MAX_MB_SIZE, UPLOAD_SERVICE_NAME, responseSucess } from '@app/common';
 
 @Controller('uploads')
 export class UploadsController {
@@ -22,10 +22,8 @@ export class UploadsController {
       .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY, fileIsRequired: true })
   ) file: Express.Multer.File, @Res() res: Response) {
     try {
-      let url = await lastValueFrom(this.client.send('upload-mp3', file))
-      res.status(200).json({
-        url
-      })
+      let url = await lastValueFrom(this.client.send(MESSAGE_PATTERN, file))
+      res.status(200).json(responseSucess(HttpStatus.OK,url))
     }
     catch (err) {
       throw new BadRequestException()

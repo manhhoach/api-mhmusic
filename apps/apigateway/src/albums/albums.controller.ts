@@ -11,10 +11,11 @@ import {
   OnModuleInit,
   Query,
   NotFoundException,
+  HttpStatus,
 } from '@nestjs/common';
 import { AlbumServiceClient, ALBUM_SERVICE_NAME } from '@app/common/proto/album';
 import { ClientGrpc } from '@nestjs/microservices';
-import { PAGE_INDEX, PAGE_SIZE, ORDER } from '@app/common';
+import { PAGE_INDEX, PAGE_SIZE, ORDER, tryCatchHttpException, responseSucess } from '@app/common';
 import { lastValueFrom } from 'rxjs';
 
 
@@ -28,7 +29,7 @@ export class AlbumsController implements OnModuleInit {
   }
   @Post()
   create(@Body() createAlbumDto) {
-    return this.albumsService.createAlbum(createAlbumDto);
+    return tryCatchHttpException(this.albumsService.createAlbum(createAlbumDto), HttpStatus.CREATED)
   }
 
   @Get()
@@ -41,33 +42,22 @@ export class AlbumsController implements OnModuleInit {
     const data = await lastValueFrom(this.albumsService.findAll(queryData));
     data.data = data.data ? data.data : [];
 
-    return data;
+   return responseSucess(HttpStatus.OK, data);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    try {
-      return await lastValueFrom(this.albumsService.findById({ id }));
-    } catch (err) {
-      throw new NotFoundException(err.details);
-    }
+    return tryCatchHttpException(this.albumsService.findById({ id }), HttpStatus.OK);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateAlbumDto) {
-    try {
-      return await lastValueFrom(this.albumsService.updateAlbum({ id, ...updateAlbumDto }))
-    } catch (err) {
-      throw new NotFoundException(err.details);
-    }
+    return tryCatchHttpException(this.albumsService.updateAlbum({ id, ...updateAlbumDto }), HttpStatus.OK);
+
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    try {
-      return await lastValueFrom(this.albumsService.deleteAlbum({ id }));
-    } catch (err) {
-      throw new NotFoundException(err.details);
-    }
+    return tryCatchHttpException(this.albumsService.deleteAlbum({ id }), HttpStatus.OK);
   }
 }

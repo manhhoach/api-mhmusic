@@ -1,7 +1,7 @@
 import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { responseSucess } from '@app/common';
+import { responseSucess, tryCatchHttpException } from '@app/common';
 
 @Controller('auth')
 export class AuthController {
@@ -9,13 +9,11 @@ export class AuthController {
 
   @Post('/login')
   async login(@Body() loginDto: LoginDto) {
-    const user = await this.authService.login(loginDto);
-    return responseSucess(HttpStatus.OK, user);
+    return tryCatchHttpException(this.authService.login(loginDto), HttpStatus.OK)
   }
 
   @Post('/register')
   async register(@Body() createUserDto) {
-    const user = await this.authService.register(createUserDto);
-    return responseSucess(HttpStatus.OK, user);
+    return tryCatchHttpException(this.authService.register(createUserDto), HttpStatus.CREATED)
   }
 }

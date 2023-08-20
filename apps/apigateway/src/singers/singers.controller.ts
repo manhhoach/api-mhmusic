@@ -10,18 +10,18 @@ import {
   Inject,
   OnModuleInit,
   Query,
-  NotFoundException,
+  HttpStatus,
 } from '@nestjs/common';
 import { SingerServiceClient, SINGER_SERVICE_NAME } from '@app/common/proto/singer';
-import { ClientGrpc, RpcException } from '@nestjs/microservices';
-import { PAGE_INDEX, PAGE_SIZE, ORDER } from '@app/common';
+import { ClientGrpc } from '@nestjs/microservices';
+import { PAGE_INDEX, PAGE_SIZE, ORDER, tryCatchHttpException, responseSucess } from '@app/common';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 @Controller('singers')
 export class SingersController implements OnModuleInit {
   private singersService: SingerServiceClient;
-  constructor(@Inject(SINGER_SERVICE_NAME) private client: ClientGrpc) {}
+  constructor(@Inject(SINGER_SERVICE_NAME) private client: ClientGrpc) { }
 
   onModuleInit() {
     this.singersService =
@@ -30,7 +30,7 @@ export class SingersController implements OnModuleInit {
 
   @Post()
   create(@Body() createSingerDto) {
-    return this.singersService.createSinger(createSingerDto);
+    return tryCatchHttpException(this.singersService.createSinger(createSingerDto), HttpStatus.CREATED)
   }
 
   @Get()
@@ -42,37 +42,21 @@ export class SingersController implements OnModuleInit {
     };
     const data = await lastValueFrom(this.singersService.findAll(queryData));
     data.data = data.data ? data.data : [];
-
-    return data;
+    return responseSucess(HttpStatus.OK, data);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    try {
-      const singer = await lastValueFrom(this.singersService.findById({ id }));
-      return singer;
-    } catch (err) {
-      throw new RpcException(err.details);
-    }
+    return tryCatchHttpException(this.singersService.findById({ id }), HttpStatus.OK)
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateSingerDto) {
-    try {
-      const data = await lastValueFrom(this.singersService.updateSinger({ id, ...updateSingerDto }))
-      return data;
-    } catch (err) {
-      throw new NotFoundException(err.details);
-    }
+    return tryCatchHttpException(this.singersService.updateSinger({ id, ...updateSingerDto }), HttpStatus.OK)
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    try {
-      const singer = await lastValueFrom(this.singersService.deleteSinger({ id }));
-      return singer;
-    } catch (err) {
-      throw new NotFoundException(err.details);
-    }
+    return tryCatchHttpException(this.singersService.deleteSinger({ id }), HttpStatus.OK)
   }
 }

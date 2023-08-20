@@ -2,7 +2,7 @@ export const responseSucess = (statusCode: number, data?: any) => {
   return {
     success: true,
     statusCode: statusCode ? statusCode : 200,
-    data,
+    data: data ? data: null,
   };
 };
 
