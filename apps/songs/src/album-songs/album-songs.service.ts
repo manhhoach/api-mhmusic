@@ -1,23 +1,27 @@
+import { AlbumSongEntity } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { CreateAlbumSongDto } from './dto/create-album-song.dto';
-import { UpdateAlbumSongDto } from './dto/update-album-song.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import {  ValidateCreateAlbumSongDto } from './dto/create-album-song.dto';
+
 
 @Injectable()
 export class AlbumSongsService {
-  create(createAlbumSongDto: CreateAlbumSongDto) {
-    return 'This action adds a new albumSong';
+  constructor( @InjectRepository(AlbumSongEntity)
+  private readonly albumSongRepository: Repository<AlbumSongEntity>,){}
+  create(createAlbumSongDto: ValidateCreateAlbumSongDto) {
+    return this.albumSongRepository.save(Object.assign(new AlbumSongEntity(), createAlbumSongDto))
   }
 
-  findAll() {
-    return `This action returns all albumSongs`;
-  }
+  findAllByAlbum(query) {
 
-  findOne(id: number) {
-    return `This action returns a #${id} albumSong`;
-  }
-
-  update(id: number, updateAlbumSongDto: UpdateAlbumSongDto) {
-    return `This action updates a #${id} albumSong`;
+    return this.albumSongRepository.createQueryBuilder("albumSong")
+    .where("albumSong.album = :albumId", { albumId: query.albumId })
+    .innerJoinAndSelect("albumSong.song", "song")
+    .select(["song.id", "song.name", "song.url", "song.view", "albumSong"])
+    .take(query.limit).skip(query.offset)
+    .orderBy({ "albumSong.createdAt": "DESC" })
+    .getManyAndCount();
   }
 
   remove(id: number) {

@@ -7,14 +7,35 @@ export const protobufPackage = "album";
 export interface Empty {
 }
 
+export interface Song {
+  id: string;
+  name: string;
+  url: string;
+  view: number;
+  createdAt: string;
+}
+
 export interface Album {
   id: string;
   name: string;
   createdAt: string;
 }
 
+export interface AlbumInfo {
+  id: string;
+  name: string;
+  createdAt: string;
+  songs: Song[];
+}
+
 export interface FindByIdDto {
   id: string;
+}
+
+export interface FindDetailDto {
+  id: string;
+  pageSize: number;
+  pageIndex: number;
 }
 
 export interface FindAllDto {
@@ -46,7 +67,7 @@ export interface AlbumServiceClient {
 
   findAll(request: FindAllDto): Observable<Albums>;
 
-  findById(request: FindByIdDto): Observable<Album>;
+  findById(request: FindDetailDto): Observable<AlbumInfo>;
 
   updateAlbum(request: UpdateAlbumDto): Observable<Album>;
 
@@ -58,7 +79,7 @@ export interface AlbumServiceController {
 
   findAll(request: FindAllDto): Promise<Albums> | Observable<Albums> | Albums;
 
-  findById(request: FindByIdDto): Promise<Album> | Observable<Album> | Album;
+  findById(request: FindDetailDto): Promise<AlbumInfo> | Observable<AlbumInfo> | AlbumInfo;
 
   updateAlbum(request: UpdateAlbumDto): Promise<Album> | Observable<Album> | Album;
 

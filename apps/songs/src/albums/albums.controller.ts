@@ -3,6 +3,7 @@ import { GrpcMethod, Payload } from '@nestjs/microservices';
 import { AlbumsService } from './albums.service';
 import { ValidateCreateAlbumDto } from './dto/create-album.dto';
 import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
+import { ValidateFindDetailDto } from '../../../../libs/common/src/dto/find-detail.dto'
 import {
   ValidateFindAllDto,
   ValidateFindByIdDto,
@@ -11,7 +12,7 @@ import {
 
 @Controller()
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) {}
+  constructor(private readonly albumsService: AlbumsService) { }
 
   @GrpcMethod('AlbumService', 'createAlbum')
   async create(@Payload() createAlbumDto: ValidateCreateAlbumDto) {
@@ -24,8 +25,8 @@ export class AlbumsController {
   }
 
   @GrpcMethod('AlbumService', 'findById')
-  findById(@Payload() findByIdDto: ValidateFindByIdDto) {
-    return tryCatchRpcException(this.albumsService.findById(findByIdDto.id));
+  findById(@Payload() findDetailDto: ValidateFindDetailDto) {
+    return tryCatchRpcException(this.albumsService.findById(findDetailDto));
   }
 
   @GrpcMethod('AlbumService', 'updateAlbum')

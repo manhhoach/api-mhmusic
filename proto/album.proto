@@ -5,20 +5,37 @@ package album;
 service AlbumService {
     rpc CreateAlbum(CreateAlbumDto) returns (Album){}
     rpc FindAll(FindAllDto) returns (Albums){}
-    rpc FindById(FindByIdDto) returns (Album){}
+    rpc FindById(FindDetailDto) returns (AlbumInfo){}
     rpc UpdateAlbum(UpdateAlbumDto) returns (Album){}
     rpc DeleteAlbum(FindByIdDto) returns (Empty){}
 }
 
 message Empty{}
-
+message Song{
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    int32 view = 4;
+    string createdAt = 5;
+}
 message Album{
     string id = 1;
     string name = 2;
     string createdAt = 3;
 }
+message AlbumInfo{
+    string id = 1;
+    string name = 2;
+    string createdAt = 3;
+    repeated Song songs = 4;
+}
 message FindByIdDto{
     string id = 1;
+}
+message FindDetailDto{
+    string id = 1;
+    int32 pageSize = 2;
+    int32 pageIndex = 3;
 }
 message FindAllDto{
     int32 pageSize = 1;

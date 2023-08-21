@@ -5,17 +5,20 @@ import {
   AlbumEntity,
   MESSAGES,
   ValidateFindAllDto,
+  ValidateFindDetailDto,
   getPagination,
   getPagingData,
 } from '@app/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AlbumSongsService } from '../album-songs/album-songs.service';
 
 @Injectable()
 export class AlbumsService {
   constructor(
     @InjectRepository(AlbumEntity)
     private readonly albumRepository: Repository<AlbumEntity>,
+    private readonly albumSongsService: AlbumSongsService
   ) {}
   create(createAlbumDto: ValidateCreateAlbumDto) {
     let data = new AlbumEntity();
@@ -43,10 +46,15 @@ export class AlbumsService {
     return getPagingData(data, findAllDto.pageIndex, limit);
   }
 
-  async findById(id: string) {
-    const data = await this.albumRepository.findOne({
-      where: { id: id },
-    });
+  async findById(findDetailDto: ValidateFindDetailDto) {
+    const { skip, limit } = getPagination(
+      findDetailDto.pageSize,
+      findDetailDto.pageIndex,
+    );
+    let data = await this.albumSongsService.findAllByAlbum({
+      skip, limit, albumId: findDetailDto.id
+    })
+    
     if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
     return data;
   }

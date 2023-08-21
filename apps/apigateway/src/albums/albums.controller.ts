@@ -46,8 +46,12 @@ export class AlbumsController implements OnModuleInit {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return tryCatchHttpException(this.albumsService.findById({ id }), HttpStatus.OK);
+  async findOne(@Param('id') id: string, @Query() query) {
+    const queryData = {
+      pageIndex: query.pageIndex ? query.pageIndex : PAGE_INDEX,
+      pageSize: query.pageSize ? query.pageSize : PAGE_SIZE
+    };
+    return tryCatchHttpException(this.albumsService.findById({ id, ...queryData }), HttpStatus.OK);
   }
 
   @Patch(':id')
