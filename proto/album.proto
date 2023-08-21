@@ -3,14 +3,25 @@ syntax = "proto3";
 package album;
 
 service AlbumService {
-    rpc CreateAlbum(CreateAlbumDto) returns (Album){}
+    rpc Create(CreateAlbumDto) returns (Album){}
     rpc FindAll(FindAllDto) returns (Albums){}
-    rpc FindById(FindDetailDto) returns (AlbumInfo){}
-    rpc UpdateAlbum(UpdateAlbumDto) returns (Album){}
-    rpc DeleteAlbum(FindByIdDto) returns (Empty){}
+    rpc Update(UpdateAlbumDto) returns (Album){}
+    rpc Delete(FindByIdDto) returns (Empty){}
+    
+    rpc FindSongsInAlbum(FindDetailDto) returns (SongsInAlbum){}
+    rpc AddSongInAlbum(AddSongDto) returns (Empty){}
+    rpc RemoveSongInAlbum(RemoveSongDto) returns(Empty){}
 }
 
-message Empty{}
+message AddSongDto{
+    string albumId = 1;
+    string songId = 2;
+}
+
+message RemoveSongDto{
+    string albumSongId = 1;
+}
+
 message Song{
     string id = 1;
     string name = 2;
@@ -18,44 +29,43 @@ message Song{
     int32 view = 4;
     string createdAt = 5;
 }
+
+message SongsInAlbum{
+    int32 totalItems = 1;
+    int32 totalPages = 2;
+    int32 currentPage = 3;
+    repeated Song data = 4;
+}
+message FindDetailDto{
+    string albumId = 1;
+    int32 pageSize = 2;
+    int32 pageIndex = 3;
+}
+
 message Album{
     string id = 1;
     string name = 2;
     string createdAt = 3;
-}
-message AlbumInfo{
-    string id = 1;
-    string name = 2;
-    string createdAt = 3;
-    repeated Song songs = 4;
-}
-message FindByIdDto{
-    string id = 1;
-}
-message FindDetailDto{
-    string id = 1;
-    int32 pageSize = 2;
-    int32 pageIndex = 3;
 }
 message FindAllDto{
     int32 pageSize = 1;
     int32 pageIndex = 2;
     string order = 3;
 }
-
 message CreateAlbumDto{
     string name = 1;
 }
-
 message UpdateAlbumDto{
     string id = 1;
     string name = 2;
 }
-
-
 message Albums{
     int32 totalItems = 1;
     int32 totalPages = 2;
     int32 currentPage = 3;
     repeated Album data = 4;
+}
+message Empty{}
+message FindByIdDto{
+    string id = 1;
 }

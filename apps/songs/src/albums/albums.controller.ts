@@ -3,18 +3,19 @@ import { GrpcMethod, Payload } from '@nestjs/microservices';
 import { AlbumsService } from './albums.service';
 import { ValidateCreateAlbumDto } from './dto/create-album.dto';
 import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
-import { ValidateFindDetailDto } from '../../../../libs/common/src/dto/find-detail.dto'
+import { ValidateFindDetailDto } from '@app/common'
 import {
   ValidateFindAllDto,
   ValidateFindByIdDto,
   tryCatchRpcException,
 } from '@app/common';
+import { ValidateAddSongDto } from './dto/add-song.dto';
 
 @Controller()
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) { }
 
-  @GrpcMethod('AlbumService', 'createAlbum')
+  @GrpcMethod('AlbumService', 'create')
   async create(@Payload() createAlbumDto: ValidateCreateAlbumDto) {
     return tryCatchRpcException(this.albumsService.create(createAlbumDto));
   }
@@ -24,20 +25,31 @@ export class AlbumsController {
     return tryCatchRpcException(this.albumsService.findAll(findAllDto));
   }
 
-  @GrpcMethod('AlbumService', 'findById')
-  findById(@Payload() findDetailDto: ValidateFindDetailDto) {
-    return tryCatchRpcException(this.albumsService.findById(findDetailDto));
-  }
 
-  @GrpcMethod('AlbumService', 'updateAlbum')
+  @GrpcMethod('AlbumService', 'update')
   update(@Payload() updateAlbumDto: ValidateUpdateAlbumDto) {
     return tryCatchRpcException(
       this.albumsService.update(updateAlbumDto.id, updateAlbumDto),
     );
   }
 
-  @GrpcMethod('AlbumService', 'deleteAlbum')
+  @GrpcMethod('AlbumService', 'delete')
   delete(@Payload() findByIdDto: ValidateFindByIdDto) {
     return tryCatchRpcException(this.albumsService.delete(findByIdDto.id));
   }
+
+
+  @GrpcMethod('AlbumService', 'addSongInAlbum')
+  addSongInAlbum(@Payload() addSongDto: ValidateAddSongDto) {
+    return tryCatchRpcException(this.albumsService.addSongInAlbum(addSongDto));
+  }
+
+  @GrpcMethod('AlbumService', 'findSongsInAlbum')
+  findSongsInAlbum(@Payload() findDetailDto: ValidateFindDetailDto) {
+    console.log('findDetailDto');
+    
+    return tryCatchRpcException(this.albumsService.findSongsInAlbum(findDetailDto));
+  }
+
+
 }

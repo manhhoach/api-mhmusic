@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { ValidateCreateAlbumDto } from './dto/create-album.dto';
 import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
 import {
   AlbumEntity,
+  AlbumSongEntity,
   MESSAGES,
   ValidateFindAllDto,
   ValidateFindDetailDto,
@@ -11,15 +12,14 @@ import {
 } from '@app/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AlbumSongsService } from '../album-songs/album-songs.service';
+import { ValidateAddSongDto } from './dto/add-song.dto';
 
 @Injectable()
 export class AlbumsService {
   constructor(
-    @InjectRepository(AlbumEntity)
-    private readonly albumRepository: Repository<AlbumEntity>,
-    private readonly albumSongsService: AlbumSongsService
-  ) {}
+    @InjectRepository(AlbumEntity) private readonly albumRepository: Repository<AlbumEntity>,
+    @InjectRepository(AlbumSongEntity) private readonly albumSongRepository: Repository<AlbumSongEntity>
+  ) { }
   create(createAlbumDto: ValidateCreateAlbumDto) {
     let data = new AlbumEntity();
     data = Object.assign(data, createAlbumDto);
@@ -46,16 +46,20 @@ export class AlbumsService {
     return getPagingData(data, findAllDto.pageIndex, limit);
   }
 
-  async findById(findDetailDto: ValidateFindDetailDto) {
+  async findSongsInAlbum(findDetailDto: ValidateFindDetailDto) {
     const { skip, limit } = getPagination(
       findDetailDto.pageSize,
       findDetailDto.pageIndex,
     );
-    let data = await this.albumSongsService.findAllByAlbum({
-      skip, limit, albumId: findDetailDto.id
-    })
-    
-    if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
+    let data = await this.albumSongRepository.createQueryBuilder("albumSong")
+      .where("albumSong.album = :albumId", { albumId: findDetailDto.id })
+      .innerJoinAndSelect("albumSong.song", "song")
+      .select(["song.id", "song.name", "song.url", "song.view", "albumSong"])
+      .take(limit).skip(skip)
+      .orderBy({ "albumSong.createdAt": "DESC" })
+      .getManyAndCount();
+    console.log(data);
+
     return data;
   }
 
@@ -74,5 +78,16 @@ export class AlbumsService {
     });
     if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
     return this.albumRepository.delete(id);
+  }
+
+  async addSongInAlbum(addSongDto: ValidateAddSongDto) {
+    try {
+      let data = { album: addSongDto.albumId, song: addSongDto.songId }
+      await this.albumSongRepository.save(Object.assign(new AlbumSongEntity(), data))
+      return null;
+    }
+    catch (error) {
+      throw new BadRequestException(MESSAGES.DUPLICATE_KEY)
+    }
   }
 }

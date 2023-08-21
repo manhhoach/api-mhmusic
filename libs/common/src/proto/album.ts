@@ -4,7 +4,13 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "album";
 
-export interface Empty {
+export interface AddSongDto {
+  albumId: string;
+  songId: string;
+}
+
+export interface RemoveSongDto {
+  albumSongId: string;
 }
 
 export interface Song {
@@ -15,27 +21,23 @@ export interface Song {
   createdAt: string;
 }
 
+export interface SongsInAlbum {
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  data: Song[];
+}
+
+export interface FindDetailDto {
+  albumId: string;
+  pageSize: number;
+  pageIndex: number;
+}
+
 export interface Album {
   id: string;
   name: string;
   createdAt: string;
-}
-
-export interface AlbumInfo {
-  id: string;
-  name: string;
-  createdAt: string;
-  songs: Song[];
-}
-
-export interface FindByIdDto {
-  id: string;
-}
-
-export interface FindDetailDto {
-  id: string;
-  pageSize: number;
-  pageIndex: number;
 }
 
 export interface FindAllDto {
@@ -60,35 +62,58 @@ export interface Albums {
   data: Album[];
 }
 
+export interface Empty {
+}
+
+export interface FindByIdDto {
+  id: string;
+}
+
 export const ALBUM_PACKAGE_NAME = "album";
 
 export interface AlbumServiceClient {
-  createAlbum(request: CreateAlbumDto): Observable<Album>;
+  create(request: CreateAlbumDto): Observable<Album>;
 
   findAll(request: FindAllDto): Observable<Albums>;
 
-  findById(request: FindDetailDto): Observable<AlbumInfo>;
+  update(request: UpdateAlbumDto): Observable<Album>;
 
-  updateAlbum(request: UpdateAlbumDto): Observable<Album>;
+  delete(request: FindByIdDto): Observable<Empty>;
 
-  deleteAlbum(request: FindByIdDto): Observable<Empty>;
+  findSongsInAlbum(request: FindDetailDto): Observable<SongsInAlbum>;
+
+  addSongInAlbum(request: AddSongDto): Observable<Empty>;
+
+  removeSongInAlbum(request: RemoveSongDto): Observable<Empty>;
 }
 
 export interface AlbumServiceController {
-  createAlbum(request: CreateAlbumDto): Promise<Album> | Observable<Album> | Album;
+  create(request: CreateAlbumDto): Promise<Album> | Observable<Album> | Album;
 
   findAll(request: FindAllDto): Promise<Albums> | Observable<Albums> | Albums;
 
-  findById(request: FindDetailDto): Promise<AlbumInfo> | Observable<AlbumInfo> | AlbumInfo;
+  update(request: UpdateAlbumDto): Promise<Album> | Observable<Album> | Album;
 
-  updateAlbum(request: UpdateAlbumDto): Promise<Album> | Observable<Album> | Album;
+  delete(request: FindByIdDto): Promise<Empty> | Observable<Empty> | Empty;
 
-  deleteAlbum(request: FindByIdDto): Promise<Empty> | Observable<Empty> | Empty;
+  findSongsInAlbum(request: FindDetailDto): Promise<SongsInAlbum> | Observable<SongsInAlbum> | SongsInAlbum;
+
+  addSongInAlbum(request: AddSongDto): Promise<Empty> | Observable<Empty> | Empty;
+
+  removeSongInAlbum(request: RemoveSongDto): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function AlbumServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createAlbum", "findAll", "findById", "updateAlbum", "deleteAlbum"];
+    const grpcMethods: string[] = [
+      "create",
+      "findAll",
+      "update",
+      "delete",
+      "findSongsInAlbum",
+      "addSongInAlbum",
+      "removeSongInAlbum",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("AlbumService", method)(constructor.prototype[method], method, descriptor);

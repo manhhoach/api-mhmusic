@@ -29,7 +29,7 @@ export class AlbumsController implements OnModuleInit {
   }
   @Post()
   create(@Body() createAlbumDto) {
-    return tryCatchHttpException(this.albumsService.createAlbum(createAlbumDto), HttpStatus.CREATED)
+    return tryCatchHttpException(this.albumsService.create(createAlbumDto), HttpStatus.CREATED)
   }
 
   @Get()
@@ -46,22 +46,28 @@ export class AlbumsController implements OnModuleInit {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Query() query) {
+  async findSongsInAlbum(@Param('id') id: string, @Query() query) {
     const queryData = {
       pageIndex: query.pageIndex ? query.pageIndex : PAGE_INDEX,
       pageSize: query.pageSize ? query.pageSize : PAGE_SIZE
     };
-    return tryCatchHttpException(this.albumsService.findById({ id, ...queryData }), HttpStatus.OK);
+    return tryCatchHttpException(this.albumsService.findSongsInAlbum({ albumId:id, ...queryData }), HttpStatus.OK);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateAlbumDto) {
-    return tryCatchHttpException(this.albumsService.updateAlbum({ id, ...updateAlbumDto }), HttpStatus.OK);
+    return tryCatchHttpException(this.albumsService.update({ id, ...updateAlbumDto }), HttpStatus.OK);
 
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return tryCatchHttpException(this.albumsService.deleteAlbum({ id }), HttpStatus.OK);
+    return tryCatchHttpException(this.albumsService.delete({ id }), HttpStatus.OK);
+  }
+
+  @Post('/add-song')
+  async addSongInAlbum(@Body() addSongDto){
+    return tryCatchHttpException(this.albumsService.addSongInAlbum(addSongDto), HttpStatus.CREATED);
+
   }
 }
