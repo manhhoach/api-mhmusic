@@ -13,7 +13,7 @@ import {
 export class SingersController {
   constructor(private readonly singersService: SingersService) {}
 
-  @GrpcMethod('SingerService', 'createSinger')
+  @GrpcMethod('SingerService', 'create')
   async create(@Payload() createSingerDto: ValidateCreateSingerDto) {
     return tryCatchRpcException(this.singersService.create(createSingerDto));
   }
@@ -28,14 +28,14 @@ export class SingersController {
     return tryCatchRpcException(this.singersService.findById(findByIdDto.id));
   }
 
-  @GrpcMethod('SingerService', 'updateSinger')
+  @GrpcMethod('SingerService', 'update')
   update(@Payload() updateSingerDto: ValidateUpdateSingerDto) {
     return tryCatchRpcException(
       this.singersService.update(updateSingerDto.id, updateSingerDto),
     );
   }
 
-  @GrpcMethod('SingerService', 'deleteSinger')
+  @GrpcMethod('SingerService', 'delete')
   delete(@Payload() findByIdDto: ValidateFindByIdDto) {
     return tryCatchRpcException(this.singersService.delete(findByIdDto.id));
   }

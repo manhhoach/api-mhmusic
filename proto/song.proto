@@ -3,11 +3,11 @@ syntax="proto3";
 package song;
 
 service SongService{
-    rpc CreateSong(CreateSongDto) returns (Song){}
+    rpc Create(CreateSongDto) returns (Song){}
     rpc FindAll(FindAllDto) returns (SongInfos){}
     rpc FindById(FindByIdDto) returns (SongInfo){}
-    rpc UpdateSong(UpdateSongDto) returns (SongInfo){}
-    rpc DeleteSong(FindByIdDto) returns (Empty){}
+    rpc Update(UpdateSongDto) returns (SongInfo){}
+    rpc Delete(FindByIdDto) returns (Empty){}
 }
 
 

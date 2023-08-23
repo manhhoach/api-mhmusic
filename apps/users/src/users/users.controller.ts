@@ -11,7 +11,7 @@ import { tryCatchRpcException } from '@app/common';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @GrpcMethod('UserService', 'CreateUser')
+  @GrpcMethod('UserService', 'Create')
   create(@Payload() createUserDto: ValidateCreateUserDto) {
     return tryCatchRpcException(this.usersService.create(createUserDto));
   }
@@ -30,7 +30,7 @@ export class UsersController {
     return tryCatchRpcException(this.usersService.findOne(findByIdDto));
   }
 
-  @GrpcMethod('UserService', 'UpdateUser')
+  @GrpcMethod('UserService', 'Update')
   update(@Payload() updateUserDto: ValidateUpdateUserDto) {
     return tryCatchRpcException(
       this.usersService.update(updateUserDto.id, updateUserDto),

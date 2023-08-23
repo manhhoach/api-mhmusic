@@ -3,10 +3,10 @@ syntax = "proto3";
 package user;
 
 service UserService {
-    rpc CreateUser(CreateUserDto) returns (User){}
+    rpc Create(CreateUserDto) returns (User){}
     rpc FindByEmail(FindByEmailDto) returns (User){}
     rpc FindById(FindByIdDto) returns (User){}
-    rpc UpdateUser(UpdateUserDto) returns (User){}
+    rpc Update(UpdateUserDto) returns (User){}
     rpc ChangePassword(ChangePasswordDto) returns (Empty){}
 }
 

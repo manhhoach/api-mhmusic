@@ -42,32 +42,32 @@ export interface Singers {
 export const SINGER_PACKAGE_NAME = "singer";
 
 export interface SingerServiceClient {
-  createSinger(request: CreateSingerDto): Observable<Singer>;
+  create(request: CreateSingerDto): Observable<Singer>;
 
   findAll(request: FindAllDto): Observable<Singers>;
 
   findById(request: FindByIdDto): Observable<Singer>;
 
-  updateSinger(request: UpdateSingerDto): Observable<Singer>;
+  update(request: UpdateSingerDto): Observable<Singer>;
 
-  deleteSinger(request: FindByIdDto): Observable<Empty>;
+  delete(request: FindByIdDto): Observable<Empty>;
 }
 
 export interface SingerServiceController {
-  createSinger(request: CreateSingerDto): Promise<Singer> | Observable<Singer> | Singer;
+  create(request: CreateSingerDto): Promise<Singer> | Observable<Singer> | Singer;
 
   findAll(request: FindAllDto): Promise<Singers> | Observable<Singers> | Singers;
 
   findById(request: FindByIdDto): Promise<Singer> | Observable<Singer> | Singer;
 
-  updateSinger(request: UpdateSingerDto): Promise<Singer> | Observable<Singer> | Singer;
+  update(request: UpdateSingerDto): Promise<Singer> | Observable<Singer> | Singer;
 
-  deleteSinger(request: FindByIdDto): Promise<Empty> | Observable<Empty> | Empty;
+  delete(request: FindByIdDto): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function SingerServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createSinger", "findAll", "findById", "updateSinger", "deleteSinger"];
+    const grpcMethods: string[] = ["create", "findAll", "findById", "update", "delete"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("SingerService", method)(constructor.prototype[method], method, descriptor);

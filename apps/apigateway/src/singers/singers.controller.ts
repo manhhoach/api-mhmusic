@@ -30,7 +30,7 @@ export class SingersController implements OnModuleInit {
 
   @Post()
   create(@Body() createSingerDto) {
-    return tryCatchHttpException(this.singersService.createSinger(createSingerDto), HttpStatus.CREATED)
+    return tryCatchHttpException(this.singersService.create(createSingerDto), HttpStatus.CREATED)
   }
 
   @Get()
@@ -46,17 +46,17 @@ export class SingersController implements OnModuleInit {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string) {
     return tryCatchHttpException(this.singersService.findById({ id }), HttpStatus.OK)
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateSingerDto) {
-    return tryCatchHttpException(this.singersService.updateSinger({ id, ...updateSingerDto }), HttpStatus.OK)
+  update(@Param('id') id: string, @Body() updateSingerDto) {
+    return tryCatchHttpException(this.singersService.update({ id, ...updateSingerDto }), HttpStatus.OK)
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return tryCatchHttpException(this.singersService.deleteSinger({ id }), HttpStatus.OK)
+  remove(@Param('id') id: string) {
+    return tryCatchHttpException(this.singersService.delete({ id }), HttpStatus.OK)
   }
 }

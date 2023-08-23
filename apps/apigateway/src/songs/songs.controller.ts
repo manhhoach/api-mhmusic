@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, OnModuleInit, Query, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, OnModuleInit, Query, NotFoundException, HttpStatus } from '@nestjs/common';
 import { SongServiceClient, SONG_SERVICE_NAME } from '@app/common/proto/song';
 import { ClientGrpc } from '@nestjs/microservices';
-import { PAGE_INDEX, PAGE_SIZE, ORDER } from '@app/common';
+import { PAGE_INDEX, PAGE_SIZE, ORDER, responseSucess, tryCatchHttpException } from '@app/common';
 import { lastValueFrom } from 'rxjs';
 
 @Controller('songs')
@@ -15,8 +15,9 @@ export class SongsController implements OnModuleInit {
 
   @Post()
   create(@Body() createSongDto) {
-    return this.songsService.createSong(createSongDto);
+    return tryCatchHttpException(this.songsService.create(createSongDto), HttpStatus.CREATED)
   }
+
 
   @Get()
   async findAll(@Query() query) {
@@ -28,33 +29,21 @@ export class SongsController implements OnModuleInit {
     const data = await lastValueFrom(this.songsService.findAll(queryData));
     data.data = data.data ? data.data : [];
 
-    return data;
+    return responseSucess(HttpStatus.OK, data);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    try {
-      return this.songsService.findById({ id });
-    } catch (err) {
-      throw new NotFoundException(err.details);
-    }
+    return tryCatchHttpException(this.songsService.findById({ id }), HttpStatus.OK)
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateSongDto) {
-    try {
-      return this.songsService.updateSong({ id, ...updateSongDto });
-    } catch (err) {
-      throw new NotFoundException(err.details);
-    }
+  update(@Param('id') id: string, @Body() updateSongDto) {
+    return tryCatchHttpException(this.songsService.update({ id, ...updateSongDto }), HttpStatus.OK)
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    try {
-      return this.songsService.deleteSong({ id });
-    } catch (err) {
-      throw new NotFoundException(err.details);
-    }
+  remove(@Param('id') id: string) {
+    return tryCatchHttpException(this.songsService.delete({ id }), HttpStatus.OK)
   }
 }

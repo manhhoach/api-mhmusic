@@ -3,11 +3,11 @@ syntax = "proto3";
 package singer;
 
 service SingerService {
-    rpc CreateSinger(CreateSingerDto) returns (Singer){}
+    rpc Create(CreateSingerDto) returns (Singer){}
     rpc FindAll(FindAllDto) returns (Singers){}
     rpc FindById(FindByIdDto) returns (Singer){}
-    rpc UpdateSinger(UpdateSingerDto) returns (Singer){}
-    rpc DeleteSinger(FindByIdDto) returns (Empty){}
+    rpc Update(UpdateSingerDto) returns (Singer){}
+    rpc Delete(FindByIdDto) returns (Empty){}
 }
 
 message Empty{}

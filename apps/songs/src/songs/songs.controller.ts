@@ -8,7 +8,7 @@ import { ValidateUpdateSongDto } from './dto/update-song.dto';
 @Controller()
 export class SongsController {
   constructor(private readonly songsService: SongsService) {}
-  @GrpcMethod('SongService', 'createSong')
+  @GrpcMethod('SongService', 'create')
   async create(@Payload() createSongDto: ValidateCreateSongDto) {
     return tryCatchRpcException(this.songsService.create(createSongDto));
   }
@@ -23,12 +23,12 @@ export class SongsController {
     return tryCatchRpcException(this.songsService.findById(findByIdDto.id));
   }
 
-  @GrpcMethod('SongService', 'updateSong')
+  @GrpcMethod('SongService', 'update')
   update(@Payload() updateSongDto: ValidateUpdateSongDto) {
     return tryCatchRpcException(this.songsService.update(updateSongDto.id, updateSongDto),);
   }
 
-  @GrpcMethod('SongService', 'deleteSong')
+  @GrpcMethod('SongService', 'delete')
   delete(@Payload() findByIdDto: ValidateFindByIdDto) {
     return tryCatchRpcException(this.songsService.delete(findByIdDto.id));
   }

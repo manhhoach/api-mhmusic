@@ -47,32 +47,32 @@ export interface Users {
 export const USER_PACKAGE_NAME = "user";
 
 export interface UserServiceClient {
-  createUser(request: CreateUserDto): Observable<User>;
+  create(request: CreateUserDto): Observable<User>;
 
   findByEmail(request: FindByEmailDto): Observable<User>;
 
   findById(request: FindByIdDto): Observable<User>;
 
-  updateUser(request: UpdateUserDto): Observable<User>;
+  update(request: UpdateUserDto): Observable<User>;
 
   changePassword(request: ChangePasswordDto): Observable<Empty>;
 }
 
 export interface UserServiceController {
-  createUser(request: CreateUserDto): Promise<User> | Observable<User> | User;
+  create(request: CreateUserDto): Promise<User> | Observable<User> | User;
 
   findByEmail(request: FindByEmailDto): Promise<User> | Observable<User> | User;
 
   findById(request: FindByIdDto): Promise<User> | Observable<User> | User;
 
-  updateUser(request: UpdateUserDto): Promise<User> | Observable<User> | User;
+  update(request: UpdateUserDto): Promise<User> | Observable<User> | User;
 
   changePassword(request: ChangePasswordDto): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function UserServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createUser", "findByEmail", "findById", "updateUser", "changePassword"];
+    const grpcMethods: string[] = ["create", "findByEmail", "findById", "update", "changePassword"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);

@@ -2,12 +2,23 @@
 // format response
 singer - done 
 album - done v1
+song - done v1
+
+user - done
 auth - done 
+
 uploads - done
 
 task tiep theo:
 get, add, remove song in album
-format response tiep
+
 
 features
 search by elastic
+
+
+
+completed services:
+auth
+singer
+upload

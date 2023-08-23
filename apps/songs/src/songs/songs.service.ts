@@ -47,6 +47,7 @@ export class SongsService {
     const data = await this.songRepository.findOne({
       where: { id: id },
     });
+    
     if (!data) throw new NotFoundException();
     return data;
   }

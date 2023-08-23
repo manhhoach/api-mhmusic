@@ -1,6 +1,4 @@
 import {
-  BadRequestException,
-  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -8,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
-import { MESSAGES, tryCatchHttpException, tryCatchRpcException } from '@app/common';
+import { MESSAGES} from '@app/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
 import { compareSync } from 'bcrypt';
@@ -34,7 +32,7 @@ export class AuthService implements OnModuleInit {
   }
 
   register(createUserDto) {
-    return this.usersService.createUser(createUserDto)
+    return this.usersService.create(createUserDto)
   }
 
   async login(loginDto: LoginDto) {
