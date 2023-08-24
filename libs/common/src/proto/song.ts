@@ -13,7 +13,7 @@ export interface Song {
   id: string;
   name: string;
   url: string;
-  view: number;
+  views: number;
   createdAt: string;
 }
 
@@ -21,7 +21,7 @@ export interface SongInfo {
   id: string;
   name: string;
   url: string;
-  view: number;
+  views: number;
   createdAt: string;
   singer: Singer | undefined;
 }
@@ -71,6 +71,8 @@ export interface SongServiceClient {
   update(request: UpdateSongDto): Observable<SongInfo>;
 
   delete(request: FindByIdDto): Observable<Empty>;
+
+  increViews(request: FindByIdDto): Observable<Empty>;
 }
 
 export interface SongServiceController {
@@ -83,11 +85,13 @@ export interface SongServiceController {
   update(request: UpdateSongDto): Promise<SongInfo> | Observable<SongInfo> | SongInfo;
 
   delete(request: FindByIdDto): Promise<Empty> | Observable<Empty> | Empty;
+
+  increViews(request: FindByIdDto): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function SongServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["create", "findAll", "findById", "update", "delete"];
+    const grpcMethods: string[] = ["create", "findAll", "findById", "update", "delete", "increViews"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("SongService", method)(constructor.prototype[method], method, descriptor);

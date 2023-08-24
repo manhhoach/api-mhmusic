@@ -9,8 +9,9 @@ export const tryCatchHttpException = async (task: Observable<any> | Promise<any>
     let data = await task;
     return responseSucess(statusCode, data)
   } catch (err) {
-    let e = err.response ? err.response : JSON.parse(err.details)
-    return responseError(e)
+
+    let error = err.details ? JSON.parse(err.details) : err.response;
+    return responseError(error)
   }
 };
 

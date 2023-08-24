@@ -10,6 +10,7 @@ import {
   tryCatchRpcException,
 } from '@app/common';
 import { ValidateAddSongDto } from './dto/add-song.dto';
+import { ValidateRemoveSongDto } from './dto/remove-song.dto';
 
 @Controller()
 export class AlbumsController {
@@ -46,10 +47,11 @@ export class AlbumsController {
 
   @GrpcMethod('AlbumService', 'findSongsInAlbum')
   findSongsInAlbum(@Payload() findDetailDto: ValidateFindDetailDto) {
-    console.log('findDetailDto');
-    
     return tryCatchRpcException(this.albumsService.findSongsInAlbum(findDetailDto));
   }
-
+  @GrpcMethod('AlbumService', 'removeSongInAlbum')
+  removeSongInAlbum(@Payload() removeSongDto: ValidateRemoveSongDto) {
+    return tryCatchRpcException(this.albumsService.removeSongInAlbum(removeSongDto));
+  }
 
 }

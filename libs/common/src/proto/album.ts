@@ -17,8 +17,9 @@ export interface Song {
   id: string;
   name: string;
   url: string;
-  view: number;
+  views: number;
   createdAt: string;
+  albumSongId: string;
 }
 
 export interface SongsInAlbum {

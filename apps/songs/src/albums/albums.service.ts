@@ -13,6 +13,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ValidateAddSongDto } from './dto/add-song.dto';
+import { ValidateRemoveSongDto } from './dto/remove-song.dto';
 
 @Injectable()
 export class AlbumsService {
@@ -51,16 +52,21 @@ export class AlbumsService {
       findDetailDto.pageSize,
       findDetailDto.pageIndex,
     );
-    let data = await this.albumSongRepository.createQueryBuilder("albumSong")
-      .where("albumSong.album = :albumId", { albumId: findDetailDto.id })
+    let data: any = await this.albumSongRepository.createQueryBuilder("albumSong")
+      .where("albumSong.album = :albumId", { albumId: findDetailDto.albumId })
       .innerJoinAndSelect("albumSong.song", "song")
-      .select(["song.id", "song.name", "song.url", "song.view", "albumSong"])
+      .select(["song.id", "song.name", "song.url", "song.views", "song.createdAt", "albumSong"])
       .take(limit).skip(skip)
       .orderBy({ "albumSong.createdAt": "DESC" })
       .getManyAndCount();
-    console.log(data);
-
-    return data;
+    data[0] = data[0].map(e=>{
+      return {
+        ...e.song,
+        albumSongId: e.id
+      }
+    })
+    let response = getPagingData(data, findDetailDto.pageIndex, limit)
+    return response;
   }
 
   async update(id: string, updateAlbumDto: ValidateUpdateAlbumDto) {
@@ -89,5 +95,12 @@ export class AlbumsService {
     catch (error) {
       throw new BadRequestException(MESSAGES.DUPLICATE_KEY)
     }
+  }
+  async removeSongInAlbum(removeSongDto: ValidateRemoveSongDto){
+    const data = await this.albumSongRepository.findOne({
+      where: { id: removeSongDto.albumSongId },
+    });
+    if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
+    return this.albumSongRepository.delete(removeSongDto.albumSongId );
   }
 }

@@ -8,6 +8,8 @@ service SongService{
     rpc FindById(FindByIdDto) returns (SongInfo){}
     rpc Update(UpdateSongDto) returns (SongInfo){}
     rpc Delete(FindByIdDto) returns (Empty){}
+
+    rpc IncreViews(FindByIdDto) returns (Empty){}
 }
 
 
@@ -19,14 +21,14 @@ message Song{
     string id = 1;
     string name = 2;
     string url = 3;
-    int32 view = 4;
+    int32 views = 4;
     string createdAt = 5;
 }
 message SongInfo{
     string id = 1;
     string name = 2;
     string url = 3;
-    int32 view = 4;
+    int32 views = 4;
     string createdAt = 5;
     Singer singer = 6;
 }

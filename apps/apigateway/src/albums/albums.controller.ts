@@ -10,7 +10,6 @@ import {
   Inject,
   OnModuleInit,
   Query,
-  NotFoundException,
   HttpStatus,
 } from '@nestjs/common';
 import { AlbumServiceClient, ALBUM_SERVICE_NAME } from '@app/common/proto/album';
@@ -35,29 +34,27 @@ export class AlbumsController implements OnModuleInit {
   @Get()
   async findAll(@Query() query) {
     const queryData = {
-      pageIndex: query.pageIndex ? query.pageIndex : PAGE_INDEX,
-      pageSize: query.pageSize ? query.pageSize : PAGE_SIZE,
+      pageIndex: query.pageIndex ? parseInt(query.pageIndex) : PAGE_INDEX,
+      pageSize: query.pageSize ? parseInt(query.pageSize) : PAGE_SIZE,
       order: query.order ? query.order : ORDER,
     };
     const data = await lastValueFrom(this.albumsService.findAll(queryData));
     data.data = data.data ? data.data : [];
 
-   return responseSucess(HttpStatus.OK, data);
+    return responseSucess(HttpStatus.OK, data);
   }
 
-  @Get(':id')
-  async findSongsInAlbum(@Param('id') id: string, @Query() query) {
-    const queryData = {
-      pageIndex: query.pageIndex ? query.pageIndex : PAGE_INDEX,
-      pageSize: query.pageSize ? query.pageSize : PAGE_SIZE
-    };
-    return tryCatchHttpException(this.albumsService.findSongsInAlbum({ albumId:id, ...queryData }), HttpStatus.OK);
-  }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateAlbumDto) {
     return tryCatchHttpException(this.albumsService.update({ id, ...updateAlbumDto }), HttpStatus.OK);
 
+  }
+
+
+  @Delete('/remove-song/:id')
+  async removeSongInAlbum(@Param('id') id: string) {
+    return tryCatchHttpException(this.albumsService.removeSongInAlbum({albumSongId: id}), HttpStatus.OK);
   }
 
   @Delete(':id')
@@ -66,8 +63,20 @@ export class AlbumsController implements OnModuleInit {
   }
 
   @Post('/add-song')
-  async addSongInAlbum(@Body() addSongDto){
+  async addSongInAlbum(@Body() addSongDto) {
     return tryCatchHttpException(this.albumsService.addSongInAlbum(addSongDto), HttpStatus.CREATED);
 
   }
+
+  @Get(':id')
+  async findSongsInAlbum(@Param('id') id: string, @Query() query) {
+    const payload = {
+      albumId: id,
+      pageIndex: query.pageIndex ? parseInt(query.pageIndex) : PAGE_INDEX,
+      pageSize: query.pageSize ? parseInt(query.pageSize) : PAGE_SIZE
+    };
+    
+    return tryCatchHttpException(this.albumsService.findSongsInAlbum(payload), HttpStatus.OK);
+  }
+
 }

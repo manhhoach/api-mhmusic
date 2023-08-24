@@ -67,4 +67,8 @@ export class SongsService {
     if (!data) throw new NotFoundException();
     return this.songRepository.delete(id);
   }
+
+  async increViews(id: string){
+    
+  }
 }

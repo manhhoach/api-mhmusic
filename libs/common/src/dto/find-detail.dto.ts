@@ -2,7 +2,7 @@ import { IsNumber, IsUUID } from 'class-validator';
 
 export class ValidateFindDetailDto {
   @IsUUID()
-  id: string;
+  albumId: string;
 
   @IsNumber()
   pageSize: number;

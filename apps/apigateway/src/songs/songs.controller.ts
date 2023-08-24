@@ -37,6 +37,13 @@ export class SongsController implements OnModuleInit {
     return tryCatchHttpException(this.songsService.findById({ id }), HttpStatus.OK)
   }
 
+
+  @Patch('/incre-views/:id')
+  increViews(@Param('id') id: string) {
+    return tryCatchHttpException(this.songsService.increViews({id}), HttpStatus.OK)
+  }
+
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSongDto) {
     return tryCatchHttpException(this.songsService.update({ id, ...updateSongDto }), HttpStatus.OK)
@@ -46,4 +53,5 @@ export class SongsController implements OnModuleInit {
   remove(@Param('id') id: string) {
     return tryCatchHttpException(this.songsService.delete({ id }), HttpStatus.OK)
   }
+
 }

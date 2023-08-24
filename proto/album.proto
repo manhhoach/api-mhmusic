@@ -26,8 +26,9 @@ message Song{
     string id = 1;
     string name = 2;
     string url = 3;
-    int32 view = 4;
+    int32 views = 4;
     string createdAt = 5;
+    string albumSongId = 6;
 }
 
 message SongsInAlbum{
@@ -65,7 +66,8 @@ message Albums{
     int32 currentPage = 3;
     repeated Album data = 4;
 }
-message Empty{}
+message Empty{
+}
 message FindByIdDto{
     string id = 1;
 }

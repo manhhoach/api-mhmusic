@@ -32,4 +32,9 @@ export class SongsController {
   delete(@Payload() findByIdDto: ValidateFindByIdDto) {
     return tryCatchRpcException(this.songsService.delete(findByIdDto.id));
   }
+
+  @GrpcMethod('SongService', 'increViews')
+  increViews(@Payload() findByIdDto: ValidateFindByIdDto) {
+    return tryCatchRpcException(this.songsService.increViews(findByIdDto.id));
+  }
 }
