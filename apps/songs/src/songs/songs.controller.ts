@@ -4,6 +4,8 @@ import { GrpcMethod, Payload } from '@nestjs/microservices';
 import { ValidateFindAllDto, ValidateFindByIdDto, tryCatchRpcException } from '@app/common';
 import { ValidateCreateSongDto } from './dto/create-song.dto';
 import { ValidateUpdateSongDto } from './dto/update-song.dto';
+import { ValidateUpdateRecentSongsDto } from './dto/update-recent-song.dto';
+import { ValidateGetRecentSongsDto } from './dto/get-recent-songs.dto';
 
 @Controller()
 export class SongsController {
@@ -41,5 +43,15 @@ export class SongsController {
   @GrpcMethod('SongService', 'getChart')
   getChart(@Payload() empty: {}){
     return tryCatchRpcException(this.songsService.getChart());
+  }
+
+  @GrpcMethod('SongService', 'updateRecentSongs')
+  updateRecentSongs(@Payload() updateRecentSongsDto: ValidateUpdateRecentSongsDto){
+    return tryCatchRpcException(this.songsService.updateRecentSongs(updateRecentSongsDto));
+  }
+
+  @GrpcMethod('SongService', 'getRecentSongs')
+  getRecentSongs(@Payload() getRecentSongsDto: ValidateGetRecentSongsDto){
+    return tryCatchRpcException(this.songsService.getRecentSongs(getRecentSongsDto));
   }
 }

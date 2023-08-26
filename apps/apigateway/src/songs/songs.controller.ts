@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, OnModuleInit, Query, NotFoundException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, OnModuleInit, Query, Request, HttpStatus, UseGuards } from '@nestjs/common';
 import { SongServiceClient, SONG_SERVICE_NAME } from '@app/common/proto/song';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PAGE_INDEX, PAGE_SIZE, ORDER, responseSucess, tryCatchHttpException } from '@app/common';
 import { lastValueFrom } from 'rxjs';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('songs')
 export class SongsController implements OnModuleInit {
@@ -33,8 +34,14 @@ export class SongsController implements OnModuleInit {
   }
 
   @Get('/chart')
-  getChart(){
+  getChart() {
     return tryCatchHttpException(this.songsService.getChart({}), HttpStatus.OK)
+  }
+
+  @Get('/recent-songs')
+  @UseGuards(AuthGuard)
+  getRecentSongs(@Request() req) {
+    return tryCatchHttpException(this.songsService.getRecentSongs({userId: req.user.id}), HttpStatus.OK)
   }
 
   @Get(':id')
@@ -42,10 +49,15 @@ export class SongsController implements OnModuleInit {
     return tryCatchHttpException(this.songsService.findById({ id }), HttpStatus.OK)
   }
 
-
   @Patch('/incre-views/:id')
   increViews(@Param('id') id: string) {
-    return tryCatchHttpException(this.songsService.increViews({id}), HttpStatus.OK)
+    return tryCatchHttpException(this.songsService.increViews({ id }), HttpStatus.OK)
+  }
+
+  @Get('/recent-songs')
+  @UseGuards(AuthGuard)
+  updateRecentSongs(@Body() body, @Request() req) {
+    return tryCatchHttpException(this.songsService.updateRecentSongs({userId: req.user.id, songId: body.songId}), HttpStatus.OK)
   }
 
 

@@ -1,13 +1,11 @@
-import { MESSAGES, responseSucess, tryCatchHttpException } from '@app/common';
+import { responseSucess, tryCatchHttpException } from '@app/common';
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
   HttpStatus,
   Inject,
   Injectable,
-  NotFoundException,
   OnModuleInit,
   Patch,
   Request,
@@ -16,7 +14,7 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { AuthGuard } from './../auth/auth.guard';
 import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
-import { lastValueFrom } from 'rxjs';
+
 
 @Injectable()
 @UseGuards(AuthGuard)

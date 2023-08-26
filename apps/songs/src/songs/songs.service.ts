@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MESSAGES, REDIS_CONSTANTS } from '@app/common';
 import * as macAddress from 'macaddress';
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 import {
   SongEntity,
@@ -15,6 +15,8 @@ import {
 } from '@app/common';
 import { RedisService } from '../redis/redis.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { ValidateUpdateRecentSongsDto } from './dto/update-recent-song.dto';
+import { ValidateGetRecentSongsDto } from './dto/get-recent-songs.dto';
 
 @Injectable()
 export class SongsService {
@@ -87,37 +89,33 @@ export class SongsService {
 
   async getChart() {
     try {
-      console.log(moment);
-      
-      // let topSongs = await this.songRepository.find({
-      //   take: REDIS_CONSTANTS.NUMBER_SONG_IN_CHARTS,
-      //   order: { "views": "DESC" }
-      // });
-      // let arr_time = [];
-      // for (let i = 0; i < 12; i++) {
-      //   arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(REDIS_CONSTANTS.STEP_TIME * i, 'hours').format(REDIS_CONSTANTS.FORMAT_TIME));
-      // }
-      // let data = await Promise.all(arr_time.map(async (time) => {
-      //   let hourlyViews = await Promise.all(topSongs.map(async (song) => {
-      //     let views = await this.redisService.get(`${time}-${REDIS_CONSTANTS.SONG_ID}${song.id}`);
-      //     return {
-      //       id: song.id,
-      //       name: song.name,
-      //       percentViews: views ? parseInt(views) : 0
-      //     };
-      //   }));
-      //   let totalViews = hourlyViews.reduce((current, next) => current + next.percentViews, 0);
-      //   if (totalViews !== 0)
-      //     hourlyViews = hourlyViews.map((v => {
-      //       return Object.assign(v, { percentViews: Math.round(v.percentViews * 100 / totalViews) });
-      //     }));
-      //   return {
-      //     time: time, hourlyViews: hourlyViews
-      //   };
-      // }))
-      // console.log(data);
-
-      // return { data }
+      let topSongs = await this.songRepository.find({
+        take: REDIS_CONSTANTS.NUMBER_SONG_IN_CHARTS,
+        order: { "views": "DESC" }
+      });
+      let arr_time = [];
+      for (let i = 0; i < 12; i++) {
+        arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(REDIS_CONSTANTS.STEP_TIME * i, 'hours').format(REDIS_CONSTANTS.FORMAT_TIME));
+      }
+      let data = await Promise.all(arr_time.map(async (time) => {
+        let hourlyViews = await Promise.all(topSongs.map(async (song) => {
+          let views = await this.redisService.get(`${time}-${REDIS_CONSTANTS.SONG_ID}${song.id}`);
+          return {
+            id: song.id,
+            name: song.name,
+            percentViews: views ? parseInt(views) : 0
+          };
+        }));
+        let totalViews = hourlyViews.reduce((current, next) => current + next.percentViews, 0);
+        if (totalViews !== 0)
+          hourlyViews = hourlyViews.map((v => {
+            return Object.assign(v, { percentViews: Math.round(v.percentViews * 100 / totalViews) });
+          }));
+        return {
+          time: time, hourlyViews: hourlyViews
+        };
+      }))
+      return { data }
     }
     catch (err) {
       console.log(err);
@@ -143,5 +141,13 @@ export class SongsService {
     await Promise.all(songs.map(async (song) => {
       await this.redisService.setKeyWithExpiredTime(`${time}-${REDIS_CONSTANTS.SONG_ID}${song.id}`, song.views, REDIS_CONSTANTS.EXPIRED_TIME_ELEMENT_CHART);
     }));
+  }
+
+  async updateRecentSongs(updateRecentSongsDto: ValidateUpdateRecentSongsDto){
+
+  }
+
+  async getRecentSongs(getRecentSongsDto: ValidateGetRecentSongsDto){
+
   }
 }

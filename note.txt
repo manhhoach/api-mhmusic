@@ -1,17 +1,5 @@
-
-// format response
-singer - done 
-album - done
-song - done v1
-
-user - done 
-auth - done 
-
-uploads - done
-
 //task tiep theo:
-song v2: update views, get chart
-user: get recent songs
+song: get recent songs
 
 //features
 search by elastic
@@ -23,3 +11,4 @@ auth
 singer
 upload
 album
+user

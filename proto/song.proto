@@ -11,6 +11,16 @@ service SongService{
 
     rpc IncreViews(FindByIdDto) returns (Empty){}
     rpc GetChart(Empty) returns (Chart){}
+    rpc GetRecentSongs(UserId) returns (RecentSongs){}
+    rpc UpdateRecentSongs(UpdateRecentSongsDto) returns (Empty){}
+}
+
+message UserId{
+    string userId = 1;
+}
+message UpdateRecentSongsDto{
+    string songId = 1;
+    string userId = 2;
 }
 
 message Chart{
@@ -25,6 +35,11 @@ message HourlyViews{
     string name = 2;
     int32 percentViews = 3;
 }
+
+message RecentSongs{
+    repeated Song data = 1;
+}
+
 message Singer{
     string id = 1;
     string name = 2;

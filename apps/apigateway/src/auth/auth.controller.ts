@@ -1,7 +1,7 @@
 import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { responseSucess, tryCatchHttpException } from '@app/common';
+import { tryCatchHttpException } from '@app/common';
 
 @Controller('auth')
 export class AuthController {
