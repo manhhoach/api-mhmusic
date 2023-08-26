@@ -10,9 +10,21 @@ service SongService{
     rpc Delete(FindByIdDto) returns (Empty){}
 
     rpc IncreViews(FindByIdDto) returns (Empty){}
+    rpc GetChart(Empty) returns (Chart){}
 }
 
-
+message Chart{
+    repeated ElementChart data = 1;
+}
+message ElementChart{
+    string time = 1;
+    HourlyViews hourlyViews = 2;
+}
+message HourlyViews{
+    string id = 1;
+    string name = 2;
+    int32 percentViews = 3;
+}
 message Singer{
     string id = 1;
     string name = 2;

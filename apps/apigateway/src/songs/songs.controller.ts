@@ -32,6 +32,11 @@ export class SongsController implements OnModuleInit {
     return responseSucess(HttpStatus.OK, data);
   }
 
+  @Get('/chart')
+  getChart(){
+    return tryCatchHttpException(this.songsService.getChart({}), HttpStatus.OK)
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return tryCatchHttpException(this.songsService.findById({ id }), HttpStatus.OK)

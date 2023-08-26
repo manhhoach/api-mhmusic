@@ -1,8 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ValidateCreateSongDto } from './dto/create-song.dto';
 import { ValidateUpdateSongDto } from './dto/update-song.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { MESSAGES, REDIS_CONSTANTS } from '@app/common';
+import * as macAddress from 'macaddress';
+import moment from 'moment-timezone';
 
 import {
   SongEntity,
@@ -10,12 +13,15 @@ import {
   getPagination,
   getPagingData,
 } from '@app/common';
+import { RedisService } from '../redis/redis.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class SongsService {
+
   constructor(
-    @InjectRepository(SongEntity)
-    private readonly songRepository: Repository<SongEntity>,
+    @InjectRepository(SongEntity) private readonly songRepository: Repository<SongEntity>,
+    private readonly redisService: RedisService
   ) { }
   create(createSongDto: ValidateCreateSongDto) {
     let data = new SongEntity();
@@ -47,7 +53,7 @@ export class SongsService {
     const data = await this.songRepository.findOne({
       where: { id: id },
     });
-    
+
     if (!data) throw new NotFoundException();
     return data;
   }
@@ -68,7 +74,74 @@ export class SongsService {
     return this.songRepository.delete(id);
   }
 
-  async increViews(id: string){
-    
+  async increViews(id: string) {
+    let song = `${REDIS_CONSTANTS.SONG_ID}${id}`;
+    let keyMacAddressSong = `${REDIS_CONSTANTS.MAC_ADDRESS}${await macAddress.one()}-${song}`;
+    let isOk = await this.redisService.setKeyUniqueWithExpiredTime(keyMacAddressSong, 'MUSIC', REDIS_CONSTANTS.RESET_TIME_LISTEN_AGAIN);
+    if (isOk === 'OK') {
+      await this.redisService.hincrby(REDIS_CONSTANTS.HASHES_VIEW_SONGS, id, 1);
+      return null;
+    }
+    throw new BadRequestException(MESSAGES.TRY_LATER)
+  }
+
+  async getChart() {
+    try {
+      console.log(moment);
+      
+      // let topSongs = await this.songRepository.find({
+      //   take: REDIS_CONSTANTS.NUMBER_SONG_IN_CHARTS,
+      //   order: { "views": "DESC" }
+      // });
+      // let arr_time = [];
+      // for (let i = 0; i < 12; i++) {
+      //   arr_time.push(moment().tz('Asia/Ho_Chi_Minh').subtract(REDIS_CONSTANTS.STEP_TIME * i, 'hours').format(REDIS_CONSTANTS.FORMAT_TIME));
+      // }
+      // let data = await Promise.all(arr_time.map(async (time) => {
+      //   let hourlyViews = await Promise.all(topSongs.map(async (song) => {
+      //     let views = await this.redisService.get(`${time}-${REDIS_CONSTANTS.SONG_ID}${song.id}`);
+      //     return {
+      //       id: song.id,
+      //       name: song.name,
+      //       percentViews: views ? parseInt(views) : 0
+      //     };
+      //   }));
+      //   let totalViews = hourlyViews.reduce((current, next) => current + next.percentViews, 0);
+      //   if (totalViews !== 0)
+      //     hourlyViews = hourlyViews.map((v => {
+      //       return Object.assign(v, { percentViews: Math.round(v.percentViews * 100 / totalViews) });
+      //     }));
+      //   return {
+      //     time: time, hourlyViews: hourlyViews
+      //   };
+      // }))
+      // console.log(data);
+
+      // return { data }
+    }
+    catch (err) {
+      console.log(err);
+
+    }
+  }
+
+
+  @Cron(`* */${REDIS_CONSTANTS.VIEWS_UPDATE_PER_MINUTES} * * * *`)
+  async updateViewsJob() {
+    let allSongs = await this.redisService.hgetAll(REDIS_CONSTANTS.HASHES_VIEW_SONGS);
+    await Promise.all(Object.keys(allSongs).map(async (id) => {
+      let views = parseInt(allSongs[id]);
+      await this.songRepository.increment({ id: id }, 'views', views);
+    }));
+    await this.redisService.del(REDIS_CONSTANTS.HASHES_VIEW_SONGS);
+  }
+
+  @Cron('0 0 * * * *')
+  async calcViewsEveryHour() {
+    let time = moment().tz('Asia/Ho_Chi_Minh').format(REDIS_CONSTANTS.FORMAT_TIME);
+    let songs = await this.songRepository.find();
+    await Promise.all(songs.map(async (song) => {
+      await this.redisService.setKeyWithExpiredTime(`${time}-${REDIS_CONSTANTS.SONG_ID}${song.id}`, song.views, REDIS_CONSTANTS.EXPIRED_TIME_ELEMENT_CHART);
+    }));
   }
 }

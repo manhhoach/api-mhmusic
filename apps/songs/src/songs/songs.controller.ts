@@ -37,4 +37,9 @@ export class SongsController {
   increViews(@Payload() findByIdDto: ValidateFindByIdDto) {
     return tryCatchRpcException(this.songsService.increViews(findByIdDto.id));
   }
+
+  @GrpcMethod('SongService', 'getChart')
+  getChart(@Payload() empty: {}){
+    return tryCatchRpcException(this.songsService.getChart());
+  }
 }

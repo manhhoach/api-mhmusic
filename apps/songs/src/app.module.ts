@@ -4,13 +4,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { AlbumsModule } from './albums/albums.module';
 import { SongsModule } from './songs/songs.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
     SingersModule,
     AlbumsModule,
-    SongsModule
+    SongsModule,
+    RedisModule
   ],
   providers: [],
   exports: [],
