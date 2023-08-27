@@ -5,11 +5,9 @@ export class ValidateCreateUserDto {
   @IsString()
   name: string;
 
-  @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @IsNotEmpty()
   @IsString()
   @Length(8, 16)
   password: string;

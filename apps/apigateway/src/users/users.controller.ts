@@ -14,7 +14,8 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { AuthGuard } from './../auth/auth.guard';
 import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
-
+import { PermissionGuard } from '../auth/permission.guard';
+import { AlbumPermission } from '@app/common';
 
 @Injectable()
 @UseGuards(AuthGuard)
@@ -29,32 +30,18 @@ export class UsersController implements OnModuleInit {
   }
 
   @Get('profile')
+  @UseGuards(PermissionGuard(AlbumPermission.CreateAlbum))
   getProfile(@Request() req) {
     return responseSucess(HttpStatus.OK, req.user)
   }
 
   @Patch('profile')
   async updateProfile(@Request() req, @Body() data: { name: string }) {
-    // try {
-    //   const user = await lastValueFrom(this.usersService.update({ id: req.user.id, ...data }))
-    //   return user;
-    // } catch (err) {
-    //   throw new BadRequestException(err.details);
-    // }
     return tryCatchHttpException(this.usersService.update({ id: req.user.id, ...data }), HttpStatus.OK)
   }
 
   @Patch('change-password')
   async changePassword(@Request() req, @Body() data: any) {
-    // try {
-    //   const changePassUserDto = { id: req.user.id, ...data };
-    //   return lastValueFrom(this.usersService.changePassword(changePassUserDto));
-    // } catch (err) {
-    //   if (err.details === MESSAGES.INCORRECT_PASSWORD)
-    //     throw new BadRequestException(MESSAGES.INCORRECT_PASSWORD);
-    //   throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND);
-    // }
-
     return tryCatchHttpException(this.usersService.changePassword({ id: req.user.id, ...data }), HttpStatus.OK)
   }
 }

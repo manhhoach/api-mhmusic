@@ -6,8 +6,8 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
-import { Length, IsEmail } from 'class-validator';
 import { genSaltSync, hashSync, compareSync } from 'bcrypt';
+import Permission from '../enums/permission';
 
 @Entity({
   name: 'users',
@@ -20,19 +20,18 @@ export class UserEntity {
   name: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
-  @IsEmail(undefined, {
-    message: 'Invalid email format',
-  })
   email: string;
 
   @Column({ nullable: false, select: false })
-  @Length(8, 16, {
-    message: 'Password must be between 8 and 16 characters',
-  })
   password: string;
 
-  @Column({ type: 'integer', default: 0 })
-  type: number;
+  @Column({
+    type: 'enum',
+    enum: Permission,
+    array: true,
+    default: []
+  })
+  permissions: Permission[];
 
   @CreateDateColumn({ select: false })
   createdAt: Date;
