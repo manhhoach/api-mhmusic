@@ -3,6 +3,7 @@ import { SongsController } from './songs.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SONG_PACKAGE_NAME, SONG_SERVICE_NAME } from '@app/common/proto/song';
 import { join } from 'path';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { join } from 'path';
           url: 'localhost:5002',
         }
       }
-    ])
+    ]),
+    AuthModule
   ],
   controllers: [SongsController],
   providers: []

@@ -40,8 +40,9 @@ export class SongsController implements OnModuleInit {
 
   @Get('/recent-songs')
   @UseGuards(AuthGuard)
-  getRecentSongs(@Request() req) {
-    return tryCatchHttpException(this.songsService.getRecentSongs({userId: req.user.id}), HttpStatus.OK)
+  async getRecentSongs(@Request() req) {
+    let data = await lastValueFrom(this.songsService.getRecentSongs({userId: req.user.id}))
+    return responseSucess(HttpStatus.OK, data.data);
   }
 
   @Get(':id')
@@ -54,7 +55,7 @@ export class SongsController implements OnModuleInit {
     return tryCatchHttpException(this.songsService.increViews({ id }), HttpStatus.OK)
   }
 
-  @Get('/recent-songs')
+  @Patch('/recent-songs')
   @UseGuards(AuthGuard)
   updateRecentSongs(@Body() body, @Request() req) {
     return tryCatchHttpException(this.songsService.updateRecentSongs({userId: req.user.id, songId: body.songId}), HttpStatus.OK)

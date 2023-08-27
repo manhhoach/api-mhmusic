@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { ValidateCreateSongDto } from './dto/create-song.dto';
 import { ValidateUpdateSongDto } from './dto/update-song.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { MESSAGES, REDIS_CONSTANTS } from '@app/common';
 import * as macAddress from 'macaddress';
 import * as moment from 'moment-timezone';
@@ -143,11 +143,26 @@ export class SongsService {
     }));
   }
 
-  async updateRecentSongs(updateRecentSongsDto: ValidateUpdateRecentSongsDto){
+  async updateRecentSongs(updateRecentSongsDto: ValidateUpdateRecentSongsDto) {
+    const recentSongsUser = `${REDIS_CONSTANTS.USER_ID}${updateRecentSongsDto.userId}`;
+    await this.redisService.remove(recentSongsUser, updateRecentSongsDto.songId);
+    await this.redisService.leftPush(recentSongsUser, updateRecentSongsDto.songId);
+    await this.redisService.setExpires(recentSongsUser, REDIS_CONSTANTS.EXPIRED_TIME_RECENT_SONGS);
+    if (await this.redisService.length(recentSongsUser) > REDIS_CONSTANTS.MAX_LENGTH_LIST_SONGS)
+      await this.redisService.rightPop(recentSongsUser);
+    return null;
 
   }
 
-  async getRecentSongs(getRecentSongsDto: ValidateGetRecentSongsDto){
-
+  async getRecentSongs(getRecentSongsDto: ValidateGetRecentSongsDto) {
+    const recentSongsUser = `${REDIS_CONSTANTS.USER_ID}${getRecentSongsDto.userId}`;
+    let songIds = await this.redisService.lrange(recentSongsUser);
+    let songs = await this.songRepository.find({
+      where: {
+        id: In(songIds)
+      },
+      loadEagerRelations: false
+    })
+    return { data: songs };
   }
 }
