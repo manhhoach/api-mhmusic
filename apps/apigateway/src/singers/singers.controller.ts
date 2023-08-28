@@ -13,18 +13,28 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { SingerServiceClient, SINGER_SERVICE_NAME } from '@app/common/proto/singer';
+import {
+  SingerServiceClient,
+  SINGER_SERVICE_NAME,
+} from '@app/common/proto/singer';
 import { ClientGrpc } from '@nestjs/microservices';
-import { PAGE_INDEX, PAGE_SIZE, ORDER, tryCatchHttpException, responseSucess, Permissions } from '@app/common';
+import {
+  PAGE_INDEX,
+  PAGE_SIZE,
+  ORDER,
+  tryCatchHttpException,
+  responseSucess,
+  Permissions,
+} from '@app/common';
 import { lastValueFrom } from 'rxjs';
 import { PermissionGuard } from '../auth/permission.guard';
-import { AuthGuard } from '../auth/auth.guard';
+import { SkipAuth } from '../auth/skip.auth.decorator';
 
 @Injectable()
 @Controller('singers')
 export class SingersController implements OnModuleInit {
   private singersService: SingerServiceClient;
-  constructor(@Inject(SINGER_SERVICE_NAME) private client: ClientGrpc) { }
+  constructor(@Inject(SINGER_SERVICE_NAME) private client: ClientGrpc) {}
 
   onModuleInit() {
     this.singersService =
@@ -32,14 +42,15 @@ export class SingersController implements OnModuleInit {
   }
 
   @Post()
-  // @UseGuards(PermissionGuard(Permissions.CREATE))
-  // @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard(Permissions.CREATE))
   create(@Body() createSingerDto) {
-    return tryCatchHttpException(this.singersService.create(createSingerDto), HttpStatus.CREATED)
+    return tryCatchHttpException(
+      this.singersService.create(createSingerDto),
+      HttpStatus.CREATED,
+    );
   }
 
-
-  
+  @SkipAuth()
   @Get()
   async findAll(@Query() query) {
     const queryData = {
@@ -52,26 +63,28 @@ export class SingersController implements OnModuleInit {
     return responseSucess(HttpStatus.OK, data);
   }
 
+  @SkipAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return tryCatchHttpException(this.singersService.findById({ id }), HttpStatus.OK)
+    return tryCatchHttpException(
+      this.singersService.findById({ id }),
+      HttpStatus.OK,
+    );
   }
-
-
 
   @Patch(':id')
-  // @UseGuards(PermissionGuard(Permissions.UPDATE))
-  // @UseGuards(AuthGuard)
   update(@Param('id') id: string, @Body() updateSingerDto) {
-    return tryCatchHttpException(this.singersService.update({ id, ...updateSingerDto }), HttpStatus.OK)
+    return tryCatchHttpException(
+      this.singersService.update({ id, ...updateSingerDto }),
+      HttpStatus.OK,
+    );
   }
 
-
-
   @Delete(':id')
-  // @UseGuards(PermissionGuard(Permissions.DELETE))
-  // @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {
-    return tryCatchHttpException(this.singersService.delete({ id }), HttpStatus.OK)
+    return tryCatchHttpException(
+      this.singersService.delete({ id }),
+      HttpStatus.OK,
+    );
   }
 }

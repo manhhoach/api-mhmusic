@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
-import { MESSAGES} from '@app/common';
+import { MESSAGES } from '@app/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { LoginDto } from './dto/login.dto';
 import { compareSync } from 'bcrypt';
@@ -24,7 +24,7 @@ export class AuthService implements OnModuleInit {
   constructor(
     @Inject(USER_SERVICE_NAME) private client: ClientGrpc,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   onModuleInit() {
     this.usersService =
@@ -32,11 +32,13 @@ export class AuthService implements OnModuleInit {
   }
 
   register(createUserDto) {
-    return this.usersService.create(createUserDto)
+    return this.usersService.create(createUserDto);
   }
 
   async login(loginDto: LoginDto) {
-    const user = await lastValueFrom(this.usersService.findByEmail({ email: loginDto.email }))
+    const user = await lastValueFrom(
+      this.usersService.findByEmail({ email: loginDto.email }),
+    );
     if (!comparePassword(loginDto.password, user.password))
       throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD);
 
@@ -44,14 +46,16 @@ export class AuthService implements OnModuleInit {
     return {
       ...user,
       password: undefined,
-      accessToken: await this.jwtService.signAsync(payload)
+      accessToken: await this.jwtService.signAsync(payload),
     };
   }
 
   async verifyToken(token: string) {
     try {
       const payload = await this.jwtService.verifyAsync(token);
-      const user = await lastValueFrom(this.usersService.findById({ id: payload.id }));
+      const user = await lastValueFrom(
+        this.usersService.findById({ id: payload.id }),
+      );
       if (user) return user;
       else throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND);
     } catch {

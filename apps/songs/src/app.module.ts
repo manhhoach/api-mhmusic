@@ -12,9 +12,9 @@ import { RedisModule } from './redis/redis.module';
     SingersModule,
     AlbumsModule,
     SongsModule,
-    RedisModule
+    RedisModule,
   ],
   providers: [],
   exports: [],
 })
-export class AppModule { }
+export class AppModule {}

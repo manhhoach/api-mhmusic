@@ -8,6 +8,6 @@ import { AlbumSongEntity } from '@app/common';
   imports: [TypeOrmModule.forFeature([AlbumSongEntity])],
   controllers: [AlbumSongsController],
   providers: [AlbumSongsService],
-  exports: [AlbumSongsService]
+  exports: [AlbumSongsService],
 })
 export class AlbumSongsModule {}

@@ -1,15 +1,30 @@
-import { Controller, Post, UseInterceptors, UploadedFile, ParseFilePipeBuilder, HttpStatus, Inject, Res, BadRequestException, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipeBuilder,
+  HttpStatus,
+  Inject,
+  Res,
+  BadRequestException,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { lastValueFrom } from 'rxjs';
-import { MESSAGE_PATTERN, MAX_MB_SIZE, Permissions, responseSucess } from '@app/common';
-import { AuthGuard } from '../auth/auth.guard';
+import {
+  MESSAGE_PATTERN,
+  MAX_MB_SIZE,
+  Permissions,
+  responseSucess,
+} from '@app/common';
 import { PermissionGuard } from '../auth/permission.guard';
 
 @Controller('uploads')
 export class UploadsController {
-  constructor(@Inject("UPLOAD_SERVICE") private readonly client: ClientProxy) { }
+  constructor(@Inject('UPLOAD_SERVICE') private readonly client: ClientProxy) {}
 
   async onApplicationBootstrap() {
     await this.client.connect();
@@ -17,22 +32,25 @@ export class UploadsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  // @UseGuards(PermissionGuard(Permissions.CREATE))
-  // @UseGuards(AuthGuard)
-  async uploadSingle(@UploadedFile(
-    new ParseFilePipeBuilder()
-      .addMaxSizeValidator({ maxSize: MAX_MB_SIZE * 1000 * 1000 })
-      .addFileTypeValidator({ fileType: /^audio\//i }) // mimetype
-      .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY, fileIsRequired: true })
-  ) file: Express.Multer.File, @Res() res: Response) {
+  @UseGuards(PermissionGuard(Permissions.CREATE))
+  async uploadSingle(
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addMaxSizeValidator({ maxSize: MAX_MB_SIZE * 1000 * 1000 })
+        .addFileTypeValidator({ fileType: /^audio\//i }) // mimetype
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+          fileIsRequired: true,
+        }),
+    )
+    file: Express.Multer.File,
+    @Res() res: Response,
+  ) {
     try {
-      let url = await lastValueFrom(this.client.send(MESSAGE_PATTERN, file))
-      res.status(200).json(responseSucess(HttpStatus.OK,url))
+      const url = await lastValueFrom(this.client.send(MESSAGE_PATTERN, file));
+      res.status(200).json(responseSucess(HttpStatus.OK, url));
+    } catch (err) {
+      throw new BadRequestException();
     }
-    catch (err) {
-      throw new BadRequestException()
-    }
-
   }
-
 }

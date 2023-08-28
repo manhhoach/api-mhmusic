@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UploadsController } from './uploads.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MulterModule } from '@nestjs/platform-express';
-import { MESSAGE_PATTERN, MAX_MB_SIZE, UPLOAD_SERVICE_NAME } from '@app/common';
+import { UPLOAD_SERVICE_NAME } from '@app/common';
 
 @Module({
   imports: [
@@ -15,16 +15,14 @@ import { MESSAGE_PATTERN, MAX_MB_SIZE, UPLOAD_SERVICE_NAME } from '@app/common';
           queue: 'uploads_queue',
           persistent: true,
           queueOptions: {
-            durable: true
-          }
-        }
-      }
+            durable: true,
+          },
+        },
+      },
     ]),
-    MulterModule.register({
-      
-    })
+    MulterModule.register({}),
   ],
   controllers: [UploadsController],
-  providers: []
+  providers: [],
 })
 export class UploadsModule {}

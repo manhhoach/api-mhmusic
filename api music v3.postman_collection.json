@@ -3,7 +3,8 @@
 		"_postman_id": "812037f6-2c46-463a-8139-1919d93ba9ca",
 		"name": "api music v3",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25960812"
+		"_exporter_id": "25960812",
+		"_collection_link": "https://martian-capsule-993467.postman.co/workspace/api-mhmusic~30e50278-68a5-4172-b840-da87a2cb113f/collection/25960812-812037f6-2c46-463a-8139-1919d93ba9ca?action=share&source=collection_link&creator=25960812"
 	},
 	"item": [
 		{
@@ -15,7 +16,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/song?page_size=5&page_index=1&order=-createdAt",
+							"raw": "http://localhost:3000/api/songs?pageSize=5&pageIndex=1&order=createdAt ASC",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -23,25 +24,20 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"song"
+								"songs"
 							],
 							"query": [
 								{
-									"key": "page_size",
+									"key": "pageSize",
 									"value": "5"
 								},
 								{
-									"key": "page_index",
+									"key": "pageIndex",
 									"value": "1"
 								},
 								{
-									"key": "name",
-									"value": "a",
-									"disabled": true
-								},
-								{
 									"key": "order",
-									"value": "-createdAt"
+									"value": "createdAt ASC"
 								}
 							]
 						}
@@ -54,7 +50,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/song/685efbd5-62a7-4b1d-82c8-53ef67b8e1f8",
+							"raw": "http://localhost:3000/api/songs/be2b544c-0397-4471-9f8d-b300bde049ea",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -62,29 +58,8 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"song",
-								"685efbd5-62a7-4b1d-82c8-53ef67b8e1f8"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get chart",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/api/song/chart",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"song",
-								"chart"
+								"songs",
+								"be2b544c-0397-4471-9f8d-b300bde049ea"
 							]
 						}
 					},
@@ -97,7 +72,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Thích thì đến\",\r\n    \"url\": \"https://api.mp3.zing.vn/api/streaming/audio/ZWBWAIDA/320\",\r\n    \"singer\": \"eb7c6915-9dd7-40f3-abac-4609b3c97377\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Thích thì đến\",\r\n    \"url\": \"https://api.mp3.zing.vn/api/streaming/audio/ZWBWAIDA/320\",\r\n    \"singer\": \"bda32498-3cdb-4f22-bd3d-b97397ba75ce\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -105,7 +80,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/song",
+							"raw": "http://localhost:3000/api/songs",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -113,7 +88,37 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"song"
+								"songs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Chiếc khăn gió ấm\",\r\n    \"url\": \"http://api.mp3.zing.vn/api/streaming/audio/ZW77FUFI/320\",\r\n    \"singer\": \"bda32498-3cdb-4f22-bd3d-b97397ba75ce\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/songs/be2b544c-0397-4471-9f8d-b300bde049ea",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"songs",
+								"be2b544c-0397-4471-9f8d-b300bde049ea"
 							]
 						}
 					},
@@ -134,7 +139,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/song/685efbd5-62a7-4b1d-82c8-53ef67b8e1f8",
+							"raw": "http://localhost:3000/api/songs/6979c947-516d-40a8-8eb4-2ffefe5795a7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -142,29 +147,20 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"song",
-								"685efbd5-62a7-4b1d-82c8-53ef67b8e1f8"
+								"songs",
+								"6979c947-516d-40a8-8eb4-2ffefe5795a7"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "update",
+					"name": "get chart",
 					"request": {
-						"method": "PATCH",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Uyên ương hồ điệp mộng\",\r\n    \"singer\": \"d79ddf53-9d76-42a9-b915-d0b90385548d\",\r\n    \"url\": \"http://api.mp3.zing.vn/api/streaming/audio/ZW77FUFI/320\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:3000/api/song/465e3c6f-620f-44a5-a1d4-eac349701b99",
+							"raw": "http://localhost:3000/api/songs/chart",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -172,8 +168,8 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"song",
-								"465e3c6f-620f-44a5-a1d4-eac349701b99"
+								"songs",
+								"chart"
 							]
 						}
 					},
@@ -182,11 +178,21 @@
 				{
 					"name": "update recent songs",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc0YWE3NmVjLTE2OWMtNGE5Yi1hYjAzLWJiODAyY2Y4ZTE1NCIsImlhdCI6MTY5MzEwMzI5NSwiZXhwIjoxNjkzNzA4MDk1fQ.eqQXfaeXgFwLHcJRmR2vaz3A2IDCG9JidTQ1pWUV5ug",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"songId\": \"6953dfd8-aad1-47d9-85e7-da9952f1f5a1\"\r\n}",
+							"raw": "{\r\n    \"songId\": \"7c41de8f-6524-4bb1-95ce-488aa0f9e940\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -194,7 +200,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/song/recent-songs",
+							"raw": "http://localhost:3000/api/songs/recent-songs",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -202,7 +208,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"song",
+								"songs",
 								"recent-songs"
 							]
 						}
@@ -212,10 +218,20 @@
 				{
 					"name": "get recent songs",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc0YWE3NmVjLTE2OWMtNGE5Yi1hYjAzLWJiODAyY2Y4ZTE1NCIsImlhdCI6MTY5MzEwMzI5NSwiZXhwIjoxNjkzNzA4MDk1fQ.eqQXfaeXgFwLHcJRmR2vaz3A2IDCG9JidTQ1pWUV5ug",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/song/recent-songs",
+							"raw": "http://localhost:3000/api/songs/recent-songs",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -223,7 +239,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"song",
+								"songs",
 								"recent-songs"
 							]
 						}
@@ -239,7 +255,7 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/song/update-views/50c514c1-4ce1-44f7-81d0-c21e6e9ff8b7",
+							"raw": "http://localhost:3000/api/songs/incre-views/be2b544c-0397-4471-9f8d-b300bde049ea",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -247,40 +263,9 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"song",
-								"update-views",
-								"50c514c1-4ce1-44f7-81d0-c21e6e9ff8b7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "upload",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/D:/MUSIC/y2mate.com - Sparkle  Your Name AMV.mp3"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/song/upload",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"song",
-								"upload"
+								"songs",
+								"incre-views",
+								"be2b544c-0397-4471-9f8d-b300bde049ea"
 							]
 						}
 					},
@@ -327,7 +312,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/album?page_index=1&page_size=5&order=-createdAt",
+							"raw": "http://localhost:3000/api/albums?pageIndex=1&pageSize=5&order=createdAt DESC",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -335,56 +320,20 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"album"
+								"albums"
 							],
 							"query": [
 								{
-									"key": "name",
-									"value": "",
-									"disabled": true
-								},
-								{
-									"key": "page_index",
+									"key": "pageIndex",
 									"value": "1"
 								},
 								{
-									"key": "page_size",
+									"key": "pageSize",
 									"value": "5"
 								},
 								{
 									"key": "order",
-									"value": "-createdAt"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get songs in album",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/api/album-song/86d34022-0514-4491-a6ab-56ef07a7ce4a?page_index=1&page_size=2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"album-song",
-								"86d34022-0514-4491-a6ab-56ef07a7ce4a"
-							],
-							"query": [
-								{
-									"key": "page_index",
-									"value": "1"
-								},
-								{
-									"key": "page_size",
-									"value": "2"
+									"value": "createdAt DESC"
 								}
 							]
 						}
@@ -398,7 +347,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Non-stop đỉnh nhất mọi thời đại\"\r\n}",
+							"raw": "{\r\n    \"name\":\"Non-stop đỉnh nhất mọi thời đại 7\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -406,7 +355,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/album",
+							"raw": "http://localhost:3000/api/albums",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -414,7 +363,7 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"album"
+								"albums"
 							]
 						}
 					},
@@ -427,7 +376,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \r\n    \"name\":\"Liên khúc Hồ Quang Hiếu\"\r\n}",
+							"raw": "{ \r\n    \"name\":\"Liên khúc Hồ Quang Hiếu 2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -435,7 +384,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/album/7be7eeb5-cd04-4a18-b0a1-a574deccd381",
+							"raw": "http://localhost:3000/api/albums/ce511465-54a3-42ca-b73a-96d833d27828",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -443,8 +392,8 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"album",
-								"7be7eeb5-cd04-4a18-b0a1-a574deccd381"
+								"albums",
+								"ce511465-54a3-42ca-b73a-96d833d27828"
 							]
 						}
 					},
@@ -465,7 +414,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/album/4c1ee6ea-f326-41bc-8a27-413e782f3d52",
+							"raw": "http://localhost:3000/api/albums/ce511465-54a3-42ca-b73a-96d833d27828",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -473,8 +422,39 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"album",
-								"4c1ee6ea-f326-41bc-8a27-413e782f3d52"
+								"albums",
+								"ce511465-54a3-42ca-b73a-96d833d27828"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get songs in album",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/albums/533bcc79-fd43-4d9b-b8a8-74dcded26fdd?pageIndex=1&pageSize=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"albums",
+								"533bcc79-fd43-4d9b-b8a8-74dcded26fdd"
+							],
+							"query": [
+								{
+									"key": "pageIndex",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "2"
+								}
 							]
 						}
 					},
@@ -487,7 +467,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"album\": \"86d34022-0514-4491-a6ab-56ef07a7ce4a\",\r\n    \"song\": \"1aaad60a-ddf4-4264-a400-6cef5f8aa80d\"\r\n}",
+							"raw": "{\r\n    \"albumId\": \"55b7581c-8f5e-4489-aa92-9514296b78c5\",\r\n    \"songId\": \"be2b544c-0397-4471-9f8d-b300bde049ea\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -495,7 +475,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/album-song",
+							"raw": "http://localhost:3000/api/albums/add-song",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -503,7 +483,8 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"album-song"
+								"albums",
+								"add-song"
 							]
 						}
 					},
@@ -524,7 +505,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/album-song/da18303b-f9bf-43ed-8a1e-7084cc593889",
+							"raw": "http://localhost:3000/api/albums/remove-song/80447714-ad6d-49bf-ba3c-ad036cde82fc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -532,8 +513,210 @@
 							"port": "3000",
 							"path": [
 								"api",
-								"album-song",
-								"da18303b-f9bf-43ed-8a1e-7084cc593889"
+								"albums",
+								"remove-song",
+								"80447714-ad6d-49bf-ba3c-ad036cde82fc"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MWNhZWRmLTBjMDItNGM1MS05NmM0LTYzODQ1NTczYTQ2MyIsImlhdCI6MTY5MzIzMzI2MCwiZXhwIjoxNjkzODM4MDYwfQ.Juahx1rgoWseVgZMnER5O3KbbUHBKO5tpwnf04y2s9o",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "singer",
+			"item": [
+				{
+					"name": "find all",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJtYW5oaG4ubnZAZ21haWwuY29tIiwiaWF0IjoxNjYyNjA2NDY3LCJleHAiOjE2NjMyMTEyNjd9.vQoeb_uZFFIn14UWjoQZ02cU-jrsRxJCqcWTSnDOfpY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/singers?pageSize=3&pageIndex=1&order=name ASC",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"singers"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "3"
+								},
+								{
+									"key": "pageIndex",
+									"value": "1"
+								},
+								{
+									"key": "order",
+									"value": "name ASC"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"name\":\"Liên khúc Hồ Quang Hiếu\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/singers/05fc331c-387f-4f3d-b4ec-ac50af22a47a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"singers",
+								"05fc331c-387f-4f3d-b4ec-ac50af22a47a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"ca sĩ Khánh Đơn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/singers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"singers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Ca sĩ abc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/singers/05fc331c-387f-4f3d-b4ec-ac50af22a47a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"singers",
+								"05fc331c-387f-4f3d-b4ec-ac50af22a47a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[17]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/singers/05fc331c-387f-4f3d-b4ec-ac50af22a47a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"singers",
+								"05fc331c-387f-4f3d-b4ec-ac50af22a47a"
 							]
 						}
 					},
@@ -632,7 +815,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"newPassword\": \"123456789\",\r\n    \"currentPassword\": \"123456az\"\r\n}",
+							"raw": "{\r\n    \"newPassword\": \"123456789az\",\r\n    \"currentPassword\": \"123456789\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -654,36 +837,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "delete",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"ids\":[12,13]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/users/43a03499-3ac8-4a52-8591-830da0170f41",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"users",
-								"43a03499-3ac8-4a52-8591-830da0170f41"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"auth": {
@@ -691,194 +844,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyNjhmNzYxLTVkYjMtNGE2MC04OTM0LTQwNGVhNTA2YTVmNSIsImlhdCI6MTY5MTU4NTEyNywiZXhwIjoxNjkxNjcxNTI3fQ.cneC1nT0meBjbWpM3nsWpmjvN2EfT-PWVY0q8kuAxNg",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "singer",
-			"item": [
-				{
-					"name": "get all paging",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/api/singer",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"singer"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "ha",
-									"disabled": true
-								},
-								{
-									"key": "sort",
-									"value": "name DESC",
-									"disabled": true
-								},
-								{
-									"key": "pageSize",
-									"value": "4",
-									"disabled": true
-								},
-								{
-									"key": "pageIndex",
-									"value": "1",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/api/singer/9afa1c9a-75df-4318-a608-f37d34a76091",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"singer",
-								"9afa1c9a-75df-4318-a608-f37d34a76091"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": 123\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/singer",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"singer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Trung Quân Idol\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/singer/684f55e9-62e5-4678-a3ad-6b42cbe3e7dc",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"singer",
-								"684f55e9-62e5-4678-a3ad-6b42cbe3e7dc"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"ids\":[3]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/api/singer/03ca343b-ef47-4640-806a-be4c58fe7b38",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"singer",
-								"03ca343b-ef47-4640-806a-be4c58fe7b38"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzI0MGFkLTVlMzctNDAwYy1iZDg1LTVlNjA0NmNlY2FkYiIsImlhdCI6MTY3OTgxODg0OCwiZXhwIjoxNjgwNDIzNjQ4fQ.-4kJrRuxxjCNI754FQX5C6JpStAFJYPl-JNhaWzHMDw",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MWNhZWRmLTBjMDItNGM1MS05NmM0LTYzODQ1NTczYTQ2MyIsImlhdCI6MTY5MzIzMzI2MCwiZXhwIjoxNjkzODM4MDYwfQ.Juahx1rgoWseVgZMnER5O3KbbUHBKO5tpwnf04y2s9o",
 						"type": "string"
 					}
 				]
@@ -914,7 +880,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"hello\",\r\n    \"email\": \"manh2@gmail.com\",\r\n    \"password\": \"123456789\"\r\n}",
+							"raw": "{\r\n    \"name\":\"hello\",\r\n    \"email\": \"manh@gmail.com\",\r\n    \"password\": \"123456789\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -944,7 +910,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"manh@gmail.com\",\r\n    \"password\":\"123456789\"\r\n}",
+							"raw": "{\r\n    \"email\": \"manh@gmail.com\",\r\n    \"password\": \"123456789\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -968,6 +934,61 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "upload",
+			"item": [
+				{
+					"name": "upload",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/manhhoach/Downloads/y2mate.com - PBN 72  Quang Lê  Cô Hàng Xóm.mp3"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/uploads",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"uploads"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ultimate search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"search"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {

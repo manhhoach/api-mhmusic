@@ -1,4 +1,9 @@
-import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
+import {
+  PipeTransform,
+  Injectable,
+  ArgumentMetadata,
+  BadRequestException,
+} from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { RpcException } from '@nestjs/microservices';
@@ -14,11 +19,9 @@ export class GrpcValidationPipe implements PipeTransform<any> {
         throw new BadRequestException(MESSAGES.VALIDATION_ERROR);
       }
       return value;
+    } catch (error) {
+      throw new RpcException(JSON.stringify(error.response));
     }
-    catch (error) {
-      throw new RpcException(JSON.stringify(error.response))
-    }
-
   }
 
   // private toValidate(metatype: Function): boolean {

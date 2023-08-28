@@ -1,4 +1,4 @@
-import { Permissions, responseSucess, tryCatchHttpException } from '@app/common';
+import { responseSucess, tryCatchHttpException } from '@app/common';
 import {
   Body,
   Controller,
@@ -9,37 +9,40 @@ import {
   OnModuleInit,
   Patch,
   Request,
-  UseGuards,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { AuthGuard } from './../auth/auth.guard';
-import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
-import { PermissionGuard } from '../auth/permission.guard';
 
+import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
 
 @Injectable()
-@UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController implements OnModuleInit {
   private usersService: UserServiceClient;
-  constructor(@Inject(USER_SERVICE_NAME) private client: ClientGrpc) { }
+  constructor(@Inject(USER_SERVICE_NAME) private client: ClientGrpc) {}
 
   onModuleInit() {
-    this.usersService = this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
+    this.usersService =
+      this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
   }
 
   @Get('profile')
   getProfile(@Request() req) {
-    return responseSucess(HttpStatus.OK, req.user)
+    return responseSucess(HttpStatus.OK, req.user);
   }
 
   @Patch('profile')
   async updateProfile(@Request() req, @Body() data: { name: string }) {
-    return tryCatchHttpException(this.usersService.update({ id: req.user.id, ...data }), HttpStatus.OK)
+    return tryCatchHttpException(
+      this.usersService.update({ id: req.user.id, ...data }),
+      HttpStatus.OK,
+    );
   }
 
   @Patch('change-password')
   async changePassword(@Request() req, @Body() data: any) {
-    return tryCatchHttpException(this.usersService.changePassword({ id: req.user.id, ...data }), HttpStatus.OK)
+    return tryCatchHttpException(
+      this.usersService.changePassword({ id: req.user.id, ...data }),
+      HttpStatus.OK,
+    );
   }
 }

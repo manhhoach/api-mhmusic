@@ -1,4 +1,4 @@
-import { Permissions } from '@app/common'
+import { Permissions } from '@app/common';
 import { CanActivate, ExecutionContext, mixin, Type } from '@nestjs/common';
 
 export const PermissionGuard = (permission: Permissions): Type<CanActivate> => {
@@ -11,4 +11,4 @@ export const PermissionGuard = (permission: Permissions): Type<CanActivate> => {
   }
 
   return mixin(PermissionGuardMixin);
-}
+};

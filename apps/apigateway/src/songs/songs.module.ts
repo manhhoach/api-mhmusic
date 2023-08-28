@@ -15,12 +15,12 @@ import { AuthModule } from '../auth/auth.module';
           package: SONG_PACKAGE_NAME,
           protoPath: join(__dirname, '../../../proto/song.proto'),
           url: 'localhost:5002',
-        }
-      }
+        },
+      },
     ]),
-    AuthModule
+    AuthModule,
   ],
   controllers: [SongsController],
-  providers: []
+  providers: [],
 })
 export class SongsModule {}

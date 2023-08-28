@@ -29,7 +29,7 @@ export class UserEntity {
     type: 'enum',
     enum: Permissions,
     array: true,
-    default: [Permissions.READ]
+    default: [Permissions.READ],
   })
   permissions: Permissions[];
 

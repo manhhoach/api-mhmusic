@@ -1,4 +1,8 @@
-import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ValidateCreateAlbumDto } from './dto/create-album.dto';
 import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
 import {
@@ -18,9 +22,11 @@ import { ValidateRemoveSongDto } from './dto/remove-song.dto';
 @Injectable()
 export class AlbumsService {
   constructor(
-    @InjectRepository(AlbumEntity) private readonly albumRepository: Repository<AlbumEntity>,
-    @InjectRepository(AlbumSongEntity) private readonly albumSongRepository: Repository<AlbumSongEntity>
-  ) { }
+    @InjectRepository(AlbumEntity)
+    private readonly albumRepository: Repository<AlbumEntity>,
+    @InjectRepository(AlbumSongEntity)
+    private readonly albumSongRepository: Repository<AlbumSongEntity>,
+  ) {}
   create(createAlbumDto: ValidateCreateAlbumDto) {
     let data = new AlbumEntity();
     data = Object.assign(data, createAlbumDto);
@@ -52,20 +58,29 @@ export class AlbumsService {
       findDetailDto.pageSize,
       findDetailDto.pageIndex,
     );
-    let data: any = await this.albumSongRepository.createQueryBuilder("albumSong")
-      .where("albumSong.album = :albumId", { albumId: findDetailDto.albumId })
-      .innerJoinAndSelect("albumSong.song", "song")
-      .select(["song.id", "song.name", "song.url", "song.views", "song.createdAt", "albumSong"])
-      .take(limit).skip(skip)
-      .orderBy({ "albumSong.createdAt": "DESC" })
+    const data: any = await this.albumSongRepository
+      .createQueryBuilder('albumSong')
+      .where('albumSong.album = :albumId', { albumId: findDetailDto.albumId })
+      .innerJoinAndSelect('albumSong.song', 'song')
+      .select([
+        'song.id',
+        'song.name',
+        'song.url',
+        'song.views',
+        'song.createdAt',
+        'albumSong',
+      ])
+      .take(limit)
+      .skip(skip)
+      .orderBy({ 'albumSong.createdAt': 'DESC' })
       .getManyAndCount();
-    data[0] = data[0].map(e=>{
+    data[0] = data[0].map((e) => {
       return {
         ...e.song,
-        albumSongId: e.id
-      }
-    })
-    let response = getPagingData(data, findDetailDto.pageIndex, limit)
+        albumSongId: e.id,
+      };
+    });
+    const response = getPagingData(data, findDetailDto.pageIndex, limit);
     return response;
   }
 
@@ -88,19 +103,20 @@ export class AlbumsService {
 
   async addSongInAlbum(addSongDto: ValidateAddSongDto) {
     try {
-      let data = { album: addSongDto.albumId, song: addSongDto.songId }
-      await this.albumSongRepository.save(Object.assign(new AlbumSongEntity(), data))
+      const data = { album: addSongDto.albumId, song: addSongDto.songId };
+      await this.albumSongRepository.save(
+        Object.assign(new AlbumSongEntity(), data),
+      );
       return null;
-    }
-    catch (error) {
-      throw new BadRequestException(MESSAGES.DUPLICATE_KEY)
+    } catch (error) {
+      throw new BadRequestException(MESSAGES.DUPLICATE_KEY);
     }
   }
-  async removeSongInAlbum(removeSongDto: ValidateRemoveSongDto){
+  async removeSongInAlbum(removeSongDto: ValidateRemoveSongDto) {
     const data = await this.albumSongRepository.findOne({
       where: { id: removeSongDto.albumSongId },
     });
     if (!data) throw new NotFoundException(MESSAGES.NOT_FOUND);
-    return this.albumSongRepository.delete(removeSongDto.albumSongId );
+    return this.albumSongRepository.delete(removeSongDto.albumSongId);
   }
 }

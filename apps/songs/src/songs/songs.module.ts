@@ -8,9 +8,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([SongEntity]), 
+    TypeOrmModule.forFeature([SongEntity]),
     RedisModule,
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
   ],
   controllers: [SongsController],
   providers: [SongsService],

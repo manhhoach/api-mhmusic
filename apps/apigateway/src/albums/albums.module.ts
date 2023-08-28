@@ -3,8 +3,9 @@ import { AlbumsController } from './albums.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import {
-  ALBUM_SERVICE_NAME, ALBUM_PACKAGE_NAME
-} from '@app/common/proto/album'
+  ALBUM_SERVICE_NAME,
+  ALBUM_PACKAGE_NAME,
+} from '@app/common/proto/album';
 
 @Module({
   imports: [
@@ -15,12 +16,12 @@ import {
         options: {
           package: ALBUM_PACKAGE_NAME,
           protoPath: join(__dirname, '../../../proto/album.proto'),
-          url: 'localhost:5002'
-        }
-      }
-    ])
+          url: 'localhost:5002',
+        },
+      },
+    ]),
   ],
   controllers: [AlbumsController],
-  providers: []
+  providers: [],
 })
 export class AlbumsModule {}

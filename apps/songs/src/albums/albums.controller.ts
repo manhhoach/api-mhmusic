@@ -3,7 +3,7 @@ import { GrpcMethod, Payload } from '@nestjs/microservices';
 import { AlbumsService } from './albums.service';
 import { ValidateCreateAlbumDto } from './dto/create-album.dto';
 import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
-import { ValidateFindDetailDto } from '@app/common'
+import { ValidateFindDetailDto } from '@app/common';
 import {
   ValidateFindAllDto,
   ValidateFindByIdDto,
@@ -14,7 +14,7 @@ import { ValidateRemoveSongDto } from './dto/remove-song.dto';
 
 @Controller()
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) { }
+  constructor(private readonly albumsService: AlbumsService) {}
 
   @GrpcMethod('AlbumService', 'create')
   async create(@Payload() createAlbumDto: ValidateCreateAlbumDto) {
@@ -25,7 +25,6 @@ export class AlbumsController {
   findAll(@Payload() findAllDto: ValidateFindAllDto) {
     return tryCatchRpcException(this.albumsService.findAll(findAllDto));
   }
-
 
   @GrpcMethod('AlbumService', 'update')
   update(@Payload() updateAlbumDto: ValidateUpdateAlbumDto) {
@@ -39,7 +38,6 @@ export class AlbumsController {
     return tryCatchRpcException(this.albumsService.delete(findByIdDto.id));
   }
 
-
   @GrpcMethod('AlbumService', 'addSongInAlbum')
   addSongInAlbum(@Payload() addSongDto: ValidateAddSongDto) {
     return tryCatchRpcException(this.albumsService.addSongInAlbum(addSongDto));
@@ -47,11 +45,14 @@ export class AlbumsController {
 
   @GrpcMethod('AlbumService', 'findSongsInAlbum')
   findSongsInAlbum(@Payload() findDetailDto: ValidateFindDetailDto) {
-    return tryCatchRpcException(this.albumsService.findSongsInAlbum(findDetailDto));
+    return tryCatchRpcException(
+      this.albumsService.findSongsInAlbum(findDetailDto),
+    );
   }
   @GrpcMethod('AlbumService', 'removeSongInAlbum')
   removeSongInAlbum(@Payload() removeSongDto: ValidateRemoveSongDto) {
-    return tryCatchRpcException(this.albumsService.removeSongInAlbum(removeSongDto));
+    return tryCatchRpcException(
+      this.albumsService.removeSongInAlbum(removeSongDto),
+    );
   }
-
 }

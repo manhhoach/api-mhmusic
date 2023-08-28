@@ -5,10 +5,24 @@ import { SingersModule } from './singers/singers.module';
 import { AlbumsModule } from './albums/albums.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { SongsModule } from './songs/songs.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
-  imports: [AuthModule, UsersModule, SingersModule, AlbumsModule, UploadsModule, SongsModule],
+  imports: [
+    AuthModule,
+    UsersModule,
+    SingersModule,
+    AlbumsModule,
+    UploadsModule,
+    SongsModule,
+  ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class ApigatewayModule {}

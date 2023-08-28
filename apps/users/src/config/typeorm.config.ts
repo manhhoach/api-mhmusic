@@ -10,4 +10,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   database: 'mhmusic-users',
   entities: [UserEntity],
   synchronize: true,
+  logging: true,
 };

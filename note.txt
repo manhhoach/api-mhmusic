@@ -1,6 +1,5 @@
 //task tiep theo:
-permission
-search by elastic
+search album, singer, song by elasticsearch
 
 
 //completed services:
