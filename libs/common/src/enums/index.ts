@@ -1,2 +1,1 @@
-export * from './album.permission';
-export * from './song.permission';
+export * from './permissions'

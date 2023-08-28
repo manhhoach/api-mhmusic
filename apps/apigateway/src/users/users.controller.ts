@@ -1,4 +1,4 @@
-import { responseSucess, tryCatchHttpException } from '@app/common';
+import { Permissions, responseSucess, tryCatchHttpException } from '@app/common';
 import {
   Body,
   Controller,
@@ -15,7 +15,7 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { AuthGuard } from './../auth/auth.guard';
 import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
 import { PermissionGuard } from '../auth/permission.guard';
-import { AlbumPermission } from '@app/common';
+
 
 @Injectable()
 @UseGuards(AuthGuard)
@@ -25,12 +25,10 @@ export class UsersController implements OnModuleInit {
   constructor(@Inject(USER_SERVICE_NAME) private client: ClientGrpc) { }
 
   onModuleInit() {
-    this.usersService =
-      this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
+    this.usersService = this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
   }
 
   @Get('profile')
-  @UseGuards(PermissionGuard(AlbumPermission.CreateAlbum))
   getProfile(@Request() req) {
     return responseSucess(HttpStatus.OK, req.user)
   }

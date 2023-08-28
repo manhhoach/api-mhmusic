@@ -11,11 +11,14 @@ import {
   OnModuleInit,
   Query,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumServiceClient, ALBUM_SERVICE_NAME } from '@app/common/proto/album';
 import { ClientGrpc } from '@nestjs/microservices';
-import { PAGE_INDEX, PAGE_SIZE, ORDER, tryCatchHttpException, responseSucess } from '@app/common';
+import { PAGE_INDEX, PAGE_SIZE, ORDER, tryCatchHttpException, responseSucess, Permissions } from '@app/common';
 import { lastValueFrom } from 'rxjs';
+import { PermissionGuard } from '../auth/permission.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 
 @Controller('albums')
@@ -26,10 +29,14 @@ export class AlbumsController implements OnModuleInit {
   onModuleInit() {
     this.albumsService = this.client.getService<AlbumServiceClient>(ALBUM_SERVICE_NAME)
   }
+
   @Post()
+  // @UseGuards(PermissionGuard(Permissions.CREATE))
+  // @UseGuards(AuthGuard)
   create(@Body() createAlbumDto) {
     return tryCatchHttpException(this.albumsService.create(createAlbumDto), HttpStatus.CREATED)
   }
+
 
   @Get()
   async findAll(@Query() query) {
@@ -46,6 +53,8 @@ export class AlbumsController implements OnModuleInit {
 
 
   @Patch(':id')
+  // @UseGuards(PermissionGuard(Permissions.UPDATE))
+  // @UseGuards(AuthGuard)
   async update(@Param('id') id: string, @Body() updateAlbumDto) {
     return tryCatchHttpException(this.albumsService.update({ id, ...updateAlbumDto }), HttpStatus.OK);
 
@@ -53,16 +62,26 @@ export class AlbumsController implements OnModuleInit {
 
 
   @Delete('/remove-song/:id')
+  // @UseGuards(PermissionGuard(Permissions.DELETE))
+  // @UseGuards(AuthGuard)
   async removeSongInAlbum(@Param('id') id: string) {
     return tryCatchHttpException(this.albumsService.removeSongInAlbum({albumSongId: id}), HttpStatus.OK);
   }
 
+
+
   @Delete(':id')
+  // @UseGuards(PermissionGuard(Permissions.DELETE))
+  // @UseGuards(AuthGuard)
   async remove(@Param('id') id: string) {
     return tryCatchHttpException(this.albumsService.delete({ id }), HttpStatus.OK);
   }
 
+
+
   @Post('/add-song')
+  // @UseGuards(PermissionGuard(Permissions.CREATE))
+  // @UseGuards(AuthGuard)
   async addSongInAlbum(@Body() addSongDto) {
     return tryCatchHttpException(this.albumsService.addSongInAlbum(addSongDto), HttpStatus.CREATED);
 

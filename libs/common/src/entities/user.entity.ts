@@ -7,7 +7,7 @@ import {
   BeforeUpdate,
 } from 'typeorm';
 import { genSaltSync, hashSync, compareSync } from 'bcrypt';
-import Permission from '../enums/permission';
+import { Permissions } from '../enums';
 
 @Entity({
   name: 'users',
@@ -27,11 +27,11 @@ export class UserEntity {
 
   @Column({
     type: 'enum',
-    enum: Permission,
+    enum: Permissions,
     array: true,
-    default: []
+    default: [Permissions.READ]
   })
-  permissions: Permission[];
+  permissions: Permissions[];
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

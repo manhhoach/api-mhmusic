@@ -1,9 +1,11 @@
-import { Controller, Post, UseInterceptors, UploadedFile, ParseFilePipeBuilder, HttpStatus, Inject, Res, BadRequestException } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, ParseFilePipeBuilder, HttpStatus, Inject, Res, BadRequestException, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { lastValueFrom } from 'rxjs';
-import { MESSAGE_PATTERN, MAX_MB_SIZE, UPLOAD_SERVICE_NAME, responseSucess } from '@app/common';
+import { MESSAGE_PATTERN, MAX_MB_SIZE, Permissions, responseSucess } from '@app/common';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionGuard } from '../auth/permission.guard';
 
 @Controller('uploads')
 export class UploadsController {
@@ -15,6 +17,8 @@ export class UploadsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
+  // @UseGuards(PermissionGuard(Permissions.CREATE))
+  // @UseGuards(AuthGuard)
   async uploadSingle(@UploadedFile(
     new ParseFilePipeBuilder()
       .addMaxSizeValidator({ maxSize: MAX_MB_SIZE * 1000 * 1000 })

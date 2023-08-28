@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, OnModuleInit, Query, Request, HttpStatus, UseGuards } from '@nestjs/common';
 import { SongServiceClient, SONG_SERVICE_NAME } from '@app/common/proto/song';
 import { ClientGrpc } from '@nestjs/microservices';
-import { PAGE_INDEX, PAGE_SIZE, ORDER, responseSucess, tryCatchHttpException } from '@app/common';
+import { PAGE_INDEX, PAGE_SIZE, ORDER, responseSucess, tryCatchHttpException, Permissions } from '@app/common';
 import { lastValueFrom } from 'rxjs';
 import { AuthGuard } from '../auth/auth.guard';
+import { PermissionGuard } from '../auth/permission.guard';
 
 @Controller('songs')
 export class SongsController implements OnModuleInit {
@@ -15,6 +16,8 @@ export class SongsController implements OnModuleInit {
   }
 
   @Post()
+  // @UseGuards(PermissionGuard(Permissions.CREATE))
+  // @UseGuards(AuthGuard)
   create(@Body() createSongDto) {
     return tryCatchHttpException(this.songsService.create(createSongDto), HttpStatus.CREATED)
   }
@@ -63,11 +66,15 @@ export class SongsController implements OnModuleInit {
 
 
   @Patch(':id')
+  //@UseGuards(PermissionGuard(Permissions.UPDATE))
+  //@UseGuards(AuthGuard)
   update(@Param('id') id: string, @Body() updateSongDto) {
     return tryCatchHttpException(this.songsService.update({ id, ...updateSongDto }), HttpStatus.OK)
   }
 
   @Delete(':id')
+  // @UseGuards(PermissionGuard(Permissions.DELETE))
+  // @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {
     return tryCatchHttpException(this.songsService.delete({ id }), HttpStatus.OK)
   }
