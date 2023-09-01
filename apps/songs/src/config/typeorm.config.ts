@@ -1,7 +1,5 @@
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import {
-  SingerEntity, AlbumEntity, SongEntity, AlbumSongEntity
-} from '@app/common';
+import { SingerEntity, AlbumEntity, SongEntity, AlbumSongEntity } from '@app/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 

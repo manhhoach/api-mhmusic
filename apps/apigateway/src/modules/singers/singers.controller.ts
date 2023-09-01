@@ -27,14 +27,14 @@ import {
   Permissions,
 } from '@app/common';
 import { lastValueFrom } from 'rxjs';
-import { PermissionGuard } from '../auth/permission.guard';
-import { SkipAuth } from '../auth/skip.auth.decorator';
+import { PermissionGuard } from './../auth/permission.guard';
+import { SkipAuth } from './../auth/skip.auth.decorator';
 
 @Injectable()
 @Controller('singers')
 export class SingersController implements OnModuleInit {
   private singersService: SingerServiceClient;
-  constructor(@Inject(SINGER_SERVICE_NAME) private client: ClientGrpc) {}
+  constructor(@Inject(SINGER_SERVICE_NAME) private client: ClientGrpc) { }
 
   onModuleInit() {
     this.singersService =

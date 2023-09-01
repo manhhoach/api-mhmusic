@@ -4,21 +4,20 @@ import {
   PutObjectCommand,
   PutObjectCommandInput,
 } from '@aws-sdk/client-s3';
-import { AWS_S3_CONFIG } from '../config/aws.s3.config';
-import 'dotenv/config';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class S3Service {
   private s3Client: S3Client;
-  constructor() {
-    this.s3Client = new S3Client(AWS_S3_CONFIG);
+  constructor(private readonly configService: ConfigService) {
+    let s3Config = this.configService.get('s3')
+    this.s3Client = new S3Client(s3Config);
   }
   async uploadToS3(file: Express.Multer.File): Promise<string> {
-    //let fileName = handleFileName(file.originalname)
     const fileName = file.originalname;
-
+    const bucketName = this.configService.get<string>('BUCKET_NAME');
     const params: PutObjectCommandInput = {
-      Bucket: process.env.BUCKET_NAME,
+      Bucket: bucketName,
       Key: fileName,
       Body: file.buffer,
       ContentLength: file.size,
@@ -26,7 +25,7 @@ export class S3Service {
     const result = await this.s3Client.send(new PutObjectCommand(params));
 
     if (result.$metadata.httpStatusCode === 200) {
-      return `https://${process.env.BUCKET_NAME}.s3.${process.env.REGION}.amazonaws.com/${fileName}`;
+      return `https://${bucketName}.s3.${this.configService.get<string>('REGION')}.amazonaws.com/${fileName}`;
     }
 
     throw new BadRequestException();

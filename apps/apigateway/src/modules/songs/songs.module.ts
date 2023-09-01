@@ -23,4 +23,4 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [SongsController],
   providers: [],
 })
-export class SongsModule {}
+export class SongsModule { }

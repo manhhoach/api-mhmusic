@@ -1,4 +1,8 @@
 .env
+.users.env
+.songs.env
+.uploads.env
+.apigateway.env
 
 # compiled output
 /dist
