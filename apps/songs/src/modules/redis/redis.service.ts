@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
-import { REDIS_URL } from './../config/redis.config';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RedisService {
   redis: Redis;
-  constructor() {
-    this.redis = new Redis(REDIS_URL);
+  REDIS_URL: string;
+  constructor(private readonly configService: ConfigService) {
+    this.REDIS_URL = this.configService.get<string>('REDIS_URL');
+    this.redis = new Redis(this.REDIS_URL);
   }
   hset(key: string, field: string, value: number) {
     return this.redis.hset(key, field, value);

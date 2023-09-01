@@ -28,7 +28,7 @@ export class SongsService {
     @InjectRepository(SongEntity)
     private readonly songRepository: Repository<SongEntity>,
     private readonly redisService: RedisService,
-  ) {}
+  ) { }
   create(createSongDto: ValidateCreateSongDto) {
     let data = new SongEntity();
     data = Object.assign(data, createSongDto);
@@ -85,9 +85,8 @@ export class SongsService {
 
   async increViews(id: string) {
     const song = `${REDIS_CONSTANTS.SONG_ID}${id}`;
-    const keyMacAddressSong = `${
-      REDIS_CONSTANTS.MAC_ADDRESS
-    }${await macAddress.one()}-${song}`;
+    const keyMacAddressSong = `${REDIS_CONSTANTS.MAC_ADDRESS
+      }${await macAddress.one()}-${song}`;
     const isOk = await this.redisService.setKeyUniqueWithExpiredTime(
       keyMacAddressSong,
       'MUSIC',
@@ -101,54 +100,50 @@ export class SongsService {
   }
 
   async getChart() {
-    try {
-      const topSongs = await this.songRepository.find({
-        take: REDIS_CONSTANTS.NUMBER_SONG_IN_CHARTS,
-        order: { views: 'DESC' },
-      });
-      const arr_time = [];
-      for (let i = 0; i < 12; i++) {
-        arr_time.push(
-          moment()
-            .tz('Asia/Ho_Chi_Minh')
-            .subtract(REDIS_CONSTANTS.STEP_TIME * i, 'hours')
-            .format(REDIS_CONSTANTS.FORMAT_TIME),
-        );
-      }
-      const data = await Promise.all(
-        arr_time.map(async (time) => {
-          let hourlyViews = await Promise.all(
-            topSongs.map(async (song) => {
-              const views = await this.redisService.get(
-                `${time}-${REDIS_CONSTANTS.SONG_ID}${song.id}`,
-              );
-              return {
-                id: song.id,
-                name: song.name,
-                percentViews: views ? parseInt(views) : 0,
-              };
-            }),
-          );
-          const totalViews = hourlyViews.reduce(
-            (current, next) => current + next.percentViews,
-            0,
-          );
-          if (totalViews !== 0)
-            hourlyViews = hourlyViews.map((v) => {
-              return Object.assign(v, {
-                percentViews: Math.round((v.percentViews * 100) / totalViews),
-              });
-            });
-          return {
-            time: time,
-            hourlyViews: hourlyViews,
-          };
-        }),
+    const topSongs = await this.songRepository.find({
+      take: REDIS_CONSTANTS.NUMBER_SONG_IN_CHARTS,
+      order: { views: 'DESC' },
+    });
+    const arr_time = [];
+    for (let i = 0; i < 12; i++) {
+      arr_time.push(
+        moment()
+          .tz('Asia/Ho_Chi_Minh')
+          .subtract(REDIS_CONSTANTS.STEP_TIME * i, 'hours')
+          .format(REDIS_CONSTANTS.FORMAT_TIME),
       );
-      return { data };
-    } catch (err) {
-      console.log(err);
     }
+    const data = await Promise.all(
+      arr_time.map(async (time) => {
+        let hourlyViews = await Promise.all(
+          topSongs.map(async (song) => {
+            const views = await this.redisService.get(
+              `${time}-${REDIS_CONSTANTS.SONG_ID}${song.id}`,
+            );
+            return {
+              id: song.id,
+              name: song.name,
+              percentViews: views ? parseInt(views) : 0,
+            };
+          }),
+        );
+        const totalViews = hourlyViews.reduce(
+          (current, next) => current + next.percentViews,
+          0,
+        );
+        if (totalViews !== 0)
+          hourlyViews = hourlyViews.map((v) => {
+            return Object.assign(v, {
+              percentViews: Math.round((v.percentViews * 100) / totalViews),
+            });
+          });
+        return {
+          time: time,
+          hourlyViews: hourlyViews,
+        };
+      }),
+    );
+    return { data };
   }
 
   @Cron(`* */${REDIS_CONSTANTS.VIEWS_UPDATE_PER_MINUTES} * * * *`)

@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
-import { SingersModule } from './singers/singers.module';
+import { SingersModule } from './modules/singers/singers.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfig } from './config/typeorm.config';
-import { AlbumsModule } from './albums/albums.module';
-import { SongsModule } from './songs/songs.module';
-import { RedisModule } from './redis/redis.module';
+import { typeOrmAsyncConfig } from './config/typeorm.config';
+import { AlbumsModule } from './modules/albums/albums.module';
+import { SongsModule } from './modules/songs/songs.module';
+import { RedisModule } from './modules/redis/redis.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeOrmConfig),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.songs.env' }),
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     SingersModule,
     AlbumsModule,
     SongsModule,
@@ -17,4 +19,4 @@ import { RedisModule } from './redis/redis.module';
   providers: [],
   exports: [],
 })
-export class AppModule {}
+export class AppModule { }

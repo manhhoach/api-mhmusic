@@ -1,4 +1,6 @@
 //task tiep theo:
+config env
+sync data to elasticsearch
 search album, singer, song by elasticsearch
 
 

@@ -4,8 +4,8 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { GrpcValidationPipe } from '@app/common';
 import { SINGER_PACKAGE_NAME } from '@app/common/proto/singer';
 import { ALBUM_PACKAGE_NAME } from '@app/common/proto/album';
-import { join } from 'path';
 import { SONG_PACKAGE_NAME } from '@app/common/proto/song';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -19,7 +19,7 @@ async function bootstrap() {
           join(__dirname, '../../../proto/song.proto'),
         ],
         package: [SINGER_PACKAGE_NAME, ALBUM_PACKAGE_NAME, SONG_PACKAGE_NAME],
-        url: 'localhost:5002',
+        url: process.env.PUBLIC_HOST || 'localhost:5002',
       },
     },
   );
