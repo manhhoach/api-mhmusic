@@ -53,12 +53,15 @@ export class AuthService implements OnModuleInit {
   async verifyToken(token: string) {
     try {
       const payload = await this.jwtService.verifyAsync(token);
+      console.log(payload);
+      
       const user = await lastValueFrom(
         this.usersService.findById({ id: payload.id }),
       );
+
       if (user) return user;
       else throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND);
-    } catch {
+    } catch(err) {
       throw new UnauthorizedException();
     }
   }

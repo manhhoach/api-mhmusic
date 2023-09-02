@@ -19,11 +19,12 @@ async function bootstrap() {
           join(__dirname, '../../../proto/song.proto'),
         ],
         package: [SINGER_PACKAGE_NAME, ALBUM_PACKAGE_NAME, SONG_PACKAGE_NAME],
-        url: process.env.PUBLIC_HOST || 'localhost:5002',
+        url: process.env.PUBLIC_HOST_SONGS_SERVICE,
       },
     },
   );
   app.useGlobalPipes(new GrpcValidationPipe());
   await app.listen();
+  console.log(`Song service listen on ${process.env.PUBLIC_HOST_SONGS_SERVICE}`)
 }
 bootstrap();

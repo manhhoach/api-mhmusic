@@ -1,8 +1,6 @@
 //task tiep theo:
-config env: upload
-
-
-
+api upto admin
 sync data to elasticsearch
 search album, singer, song by elasticsearch
 
+fix lai permission, token

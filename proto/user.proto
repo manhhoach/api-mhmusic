@@ -8,6 +8,7 @@ service UserService {
     rpc FindById(FindByIdDto) returns (User){}
     rpc Update(UpdateUserDto) returns (User){}
     rpc ChangePassword(ChangePasswordDto) returns (Empty){}
+    rpc UpgradeToAdmin(FindByIdDto) returns (Empty){}
 }
 
 message Empty{}

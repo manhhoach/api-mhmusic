@@ -10,7 +10,7 @@ import {
   FindByEmailDto,
   FindByIdDto,
 } from '@app/common/proto/user';
-import { UserEntity, MESSAGES } from '@app/common';
+import { UserEntity, MESSAGES, Permissions } from '@app/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -19,7 +19,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto) {
     const user = await this.usersRepository.findOne({
@@ -85,5 +85,11 @@ export class UsersService {
       return this.usersRepository.save(user);
     }
     throw new BadRequestException(MESSAGES.INCORRECT_PASSWORD);
+  }
+
+  async upgradeToAdmin(id: string) {
+    await this.usersRepository.update(id, {
+      permissions: Object.keys(Permissions).map(key => Permissions[key])
+    },)
   }
 }

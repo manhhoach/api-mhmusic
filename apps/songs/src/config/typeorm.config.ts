@@ -1,12 +1,7 @@
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SingerEntity, AlbumEntity, SongEntity, AlbumSongEntity } from '@app/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-
-
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
-  imports: [ConfigModule],
-  inject: [ConfigService],
   useFactory: async (): Promise<TypeOrmModuleOptions> => {
     return {
       type: 'postgres',

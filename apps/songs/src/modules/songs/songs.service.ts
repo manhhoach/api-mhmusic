@@ -3,24 +3,25 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ValidateCreateSongDto } from './dto/create-song.dto';
-import { ValidateUpdateSongDto } from './dto/update-song.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { MESSAGES, REDIS_CONSTANTS } from '@app/common';
 import * as macAddress from 'macaddress';
 import * as moment from 'moment-timezone';
+import { Cron } from '@nestjs/schedule';
+import { ValidateCreateSongDto } from './dto/create-song.dto';
+import { ValidateUpdateSongDto } from './dto/update-song.dto';
+import { ValidateUpdateRecentSongsDto } from './dto/update-recent-song.dto';
+import { ValidateGetRecentSongsDto } from './dto/get-recent-songs.dto';
 
 import {
   SongEntity,
   ValidateFindAllDto,
   getPagination,
-  getPagingData,
+  getPagingData, MESSAGES, REDIS_CONSTANTS
 } from '@app/common';
 import { RedisService } from '../redis/redis.service';
-import { Cron } from '@nestjs/schedule';
-import { ValidateUpdateRecentSongsDto } from './dto/update-recent-song.dto';
-import { ValidateGetRecentSongsDto } from './dto/get-recent-songs.dto';
+
+
 
 @Injectable()
 export class SongsService {

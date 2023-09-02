@@ -3,8 +3,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { ValidateCreateAlbumDto } from './dto/create-album.dto';
 import { ValidateUpdateAlbumDto } from './dto/update-album.dto';
+import { ValidateAddSongDto } from './dto/add-song.dto';
+import { ValidateRemoveSongDto } from './dto/remove-song.dto';
 import {
   AlbumEntity,
   AlbumSongEntity,
@@ -14,10 +18,7 @@ import {
   getPagination,
   getPagingData,
 } from '@app/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ValidateAddSongDto } from './dto/add-song.dto';
-import { ValidateRemoveSongDto } from './dto/remove-song.dto';
+
 
 @Injectable()
 export class AlbumsService {

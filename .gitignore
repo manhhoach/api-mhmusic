@@ -1,6 +1,6 @@
 .env
-.users.env
 .songs.env
+.users.env
 .uploads.env
 .apigateway.env
 

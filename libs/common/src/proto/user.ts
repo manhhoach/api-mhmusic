@@ -56,6 +56,8 @@ export interface UserServiceClient {
   update(request: UpdateUserDto): Observable<User>;
 
   changePassword(request: ChangePasswordDto): Observable<Empty>;
+
+  upgradeToAdmin(request: FindByIdDto): Observable<Empty>;
 }
 
 export interface UserServiceController {
@@ -68,11 +70,13 @@ export interface UserServiceController {
   update(request: UpdateUserDto): Promise<User> | Observable<User> | User;
 
   changePassword(request: ChangePasswordDto): Promise<Empty> | Observable<Empty> | Empty;
+
+  upgradeToAdmin(request: FindByIdDto): Promise<Empty> | Observable<Empty> | Empty;
 }
 
 export function UserServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["create", "findByEmail", "findById", "update", "changePassword"];
+    const grpcMethods: string[] = ["create", "findByEmail", "findById", "update", "changePassword", "upgradeToAdmin"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);

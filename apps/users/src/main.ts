@@ -13,13 +13,13 @@ async function bootstrap() {
       options: {
         protoPath: join(__dirname, '../../../proto/user.proto'),
         package: USER_PACKAGE_NAME,
-        url: process.env.PUBLIC_HOST
+        url: process.env.PUBLIC_HOST_USERS_SERVICE
       },
     },
   );
   app.useGlobalPipes(new GrpcValidationPipe());
   await app.listen();
-  console.log(`User service listen on ${process.env.PUBLIC_HOST}`);
+  console.log(`User service listen on ${process.env.PUBLIC_HOST_USERS_SERVICE}`);
   
 }
 bootstrap();
