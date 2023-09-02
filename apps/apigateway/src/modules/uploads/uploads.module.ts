@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UploadsController } from './uploads.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MulterModule } from '@nestjs/platform-express';
-import { UPLOAD_SERVICE_NAME } from '@app/common';
+import { UPLOAD_SERVICE_NAME, QUEUE_NAME } from '@app/common';
 
 @Module({
   imports: [
@@ -11,8 +11,8 @@ import { UPLOAD_SERVICE_NAME } from '@app/common';
         name: UPLOAD_SERVICE_NAME,
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
-          queue: 'uploads_queue',
+          urls: [process.env.RABBITMQ_URL],
+          queue: QUEUE_NAME,
           persistent: true,
           queueOptions: {
             durable: true,
@@ -25,4 +25,4 @@ import { UPLOAD_SERVICE_NAME } from '@app/common';
   controllers: [UploadsController],
   providers: [],
 })
-export class UploadsModule {}
+export class UploadsModule { }

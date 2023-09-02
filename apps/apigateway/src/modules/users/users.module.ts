@@ -15,7 +15,7 @@ import { AuthModule } from '../auth/auth.module';
         options: {
           package: USER_PACKAGE_NAME,
           protoPath: join(__dirname, '../../../proto/user.proto'),
-          url: 'localhost:5001',
+          url: process.env.PUBLIC_HOST_USERS_SERVICE,
         },
       },
     ]),

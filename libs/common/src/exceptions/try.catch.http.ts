@@ -12,6 +12,8 @@ export const tryCatchHttpException = async (
     const data = await task;
     return responseSucess(statusCode, data);
   } catch (err) {
+    console.log(err);
+    
     const error = err.details ? JSON.parse(err.details) : err.response;
     return responseError(error);
   }

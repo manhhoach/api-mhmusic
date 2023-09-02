@@ -5,5 +5,6 @@ export default () => ({
             accessKeyId: process.env.ACCESS_KEY,
             secretAccessKey: process.env.SECRET_ACCESS_KEY,
         }
-    }
+    },
+    bucketName: process.env.BUCKET_NAME
 });

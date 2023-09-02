@@ -19,12 +19,13 @@ import {
   MAX_MB_SIZE,
   Permissions,
   responseSucess,
+  UPLOAD_SERVICE_NAME
 } from '@app/common';
 import { PermissionGuard } from '../auth/permission.guard';
 
 @Controller('uploads')
 export class UploadsController {
-  constructor(@Inject('UPLOAD_SERVICE') private readonly client: ClientProxy) { }
+  constructor(@Inject(UPLOAD_SERVICE_NAME) private readonly client: ClientProxy) { }
 
   async onApplicationBootstrap() {
     await this.client.connect();

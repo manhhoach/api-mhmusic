@@ -14,7 +14,7 @@ import { AuthModule } from '../auth/auth.module';
         options: {
           package: SONG_PACKAGE_NAME,
           protoPath: join(__dirname, '../../../proto/song.proto'),
-          url: 'localhost:5002',
+          url: process.env.PUBLIC_HOST_SONGS_SERVICE,
         },
       },
     ]),

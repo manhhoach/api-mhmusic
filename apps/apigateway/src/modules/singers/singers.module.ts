@@ -16,7 +16,7 @@ import {
         options: {
           package: SINGER_PACKAGE_NAME,
           protoPath: join(__dirname, '../../../proto/singer.proto'),
-          url: 'localhost:5002',
+          url: process.env.PUBLIC_HOST_SONGS_SERVICE,
         },
       },
     ]),

@@ -1,12 +1,8 @@
 //task tiep theo:
-config env
+config env: upload
+
+
+
 sync data to elasticsearch
 search album, singer, song by elasticsearch
 
-
-//completed services:
-auth
-singer
-upload
-album
-user

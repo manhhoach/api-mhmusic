@@ -26,5 +26,6 @@ import { ConfigModule } from '@nestjs/config';
       useClass: AuthGuard,
     },
   ],
+  exports: []
 })
 export class ApigatewayModule { }

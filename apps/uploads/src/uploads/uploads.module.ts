@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { S3Service } from './s3.service';
 import { UploadsController } from './uploads.controller';
 import { ConfigModule } from '@nestjs/config';
-import s3Config from './../config/s3.config'
+import uploadConfig from '../config/upload.config'
 
 @Module({
-  imports: [ConfigModule.forRoot({ load: [s3Config], envFilePath: '.uploads.env' })],
+  imports: [ConfigModule.forRoot({ load: [uploadConfig], envFilePath: '.uploads.env' })],
   controllers: [UploadsController],
   providers: [S3Service],
 })
