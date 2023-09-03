@@ -9,10 +9,11 @@ import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { Reflector } from '@nestjs/core';
 import { IS_SKIP_AUTH } from './constants';
+import { MESSAGES } from '@app/common'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private reflector: Reflector) {}
+  constructor(private authService: AuthService, private reflector: Reflector) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isSkipAuth = this.reflector.getAllAndOverride<boolean>(IS_SKIP_AUTH, [
@@ -26,14 +27,12 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(MESSAGES.TOKEN_NOT_FOUND);
     }
     try {
       const user = await this.authService.verifyToken(token);
       request.user = user;
-
     } catch (err) {
-      console.log(err);
       throw err;
     }
     return true;
