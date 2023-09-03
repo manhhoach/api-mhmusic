@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException(MESSAGES.TOKEN_NOT_FOUND);
     }
     try {
-      const user = await this.authService.verifyToken(token);
+      const user = await this.authService.decodeToken(token);
       request.user = user;
     } catch (err) {
       throw err;

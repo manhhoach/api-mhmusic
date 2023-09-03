@@ -1,44 +1,48 @@
 import {
-  Inject,
+  BadRequestException,
   Injectable,
   NotFoundException,
-  OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
-import { USER_SERVICE_NAME, UserServiceClient } from '@app/common/proto/user';
-import { MESSAGES } from '@app/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import { MESSAGES, UserEntity } from '@app/common';
 import { LoginDto } from './dto/login.dto';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { lastValueFrom } from 'rxjs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ValidateCreateUserDto } from './dto/create-user.dto';
 
 const comparePassword = (password: string, hashedPassword: string): boolean => {
   return compareSync(password, hashedPassword);
 };
 
 @Injectable()
-export class AuthService implements OnModuleInit {
-  private usersService: UserServiceClient;
-
+export class AuthService {
   constructor(
-    @Inject(USER_SERVICE_NAME) private client: ClientGrpc,
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
-  onModuleInit() {
-    this.usersService =
-      this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
-  }
-
-  register(createUserDto) {
-    return this.usersService.create(createUserDto);
+  async register(createUserDto: ValidateCreateUserDto) {
+    const user = await this.usersRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+    if (user) {
+      throw new BadRequestException(MESSAGES.EMAIL_EXISTS);
+    }
+    return this.usersRepository.save(
+      Object.assign(new UserEntity(), createUserDto)
+    );
   }
 
   async login(loginDto: LoginDto) {
-    const user = await lastValueFrom(
-      this.usersService.findByEmail({ email: loginDto.email }),
-    );
+    const user = await this.usersRepository.createQueryBuilder('users').where('email = :email', { email: loginDto.email }).addSelect('users.password').getOne();
+
+    if (!user)
+      throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND);
+
+
     if (!comparePassword(loginDto.password, user.password))
       throw new UnauthorizedException(MESSAGES.INCORRECT_PASSWORD);
 
@@ -50,16 +54,14 @@ export class AuthService implements OnModuleInit {
     };
   }
 
-  async verifyToken(token: string) {
+  async decodeToken(token: string) {
     try {
       const payload = await this.jwtService.verifyAsync(token);
-      const user = await lastValueFrom(
-        this.usersService.findById({ id: payload.id }),
-      );
-
-      if (user) return user;
-      else throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND);
-    } catch(err) {
+      const user = await this.usersRepository.findOneBy({ id: payload.id })
+      if (user)
+        return user;
+      throw new NotFoundException(MESSAGES.EMAIL_NOT_FOUND);
+    } catch (err) {
       throw new UnauthorizedException();
     }
   }

@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ApigatewayModule } from './apigateway.module';
 import { ValidationPipe } from '@nestjs/common';
-import { jwtConfig } from './config/jwt.config';
 
 async function bootstrap() {
   try {

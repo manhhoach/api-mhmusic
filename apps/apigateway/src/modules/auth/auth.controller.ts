@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { tryCatchHttpException } from '@app/common';
 import { SkipAuth } from './skip.auth.decorator';
+import { ValidateCreateUserDto } from './dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -19,7 +20,7 @@ export class AuthController {
 
   @SkipAuth()
   @Post('/register')
-  async register(@Body() createUserDto) {
+  async register(@Body() createUserDto: ValidateCreateUserDto) {
     return tryCatchHttpException(
       this.authService.register(createUserDto),
       HttpStatus.CREATED,
