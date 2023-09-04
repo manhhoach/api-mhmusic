@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal: true, envFilePath: '.users.env'}),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.users.env' }),
     TypeOrmModule.forRootAsync(typeOrmConfig),
     TypeOrmModule.forFeature([UserEntity]),
   ],

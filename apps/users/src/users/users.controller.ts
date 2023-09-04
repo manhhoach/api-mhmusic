@@ -1,6 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { FindByEmailDto, FindByIdDto, USER_SERVICE_NAME } from '@app/common/proto/user';
+import {
+  FindByEmailDto,
+  FindByIdDto,
+  USER_SERVICE_NAME,
+} from '@app/common/proto/user';
 import { Payload, GrpcMethod } from '@nestjs/microservices';
 import { ValidateUpdateUserDto } from './dto/update-user.dto';
 import { ValidateCreateUserDto } from './dto/create-user.dto';
@@ -9,7 +13,7 @@ import { tryCatchRpcException } from '@app/common';
 
 @Controller()
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @GrpcMethod(USER_SERVICE_NAME, 'Create')
   create(@Payload() createUserDto: ValidateCreateUserDto) {

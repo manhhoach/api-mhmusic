@@ -15,7 +15,7 @@ export class S3Service {
     this.s3Config = this.configService.get('s3');
     this.s3Client = new S3Client(this.s3Config);
   }
-  
+
   async uploadToS3(file: Express.Multer.File): Promise<string> {
     const fileName = file.originalname;
     const bucketName = this.configService.get('bucketName');

@@ -1,4 +1,7 @@
-import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import {
+  TypeOrmModuleAsyncOptions,
+  TypeOrmModuleOptions,
+} from '@nestjs/typeorm';
 import { UserEntity } from '@app/common';
 
 export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
@@ -12,6 +15,6 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
       database: process.env.DB_DATABASE || 'mhmusic-users',
       entities: [UserEntity],
       synchronize: true,
-    }
-  }
+    };
+  },
 };

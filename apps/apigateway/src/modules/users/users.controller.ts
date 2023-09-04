@@ -47,10 +47,10 @@ export class UsersController implements OnModuleInit {
   }
 
   @Patch('upgrade-to-admin')
-  async upgradeToAdmin(@Request() req){
+  async upgradeToAdmin(@Request() req) {
     return tryCatchHttpException(
       this.usersService.upgradeToAdmin({ id: req.user.id }),
       HttpStatus.OK,
-    ); 
+    );
   }
 }

@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({envFilePath: '.uploads.env'}),
+    ConfigModule.forRoot({ envFilePath: '.uploads.env' }),
     ClientsModule.register([
       {
         name: UPLOAD_SERVICE_NAME,
@@ -27,4 +27,4 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [UploadsController],
   providers: [],
 })
-export class UploadsModule { }
+export class UploadsModule {}

@@ -17,11 +17,11 @@ import {
   SongEntity,
   ValidateFindAllDto,
   getPagination,
-  getPagingData, MESSAGES, REDIS_CONSTANTS
+  getPagingData,
+  MESSAGES,
+  REDIS_CONSTANTS,
 } from '@app/common';
 import { RedisService } from '../redis/redis.service';
-
-
 
 @Injectable()
 export class SongsService {
@@ -29,7 +29,7 @@ export class SongsService {
     @InjectRepository(SongEntity)
     private readonly songRepository: Repository<SongEntity>,
     private readonly redisService: RedisService,
-  ) { }
+  ) {}
   create(createSongDto: ValidateCreateSongDto) {
     let data = new SongEntity();
     data = Object.assign(data, createSongDto);
@@ -86,8 +86,9 @@ export class SongsService {
 
   async increViews(id: string) {
     const song = `${REDIS_CONSTANTS.SONG_ID}${id}`;
-    const keyMacAddressSong = `${REDIS_CONSTANTS.MAC_ADDRESS
-      }${await macAddress.one()}-${song}`;
+    const keyMacAddressSong = `${
+      REDIS_CONSTANTS.MAC_ADDRESS
+    }${await macAddress.one()}-${song}`;
     const isOk = await this.redisService.setKeyUniqueWithExpiredTime(
       keyMacAddressSong,
       'MUSIC',

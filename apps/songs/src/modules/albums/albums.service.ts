@@ -19,7 +19,6 @@ import {
   getPagingData,
 } from '@app/common';
 
-
 @Injectable()
 export class AlbumsService {
   constructor(

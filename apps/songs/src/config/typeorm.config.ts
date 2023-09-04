@@ -1,5 +1,13 @@
-import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { SingerEntity, AlbumEntity, SongEntity, AlbumSongEntity } from '@app/common';
+import {
+  TypeOrmModuleAsyncOptions,
+  TypeOrmModuleOptions,
+} from '@nestjs/typeorm';
+import {
+  SingerEntity,
+  AlbumEntity,
+  SongEntity,
+  AlbumSongEntity,
+} from '@app/common';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   useFactory: async (): Promise<TypeOrmModuleOptions> => {
@@ -12,6 +20,6 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       database: process.env.DB_DATABASE || 'mhmusic-songs',
       entities: [SingerEntity, AlbumEntity, SongEntity, AlbumSongEntity],
       synchronize: true,
-    }
-  }
+    };
+  },
 };

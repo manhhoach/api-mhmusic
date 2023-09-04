@@ -30,7 +30,7 @@ import { SkipAuth } from '../auth/skip.auth.decorator';
 @Controller('songs')
 export class SongsController implements OnModuleInit {
   private songsService: SongServiceClient;
-  constructor(@Inject(SONG_SERVICE_NAME) private client: ClientGrpc) { }
+  constructor(@Inject(SONG_SERVICE_NAME) private client: ClientGrpc) {}
 
   onModuleInit() {
     this.songsService =

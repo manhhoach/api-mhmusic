@@ -13,10 +13,10 @@ import { typeOrmConfig } from '../../config/typeorm.config';
     ConfigModule.forRoot({ envFilePath: '.users.env' }),
     JwtModule.registerAsync(jwtConfig),
     TypeOrmModule.forRootAsync(typeOrmConfig),
-    TypeOrmModule.forFeature([UserEntity])
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [AuthController],
   providers: [AuthService],
   exports: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

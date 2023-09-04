@@ -34,7 +34,7 @@ import { SkipAuth } from '../auth/skip.auth.decorator';
 @Injectable()
 export class AlbumsController implements OnModuleInit {
   private albumsService: AlbumServiceClient;
-  constructor(@Inject(ALBUM_SERVICE_NAME) private client: ClientGrpc) { }
+  constructor(@Inject(ALBUM_SERVICE_NAME) private client: ClientGrpc) {}
   onModuleInit() {
     this.albumsService =
       this.client.getService<AlbumServiceClient>(ALBUM_SERVICE_NAME);

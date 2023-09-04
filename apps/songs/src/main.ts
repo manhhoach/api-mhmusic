@@ -25,6 +25,8 @@ async function bootstrap() {
   );
   app.useGlobalPipes(new GrpcValidationPipe());
   await app.listen();
-  console.log(`Song service listen on ${process.env.PUBLIC_HOST_SONGS_SERVICE}`)
+  console.log(
+    `Song service listen on ${process.env.PUBLIC_HOST_SONGS_SERVICE}`,
+  );
 }
 bootstrap();

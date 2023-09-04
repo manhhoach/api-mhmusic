@@ -16,7 +16,7 @@ import {
         options: {
           package: ALBUM_PACKAGE_NAME,
           protoPath: join(__dirname, '../../../proto/album.proto'),
-          url:  process.env.PUBLIC_HOST_SONGS_SERVICE,
+          url: process.env.PUBLIC_HOST_SONGS_SERVICE,
         },
       },
     ]),

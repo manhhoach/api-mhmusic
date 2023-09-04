@@ -1,1 +1,1 @@
-export * from './../../../users/src/config/typeorm.config'
+export * from './../../../users/src/config/typeorm.config';

@@ -11,7 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal: true, envFilePath: '.apigateway.env'}),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.apigateway.env' }),
     AuthModule,
     UsersModule,
     SingersModule,
@@ -26,6 +26,6 @@ import { ConfigModule } from '@nestjs/config';
       useClass: AuthGuard,
     },
   ],
-  exports: []
+  exports: [],
 })
-export class ApigatewayModule { }
+export class ApigatewayModule {}

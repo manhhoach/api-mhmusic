@@ -13,7 +13,7 @@ export const tryCatchHttpException = async (
     return responseSucess(statusCode, data);
   } catch (err) {
     console.log(err);
-    
+
     const error = err.details ? JSON.parse(err.details) : err.response;
     return responseError(error);
   }

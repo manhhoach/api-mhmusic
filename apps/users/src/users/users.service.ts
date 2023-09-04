@@ -19,7 +19,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const user = await this.usersRepository.findOne({
@@ -89,7 +89,7 @@ export class UsersService {
 
   async upgradeToAdmin(id: string) {
     await this.usersRepository.update(id, {
-      permissions: Object.keys(Permissions).map(key => Permissions[key])
-    },)
+      permissions: Object.keys(Permissions).map((key) => Permissions[key]),
+    });
   }
 }

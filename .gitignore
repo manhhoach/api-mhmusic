@@ -3,6 +3,7 @@
 .users.env
 .uploads.env
 .apigateway.env
+.search.env
 
 # compiled output
 /dist
