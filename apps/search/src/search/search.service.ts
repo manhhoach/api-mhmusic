@@ -1,5 +1,5 @@
-import { AlbumEntity, SingerEntity, SongEntity } from '@app/common';
-import { Injectable } from '@nestjs/common';
+import { AlbumEntity, SingerEntity, SongEntity, responseSucess } from '@app/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -36,8 +36,7 @@ export class SearchService {
     let albumsBody = this.formatData(albums, 'albums')
     let singersBody = this.formatData(singers, 'singers')
     let songsBody = this.formatData(songs, 'songs')
-    await this.elasticsearchService.bulk({ body: songsBody.concat(albumsBody, singersBody) })
-    console.log('synced');
+    this.elasticsearchService.bulk({ body: songsBody.concat(albumsBody, singersBody) })
   }
 
   async search(name: string) {
@@ -49,8 +48,7 @@ export class SearchService {
         }
       }
     })
-    console.log(data);
-
-    return data.hits.hits.map(e => e._source)
+    let response = data.hits.hits.map(e => e._source)
+    return responseSucess(HttpStatus.OK, response)
   }
 }

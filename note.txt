@@ -1,3 +1,4 @@
 //task tiep theo:
-sync data to elasticsearch
-search album, singer, song by elasticsearch
+deploy thooi
+
+sudo sysctl -w vm.max_map_count=262144
